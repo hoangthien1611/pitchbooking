@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="header">
+    <div id="fb-root"></div>
+    <div id="loadingBar" class="load-bar hidden">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+
+    <!--0.nav-mobile-->
+    <div id="left-sidebar" class="only-mobile">
+        <div class="n-mobi-nav">
+            <span class="menu-closer"></span>
+            <a href="#" class="mobile-brand"><img class="img-responsive" th:src="@{/images/logo-namviet-gate-li.png}"
+                                                  alt="logo"></a>
+            <ul class="n-nav-ul-mobile">
+                <li class="nav-tim-doi dropdown dropdown-dat" id="dropdownMenu4">
+                    <a href="/tim-doi-da-bong" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tìm đối
+                        đá
+                        bóng&nbsp;&nbsp;<span class="caret"></span></a>
+                    <ul class="dropdown-menu navbar-nav-dropdown" aria-labelledby="dropdownMenu4">
+                        <li class="navbar-match-finding">
+                            <a href="/tim-doi-da-bong" title="Tìm đối đá bóng">Đối đang chờ</a>
+                        </li>
+                        <li class="navbar-team">
+                            <a href="/doi-bong" title="Danh sách đội bóng">Danh sách đội bóng</a>
+                        </li>
+                        <li class="navbar-invite">
+                            <a href="/match/post">
+                                Mời đối giao lưu
+                            </a>
+                        </li>
+
+                        <li style="display:none">View more</li>
+
+                    </ul>
+                </li>
+                <li style="display:none"></li>
+                <li class="navbar-stadium dropdown dropdown-dat" id="dropdownMenu5">
+                    <a href="/dat-san-nhanh" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                            class="fa fa-futbol-o" aria-hidden="true"></i>&nbsp;Tìm sân bóng&nbsp;&nbsp;<span
+                            class="caret"></span></a>
+                    <ul class="dropdown-menu navbar-nav-dropdown" aria-labelledby="dropdownMenu5">
+                        <li><a href="/dat-san-nhanh" title="Tìm sân bóng còn trống khung giờ vàng">Đặt sân nhanh</a>
+                        </li>
+                        <li><a href="/san-bong-tai-ha-noi" title="Sân bóng tại Hà Nội">Sân bóng tại Hà Nội</a></li>
+                        <li><a href="/san-bong-tai-ho-chi-minh" title="Sân bóng tại Hồ Chí Minh">Sân bóng tại HCM</a>
+                        </li>
+                        <li><a href="/san-bong" title="Toàn bộ sân bóng">Xem thêm</a></li>
+                    </ul>
+                </li>
+                <li class="navbar-stadium dropdown dropdown-dat" id="dropdownMenu9">
+                    <a href="https://myleague.vn/league" title="Tìm giải đá bóng" target="_blank">
+                        <i class="fa fa-futbol-o" aria-hidden="true"></i>
+                        Tìm giải đấu
+                    </a>
+                </li>
+                <li class="navbar-stadium dropdown dropdown-dat" id="dropdownMenu6">
+                    <a href="/dat-san-nhanh" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                            class="fa fa-futbol-o" aria-hidden="true"></i>&nbsp;Tìm sân Tennis&nbsp;&nbsp;<span
+                            class="caret"></span></a>
+                    <ul class="dropdown-menu navbar-nav-dropdown" aria-labelledby="dropdownMenu6">
+                        <li><a href="/dat-san-nhanh" title="Tìm sân tennis còn trống khung giờ vàng">Đặt sân nhanh</a>
+                        </li>
+                        <li><a href="/san-tennis-tai-ha-noi" title="Sân tennis tại Hà Nội">Sân bóng tennis Hà Nội</a>
+                        </li>
+                        <li><a href="/san-tennis-tai-ho-chi-minh" title="Sân tennis tại Hồ Chí Minh">Sân tennis tại
+                            HCM</a>
+                        </li>
+                        <li><a href="/san-tennis" title="Toàn bộ sân tennis">Xem thêm</a></li>
+                    </ul>
+                </li>
+                <li class="navbar-stadium dropdown dropdown-dat" id="dropdownMenu7">
+                    <a href="/dat-san-nhanh" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                            class="fa fa-futbol-o" aria-hidden="true"></i>&nbsp;Tìm sân cầu lông&nbsp;&nbsp;<span
+                            class="caret"></span></a>
+                    <ul class="dropdown-menu navbar-nav-dropdown" aria-labelledby="dropdownMenu7">
+                        <li><a href="/san-cau-long-tai-ha-noi" title="Sân cầu lông tại Hà Nội">Sân cầu lông tại Hà
+                            Nội</a>
+                        </li>
+                        <li><a href="/san-cau-long-tai-ho-chi-minh" title="Sân cầu lông tại Hồ Chí Minh">Sân cầu lông
+                            tại
+                            HCM</a></li>
+                        <li><a href="/san-cau-long" title="Toàn bộ sân cầu lông">Xem thêm</a></li>
+                    </ul>
+                </li>
+                <li class="navbar-stadium dropdown dropdown-dat" id="dropdownMenu8">
+                    <a href="/dat-san-nhanh" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                            class="fa fa-futbol-o" aria-hidden="true"></i>&nbsp;CLB bóng bàn&nbsp;&nbsp;<span
+                            class="caret"></span></a>
+                    <ul class="dropdown-menu navbar-nav-dropdown" aria-labelledby="dropdownMenu8">
+                        <li><a href="/clb-bong-ban-tai-ha-noi" title="CLB bóng bàn tại Hà Nội">CLB bóng bàn tại Hà
+                            Nội</a>
+                        </li>
+                        <li><a href="/clb-bong-ban-tai-ho-chi-minh" title="CLB bóng bàn tại Hồ Chí Minh">CLB bóng bàn
+                            tại
+                            HCM</a></li>
+                        <li><a href="/clb-bong-ban" title="Toàn bộ CLB bóng bàn">Xem thêm</a></li>
+                    </ul>
+                </li>
+                <li class="navbar-stadium" id="dropdownMenu9">
+                    <a href="https://www.sport9.vn/" title="Giày đá bóng chính hãng SPORT9" target="_blank">
+                        <i class="fa fa-shopping-basket" aria-hidden="true"></i>
+                        Giày chính hãng
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="right-sidebar" class="only-mobile right-user">
+
+
+        <div class="n-mobi-nav">
+            <span class="menu-closer"></span>
+            <a href="#" class="user-title" data-toggle="dropdown">
+            </a>
+            <ul class="n-nav-ul-mobile">
+                <li>
+                    <a href="/#frmRegister" onclick="location.href = '/';" title="Đăng ký thành viên">
+                        <i class="fa fa-user" aria-hidden="true"></i> Đăng ký
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#loginModal" title="Đăng nhập">
+                        <i class="fa fa-lock" aria-hidden="true"></i> Đăng nhập
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="overlay-nav"></div>
+    <!--#0.nav-mobile-->
+    <header class="n-nav navbar" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <span id="btn-left-sidebar" class="only-mobile-btn"><i class="fa fa-bars" aria-hidden="true"></i></span>
+                <a class="logo-top" href="/" title="Tìm Đối Nhanh">
+                    <img th:src="@{/images/logo-tim-doi-nhanh.png}" alt="Tìm Đối Nhanh">
+                </a>
+                <span id="btn-right-sidebar" class="only-mobile-btn btn-right-user" ng-controller="NotificationCtrl">
+            <i class="fa fa-user" aria-hidden="true"></i>
+            <b class="badge badge-primary bg-red" style="display:none" ng-class="{'ngloaded-inline':notiItemCount!=''}">{{ notiItemCount }}</b>
+        </span>
+            </div> <!-- /.navbar-header -->
+            <nav class="mobi-none" role="navigation">
+                <ul class="nav navbar-nav navbar-right" ng-controller="NotificationCtrl">
+                    <li>
+                        <a href="/tim-doi-da-bong" title="Tìm đối đá bóng sân 7 người, sân 5 người">Tìm đối nhanh</a>
+                        <ul class="navbar-nav-dropdown">
+                            <li class="navbar-match-finding">
+                                <a href="/tim-doi-da-bong-tai-ha-noi" title="Tìm đối đá bóng tại Hà Nội">
+                                    <i class="fa fa-futbol-o" aria-hidden="true"></i>
+                                    Đối đang chờ
+                                </a>
+                            </li>
+                            <li class="navbar-team">
+                                <a href="/doi-bong-tai-ha-noi" title="Danh sách đội bóng tại Hà Nội">
+                                    <i class="fa fa-futbol-o" aria-hidden="true"></i>
+                                    Danh sách đội bóng
+                                </a>
+                            </li>
+                            <li class="navbar-invite">
+                                <a href="/match/post">
+                                    <i class="fa fa-beer"></i>
+                                    Mời đối giao lưu
+                                </a>
+                            </li>
+
+                            <li style="display:none">View more</li>
+
+                        </ul>
+                    </li>
+                    <li style="display:none"></li>
+                    <li class="navbar-stadium">
+                        <a href="/dat-san-nhanh" title="Sân cỏ nhân tạo tại Hà Nội, sân cỏ nhân tạo tại HCM"><i
+                                class="fa fa-futbol-o" aria-hidden="true"></i>Đặt sân nhanh</a>
+                        <ul class="navbar-nav-dropdown">
+                            <li>
+                                <a href="/san-bong-tai-ha-noi" title="Sân bóng tại Hà Nội">
+                                    <i class="fa fa-futbol-o" aria-hidden="true"></i>
+                                    Sân bóng tại Hà Nội
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/san-bong-tai-ho-chi-minh" title="Sân bóng tại Hồ Chí Minh">
+                                    <i class="fa fa-futbol-o" aria-hidden="true"></i>
+                                    Sân bóng tại HCM
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/san-bong-tai-da-nang" title="Sân bóng tại Đà nẵng">
+                                    <i class="fa fa-futbol-o" aria-hidden="true"></i>
+                                    Sân bóng tại Đà nẵng
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/san-tennis" title="Sân Tennis">
+                                    <i class="fa fa-futbol-o" aria-hidden="true"></i>
+                                    Sân Tennis
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/san-cau-long" title="Sân cầu lông">
+                                    <i class="fa fa-futbol-o" aria-hidden="true"></i>
+                                    Sân cầu lông
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/clb-bong-ban" title="Câu lạc bộ bóng bàn">
+                                    <i class="fa fa-futbol-o" aria-hidden="true"></i>
+                                    Câu lạc bộ bóng bàn
+                                </a>
+                            </li>
+                            <li style="display:none">View more</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="https://myleague.vn/league" title="Tìm giải đá bóng" target="_blank">
+                            <i class="fa fa-futbol-o" aria-hidden="true"></i>
+                            Tìm giải đấu
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="https://www.sport9.vn/" title="Giày đá bóng chính hãng SPORT9" target="_blank">
+                            <i class="fa fa-shopping-basket" aria-hidden="true"></i>
+                            Giày chính hãng
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="javascript:;" id="loginBtn" data-toggle="modal" data-target="#loginModal">
+                            Đăng nhập
+                        </a>
+                    </li>
+
+                    <li class="dropdown navbar-notification">
+                        <a href="javascript:void();" class="dropdown-toggle" data-toggle="dropdown"
+                           ng-click="onShowNotifications();">
+                            <i class="fa fa-bell navbar-notification-icon"></i>
+                            <span class="visible-xs-inline">&nbsp;Notifications</span>
+                            <b class="badge badge-primary ng-binding" style="display:none"
+                               ng-class="{&#39;ngloaded-inline&#39;:notiItemCount}"></b>
+                        </a>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-header">Thông báo</div>
+                            <!-- ngIf: !isNotificationLoaded -->
+                            <div class="notification-list scrollbar-enabled">
+                                <div class="force-overflow" ng-show="isNotificationLoaded" style="">
+                                    <!-- ngRepeat: noti in notiItemListDisplay | orderBy:'-time' -->
+                                    <!-- / .notification -->
+                                </div>
+                            </div> <!-- / .notification-list -->
+                            <a href="https://www.timdoinhanh.com/notification/history"
+                               class="notification-link-all text-center">Xem tất cả</a>
+                        </div> <!-- / .dropdown-menu -->
+                    </li>
+
+                    <li class="dropdown navbar-profile">
+
+                        <a class="dropdown-toggle user-menu" data-toggle="dropdown" href="javascript:;">
+                            <img th:src="@{/images/default-user.png}"
+                                 class="navbar-profile-avatar" alt="">
+                            <span class="visible-xs-inline user-name">Nguyen Thien &nbsp;</span>
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="navbar-nav-dropdown" role="menu">
+
+                            <li>
+                                <a href="https://www.timdoinhanh.com/user/profile">
+                                    <i class="fa fa-user"></i>
+                                    Thông tin tài khoản
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.timdoinhanh.com/match/inviting">
+                                    <i class="fa fa-futbol-o"></i>
+                                    Đang bắt đối
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.timdoinhanh.com/stadium/bookinghistory">
+                                    <i class="fa fa-history"></i>
+                                    Lịch sử đặt sân
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.timdoinhanh.com/team/management">
+                                    <i class="fa fa-futbol-o"></i>
+                                    Đội bóng của tôi
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.timdoinhanh.com/stadium/management">
+                                    <i class="fa fa-th-large"></i>
+                                    Sân bóng của tôi
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.timdoinhanh.com/User/logout">
+                                    <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                    Đăng xuất
+                                </a>
+                            </li>
+                            <li style="display:none"></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div> <!-- /.container -->
+    </header>
+</div>
+</body>
+</html>

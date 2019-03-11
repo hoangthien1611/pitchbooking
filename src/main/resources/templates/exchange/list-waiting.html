@@ -1,0 +1,1410 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head::head"></head>
+<body ng-app="sportApp" class="page-sportmatchfindinglist ">
+<div th:replace="fragments/header::header"></div>
+
+<div class="breadcrum">
+    <div class="container">
+        <div class="breadcrum-line">
+            <a href="/">Trang chủ</a>
+            <a>T&#236;m đối đ&#225; b&#243;ng</a>
+        </div>
+    </div>
+</div>
+
+<style type="text/css">
+    .list-search-top button[type=submit] {
+        width: 96px;
+    }
+
+    .list-search-top input[type=text] {
+        width: calc(100% - 100px);
+    }
+</style>
+<div class="content-wrap" ng-controller="matchFindingCtrl" id="match-item-list">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 mobile-marginlr-15">
+                <div class="sidebar-filter-container">
+                    <div class="m-btn-expand-holder mobile-only">
+                        <span class="form-filter-san-span">Lọc kết quả <i class="fa fa-filter"
+                                                                             aria-hidden="true"></i></span>
+                    </div>
+                    <h2 id="a" class="title-intent title-pages mobile-hidden"><i class="fa fa-filter"
+                                                                                 aria-hidden="true"></i>Lọc kết quả</h2>
+
+                    <div class="sidebar sidebar-tien-ich sidebar-province">
+                        <p class="title-box"><i class="fa fa-map-marker" aria-hidden="true"></i> Tỉnh / Thành phố</p>
+                        <ul class="list-left-links">
+                            <li>
+                                <a href="/tim-doi-da-bong-tai-da-nang">Đ&#224; Nẵng <span>10</span></a>
+                            </li>
+                            <li>
+                                <a href="/tim-doi-da-bong-tai-ha-noi">H&#224; Nội <span>142</span></a>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                    <div class="sidebar sidebar-tim-doi">
+                        <ul class="list-left-links list-left-check">
+                            <li>
+                                <strong>S&#226;n nh&#224;</strong>
+                                <ul>
+                                    <li onclick="location.href='/tim-doi-da-bong?hasstadium=1';">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input id="fo" name="fo" type="checkbox" value="true"/><input name="fo"
+                                                                                                              type="hidden"
+                                                                                                              value="false"/>
+                                                C&#243; s&#226;n nh&#224;
+                                                <span class="pull-right filter-count">55</span>
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li onclick="location.href='/tim-doi-da-bong?hasstadium=0';">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input id="fo" name="fo" type="checkbox" value="true"/><input name="fo"
+                                                                                                              type="hidden"
+                                                                                                              value="false"/>
+                                                Cần đi kh&#225;ch
+                                                <span class="pull-right filter-count">33</span>
+                                            </label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>Tr&#236;nh độ</strong>
+                                <ul>
+                                    <li onclick="location.href='/tim-doi-da-bong?level=6';">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input id="fo" name="fo" type="checkbox" value="true"/><input name="fo"
+                                                                                                              type="hidden"
+                                                                                                              value="false"/>
+                                                Mềm
+                                                <span class="pull-right filter-count">1</span>
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li onclick="location.href='/tim-doi-da-bong?level=2';">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input id="fo" name="fo" type="checkbox" value="true"/><input name="fo"
+                                                                                                              type="hidden"
+                                                                                                              value="false"/>
+                                                Trung b&#236;nh
+                                                <span class="pull-right filter-count">12</span>
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li onclick="location.href='/tim-doi-da-bong?level=3';">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input id="fo" name="fo" type="checkbox" value="true"/><input name="fo"
+                                                                                                              type="hidden"
+                                                                                                              value="false"/>
+                                                Trung b&#236;nh kh&#225;
+                                                <span class="pull-right filter-count">12</span>
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li onclick="location.href='/tim-doi-da-bong?level=5';">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input id="fo" name="fo" type="checkbox" value="true"/><input name="fo"
+                                                                                                              type="hidden"
+                                                                                                              value="false"/>
+                                                Trung b&#236;nh yếu
+                                                <span class="pull-right filter-count">63</span>
+                                            </label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+
+                        </ul>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-6">
+                <div class="p-content">
+                    <h1 id="a" class="title-intent title-pages mobile-marginlr-15"><i class="fa fa-futbol-o"
+                                                                                      aria-hidden="true"></i>T&#236;m
+                        đối đ&#225; b&#243;ng</h1>
+                    <div class="form-group row mobile-marginlr-15">
+                        <form method="get" action="/tim-doi-da-bong">
+                            <div class="col-md-9 col-xs-9 margin-b10">
+                                <input type="text" name="keyword" class="form-control"
+                                       placeholder="Ví dụ: 17h30 thứ 6, hoàng minh giám, thành phát"/>
+                            </div>
+                            <div class="col-md-3 col-xs-3 margin-b10">
+                                <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <ul class="list-item-san">
+
+
+                        <li class="item-card match-finding-item" idd="78334">
+                            <div class="row">
+                                <div class="col-md-12 right-item-san right-item-doi">
+
+                                    <div class="header-item-doi header-tim-doi ">
+                                        <div class="match-header-texts">
+                                            <h2>
+                                                <a href="/doi-moi.html?matchId=78334" title="Đội mới">Đội mới</a>
+                                                <span class="match-taginfo">
+                            <i class="fa fa-tag" aria-hidden="true"></i> Cần đi kh&#225;ch
+                        </span>
+                                            </h2>
+
+                                            <p class="captain-item noborder" owner-id="3952">
+                                                <a href="/user/profile/3952"><i class="fa fa-user"
+                                                                                aria-hidden="true"></i> Nguyễn Trần Lê
+                                                    Hai</a>
+                                                <span class="captain-item-status offline hide"></span>
+                                                <span class="chat-nhanh" ng-click="onQuickChat(3952);"><i
+                                                        class="fa fa-comments" aria-hidden="true"></i>Nói chuyện</span>
+                                            </p>
+                                        </div>
+                                        <div class="btn-doi-top pull-right">
+
+
+                                        </div>
+                                    </div>
+
+                                    <p class="tim-doi-time"><i class="fa fa-calendar-check-o"
+                                                               aria-hidden="true"></i><strong>Thời gian:</strong>10h30
+                                        Thứ Bảy ngày 09/03/2019</p>
+
+                                    <p class="guest-stadium-list">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Khu vực:</strong><a
+                                            href="/tim-doi-da-bong-tai-ha-noi?keyword=%c4%90%c3%a0+N%e1%ba%b5ng"
+                                            target="_blank" class="label label-success">Đà Nẵng</a>
+                                    </p>
+                                    <p class="level-row">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Trình độ:</strong>Trung
+                                        b&#236;nh
+                                    </p>
+                                    <p class="match-contract">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Kèo:</strong>
+                                        6-4 s&#226;n nước
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i> <strong>Trạng
+                                        thái:</strong>
+                                        <span class="red">Đã quá hạn</span>
+                                    </p>
+                                    <p class="quost-doi">
+                                        abc
+                                    </p>
+
+                                    <div class="btn-doi-bottom mobile-only mobile-only">
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+
+                        <li class="item-card match-finding-item" idd="78552">
+                            <div class="row">
+                                <div class="col-md-12 right-item-san right-item-doi">
+
+                                    <div class="header-item-doi header-tim-doi ">
+                                        <div class="match-header-texts">
+                                            <h2>
+                                                <a href="/team/view/14565?matchId=78552" title="Fc TNX">Fc TNX</a>
+                                                <span class="match-taginfo">
+                            <i class="fa fa-tag" aria-hidden="true"></i> C&#243; s&#226;n nh&#224;
+                        </span>
+                                            </h2>
+
+                                            <p class="captain-item noborder" owner-id="3397">
+                                                <a href="/user/profile/3397"><i class="fa fa-user"
+                                                                                aria-hidden="true"></i> Phạm Hữu Phúc
+                                                </a>
+                                                <span class="captain-item-status offline hide"></span>
+                                                <span class="chat-nhanh" ng-click="onQuickChat(3397);"><i
+                                                        class="fa fa-comments" aria-hidden="true"></i>Nói chuyện</span>
+                                            </p>
+                                        </div>
+                                        <div class="btn-doi-top pull-right">
+
+
+                                        </div>
+                                    </div>
+
+                                    <p class="tim-doi-time"><i class="fa fa-calendar-check-o"
+                                                               aria-hidden="true"></i><strong>Thời gian:</strong>17h30
+                                        Thứ Bảy ngày 09/03/2019</p>
+
+                                    <p class="item-stadium-p">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Sân nhà:</strong><a
+                                            href="/san-bong-dam-hong-ii.html" target="_blank">Sân Bóng Đầm Hồng II (Sân
+                                        7 số 1)</a>
+                                        <span class="price-san">600.000<sup>vnđ</sup> / trận</span>
+                                    </p>
+                                    <p class="item-stadium-address"><i class="fa fa-shirtsinbulk"
+                                                                       aria-hidden="true"></i><strong>Địa chỉ:</strong>Ngõ
+                                        93 - Hoàng Văn Thái (Quận Thanh Xuân Hà Nội)</p>
+                                    <p class="level-row">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Trình độ:</strong>Trung
+                                        b&#236;nh kh&#225;
+                                    </p>
+                                    <p class="match-contract">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Kèo:</strong>
+                                        2-3-4
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i> <strong>Trạng
+                                        thái:</strong>
+                                        <span class="red">Đã quá hạn</span>
+                                    </p>
+                                    <p class="quost-doi">
+                                        Xin chào tất cả a em. Mời a e giao lưu cùng đội mình. Đam mê chính là thể thao
+                                        là sức khỏe. 17h30 ngày 26/1 . hân hạnh được giao lưu cùng anh em. Sdt
+                                        0974039248. Sdt 0933901801.
+                                    </p>
+
+                                    <div class="btn-doi-bottom mobile-only mobile-only">
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+
+                        <li class="item-card match-finding-item" idd="77182">
+                            <div class="row">
+                                <div class="col-md-12 right-item-san right-item-doi">
+
+                                    <div class="header-item-doi header-tim-doi team-logo-enabled">
+                                        <div class="match-team-logo">
+                                            <a href="/ttvn-fc.html?matchId=77182" title="TTVN FC">
+                                                <img class="img-responsive"
+                                                     src="https://res.givator.com/pictures/11017/600/2019_02/medium/viber-image_1.jpg"
+                                                     align="thumbnail" alt="TTVN FC">
+                                            </a>
+                                        </div>
+                                        <div class="match-header-texts">
+                                            <h2>
+                                                <a href="/ttvn-fc.html?matchId=77182" title="TTVN FC">TTVN FC</a>
+                                                <span class="match-taginfo">
+                            <i class="fa fa-tag" aria-hidden="true"></i> C&#243; s&#226;n nh&#224;
+                        </span>
+                                            </h2>
+
+                                            <p class="captain-item noborder" owner-id="3936">
+                                                <a href="/user/profile/3936"><i class="fa fa-user"
+                                                                                aria-hidden="true"></i> nguyễn vinh</a>
+                                                <span class="captain-item-status offline hide"></span>
+                                                <span class="chat-nhanh" ng-click="onQuickChat(3936);"><i
+                                                        class="fa fa-comments" aria-hidden="true"></i>Nói chuyện</span>
+                                            </p>
+                                        </div>
+                                        <div class="btn-doi-top pull-right">
+
+
+                                            <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                    data-modal-tpl="match.recipientMaker"
+                                                    login-required="true"
+                                                    data-modal-qs="toTeamId=16396&toUserId=3936&toMatchId=77182&matchId=77182&teamId=16396&toTeamName=TTVN FC">
+                                                <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                            </button>
+
+
+                                        </div>
+                                    </div>
+
+                                    <p class="tim-doi-time"><i class="fa fa-calendar-check-o"
+                                                               aria-hidden="true"></i><strong>Thời gian:</strong>19h00
+                                        Thứ Hai ngày 11/03/2019</p>
+
+                                    <p class="item-stadium-p">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Sân nhà:</strong><a
+                                            href="/san-bong-dam-hong-ii.html" target="_blank">Sân Bóng Đầm Hồng II (Sân
+                                        7 số 7)</a>
+                                        <span class="price-san">850.000<sup>vnđ</sup> / trận</span>
+                                    </p>
+                                    <p class="item-stadium-address"><i class="fa fa-shirtsinbulk"
+                                                                       aria-hidden="true"></i><strong>Địa chỉ:</strong>Ngõ
+                                        93 - Hoàng Văn Thái (Quận Thanh Xuân Hà Nội)</p>
+                                    <p class="level-row">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Trình độ:</strong>Trung
+                                        b&#236;nh
+                                    </p>
+                                    <p class="match-contract">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Kèo:</strong>
+                                        3-4-5
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i> <strong>Trạng
+                                        thái:</strong>
+                                        <span class="red">Đang chờ</span>
+                                    </p>
+                                    <p class="quost-doi">
+                                        Đội bóng của văn phòng Cty cổ phần tập đoàn Trường Thành Việt Nam muốn đá giao
+                                        lưu với các đội bóng với trình độ trung bình, cam kết đá lịch sự không CTM
+                                    </p>
+
+                                    <div class="btn-doi-bottom mobile-only mobile-only">
+
+
+                                        <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                data-modal-tpl="match.recipientMaker"
+                                                login-required="true"
+                                                data-modal-qs="toTeamId=16396&toUserId=3936&toMatchId=77182&matchId=77182&teamId=16396&toTeamName=TTVN FC">
+                                            <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                        </button>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+
+                        <li class="item-card match-finding-item" idd="78533">
+                            <div class="row">
+                                <div class="col-md-12 right-item-san right-item-doi">
+
+                                    <div class="header-item-doi header-tim-doi ">
+                                        <div class="match-header-texts">
+                                            <h2>
+                                                <a href="/pgt-da-nang.html?matchId=78533" title="Pgt đ&#224; nẵng">Pgt đ&#224;
+                                                    nẵng</a>
+                                                <span class="match-taginfo">
+                            <i class="fa fa-tag" aria-hidden="true"></i> C&#243; s&#226;n nh&#224;
+                        </span>
+                                            </h2>
+
+                                            <p class="captain-item noborder" owner-id="4039">
+                                                <a href="/user/profile/4039"><i class="fa fa-user"
+                                                                                aria-hidden="true"></i> Nguyễn Văn long</a>
+                                                <span class="captain-item-status offline hide"></span>
+                                                <span class="chat-nhanh" ng-click="onQuickChat(4039);"><i
+                                                        class="fa fa-comments" aria-hidden="true"></i>Nói chuyện</span>
+                                            </p>
+                                        </div>
+                                        <div class="btn-doi-top pull-right">
+
+
+                                            <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                    data-modal-tpl="match.recipientMaker"
+                                                    login-required="true"
+                                                    data-modal-qs="toTeamId=16625&toUserId=4039&toMatchId=78533&matchId=78533&teamId=16625&toTeamName=Pgt đ&#224; nẵng">
+                                                <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                            </button>
+
+
+                                        </div>
+                                    </div>
+
+                                    <p class="tim-doi-time"><i class="fa fa-calendar-check-o"
+                                                               aria-hidden="true"></i><strong>Thời gian:</strong>17h30
+                                        Thứ Tư ngày 13/03/2019</p>
+
+                                    <p class="item-stadium-p">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Sân nhà:</strong><a
+                                            href="/san-bong-da-chuyen-viet.html" target="_blank">Sân bóng đá Chuyên Việt
+                                        (Sân 5 số 1)</a>
+                                    </p>
+                                    <p class="item-stadium-address"><i class="fa fa-shirtsinbulk"
+                                                                       aria-hidden="true"></i><strong>Địa chỉ:</strong>98
+                                        Tiểu La, Hoà Thuận Đông (Quận Hải Châu Đà Nẵng)</p>
+                                    <p class="level-row">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Trình độ:</strong>Trung
+                                        b&#236;nh kh&#225;
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i> <strong>Trạng
+                                        thái:</strong>
+                                        <span class="red">Đang chờ</span>
+                                    </p>
+                                    <p class="quost-doi">
+                                        Đội văn phòng nên đá nhẹ nhàng, tinh thần thể thao
+                                    </p>
+
+                                    <div class="btn-doi-bottom mobile-only mobile-only">
+
+
+                                        <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                data-modal-tpl="match.recipientMaker"
+                                                login-required="true"
+                                                data-modal-qs="toTeamId=16625&toUserId=4039&toMatchId=78533&matchId=78533&teamId=16625&toTeamName=Pgt đ&#224; nẵng">
+                                            <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                        </button>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+
+                        <li class="item-card match-finding-item" idd="78547">
+                            <div class="row">
+                                <div class="col-md-12 right-item-san right-item-doi">
+
+                                    <div class="header-item-doi header-tim-doi ">
+                                        <div class="match-header-texts">
+                                            <h2>
+                                                <a href="/wedo-fc-262011.html?matchId=78547" title="WEDO FC">WEDO FC</a>
+                                                <span class="match-taginfo">
+                            <i class="fa fa-tag" aria-hidden="true"></i> C&#243; s&#226;n nh&#224;
+                        </span>
+                                            </h2>
+
+                                            <p class="captain-item noborder" owner-id="4041">
+                                                <a href="/user/profile/4041"><i class="fa fa-user"
+                                                                                aria-hidden="true"></i> Quý Lê</a>
+                                                <span class="captain-item-status offline hide"></span>
+                                                <span class="chat-nhanh" ng-click="onQuickChat(4041);"><i
+                                                        class="fa fa-comments" aria-hidden="true"></i>Nói chuyện</span>
+                                            </p>
+                                        </div>
+                                        <div class="btn-doi-top pull-right">
+
+
+                                            <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                    data-modal-tpl="match.recipientMaker"
+                                                    login-required="true"
+                                                    data-modal-qs="toTeamId=16627&toUserId=4041&toMatchId=78547&matchId=78547&teamId=16627&toTeamName=WEDO FC">
+                                                <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                            </button>
+
+
+                                        </div>
+                                    </div>
+
+                                    <p class="tim-doi-time"><i class="fa fa-calendar-check-o"
+                                                               aria-hidden="true"></i><strong>Thời gian:</strong>17h30
+                                        Thứ Sáu ngày 15/03/2019</p>
+
+                                    <p class="item-stadium-p">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Sân nhà:</strong><a
+                                            href="/san-bong-son-trang-2-266011.html" target="_blank">Sân bóng Sơn Trang
+                                        2 (Sân 7 số 1)</a>
+                                    </p>
+                                    <p class="item-stadium-address"><i class="fa fa-shirtsinbulk"
+                                                                       aria-hidden="true"></i><strong>Địa chỉ:</strong>Số
+                                        1 Hoàng Minh Giám, Nhân Chính (Quận Thanh Xuân Hà Nội)</p>
+                                    <p class="level-row">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Trình độ:</strong>Mềm
+                                    </p>
+                                    <p class="match-contract">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Kèo:</strong>
+                                        50-50
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i> <strong>Trạng
+                                        thái:</strong>
+                                        <span class="red">Đang chờ</span>
+                                    </p>
+                                    <p class="quost-doi">
+                                        Đối mới văn phòng rất mềm, Đá tinh thần thể thao sức khỏe, ko ham thắng thua.
+                                        Cần tinh thần thể thao là chính. Thời gian: Thứ 6 17h30 Sân Sơn Trang 2, Hoàng
+                                        Minh Giám<br>Mời anh em tham gia cho vui vẻ! SĐT liên hệ: Quý-0966554992<br>Rất
+                                        mong được đón tiếp anh em!
+                                    </p>
+
+                                    <div class="btn-doi-bottom mobile-only mobile-only">
+
+
+                                        <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                data-modal-tpl="match.recipientMaker"
+                                                login-required="true"
+                                                data-modal-qs="toTeamId=16627&toUserId=4041&toMatchId=78547&matchId=78547&teamId=16627&toTeamName=WEDO FC">
+                                            <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                        </button>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+
+                        <li class="item-card match-finding-item" idd="73719">
+                            <div class="row">
+                                <div class="col-md-12 right-item-san right-item-doi">
+
+                                    <div class="header-item-doi header-tim-doi ">
+                                        <div class="match-header-texts">
+                                            <h2>
+                                                <a href="/vnpt-hofc.html?matchId=73719" title="VNPT HOFC">VNPT HOFC</a>
+                                                <span class="match-taginfo">
+                            <i class="fa fa-tag" aria-hidden="true"></i> C&#243; s&#226;n nh&#224;
+                        </span>
+                                            </h2>
+
+                                            <p class="captain-item noborder" owner-id="2044">
+                                                <a href="/user/profile/2044"><i class="fa fa-user"
+                                                                                aria-hidden="true"></i> Vu Quang
+                                                    Minh</a>
+                                                <span class="captain-item-status offline hide"></span>
+                                                <span class="chat-nhanh" ng-click="onQuickChat(2044);"><i
+                                                        class="fa fa-comments" aria-hidden="true"></i>Nói chuyện</span>
+                                            </p>
+                                        </div>
+                                        <div class="btn-doi-top pull-right">
+
+
+                                            <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                    data-modal-tpl="match.recipientMaker"
+                                                    login-required="true"
+                                                    data-modal-qs="toTeamId=10653&toUserId=2044&toMatchId=73719&matchId=73719&teamId=10653&toTeamName=VNPT HOFC">
+                                                <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                            </button>
+
+
+                                        </div>
+                                    </div>
+
+                                    <p class="tim-doi-time"><i class="fa fa-calendar-check-o"
+                                                               aria-hidden="true"></i><strong>Thời gian:</strong>17h30
+                                        Thứ Sáu ngày 15/03/2019</p>
+
+                                    <p class="item-stadium-p">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Sân nhà:</strong><a
+                                            href="/san-bong-thanh-dong-26677211.html" target="_blank">Sân bóng Thành
+                                        Đồng (Sân 7 số 4)</a>
+                                        <span class="price-san">800.000<sup>vnđ</sup> / trận</span>
+                                    </p>
+                                    <p class="item-stadium-address"><i class="fa fa-shirtsinbulk"
+                                                                       aria-hidden="true"></i><strong>Địa chỉ:</strong>Nam
+                                        Trung Yên, Trung Hoà (Quận Cầu Giấy Hà Nội)</p>
+                                    <p class="level-row">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Trình độ:</strong>Trung
+                                        b&#236;nh yếu
+                                    </p>
+                                    <p class="match-contract">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Kèo:</strong>
+                                        chia sẻ tiền s&#226;n 3-4-5 hoặc 4-4
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i> <strong>Trạng
+                                        thái:</strong>
+                                        <span class="red">Đang chờ</span>
+                                    </p>
+                                    <p class="quost-doi">
+                                        Mời các đội bóng giao lưu để thêm bạn và thêm sức khỏe. Đội mình phù hợp với các
+                                        đối tác là ae văn phòng, tuổi trung bình 40 ...
+                                    </p>
+
+                                    <div class="btn-doi-bottom mobile-only mobile-only">
+
+
+                                        <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                data-modal-tpl="match.recipientMaker"
+                                                login-required="true"
+                                                data-modal-qs="toTeamId=10653&toUserId=2044&toMatchId=73719&matchId=73719&teamId=10653&toTeamName=VNPT HOFC">
+                                            <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                        </button>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+
+                        <li class="item-card match-finding-item" idd="75807">
+                            <div class="row">
+                                <div class="col-md-12 right-item-san right-item-doi">
+
+                                    <div class="header-item-doi header-tim-doi ">
+                                        <div class="match-header-texts">
+                                            <h2>
+                                                <a href="/fc-dc-day-chang.html?matchId=75807"
+                                                   title="Fc DC (D&#226;y chằng)">Fc DC (D&#226;y chằng)</a>
+                                                <span class="match-taginfo">
+                            <i class="fa fa-tag" aria-hidden="true"></i> C&#243; s&#226;n nh&#224;
+                        </span>
+                                            </h2>
+
+                                            <p class="captain-item noborder" owner-id="3143">
+                                                <a href="/user/profile/3143"><i class="fa fa-user"
+                                                                                aria-hidden="true"></i> Nguyễn Dũng</a>
+                                                <span class="captain-item-status offline hide"></span>
+                                                <span class="chat-nhanh" ng-click="onQuickChat(3143);"><i
+                                                        class="fa fa-comments" aria-hidden="true"></i>Nói chuyện</span>
+                                            </p>
+                                        </div>
+                                        <div class="btn-doi-top pull-right">
+
+
+                                            <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                    data-modal-tpl="match.recipientMaker"
+                                                    login-required="true"
+                                                    data-modal-qs="toTeamId=13467&toUserId=3143&toMatchId=75807&matchId=75807&teamId=13467&toTeamName=Fc DC (D&#226;y chằng)">
+                                                <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                            </button>
+
+
+                                        </div>
+                                    </div>
+
+                                    <p class="tim-doi-time"><i class="fa fa-calendar-check-o"
+                                                               aria-hidden="true"></i><strong>Thời gian:</strong>19h00
+                                        Thứ Sáu ngày 15/03/2019</p>
+
+                                    <p class="item-stadium-p">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Sân nhà:</strong><a
+                                            href="/san-bong-dai-hoc-thuy-loi.html" target="_blank">Sân bóng Đại học Thủy
+                                        lợi (Sân 7 số 1)</a>
+                                    </p>
+                                    <p class="item-stadium-address"><i class="fa fa-shirtsinbulk"
+                                                                       aria-hidden="true"></i><strong>Địa chỉ:</strong>Ngõ
+                                        95 Chùa Bộc, Trung Liệt (Quận Đống Đa Hà Nội)</p>
+                                    <p class="level-row">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Trình độ:</strong>Trung
+                                        b&#236;nh
+                                    </p>
+                                    <p class="match-contract">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Kèo:</strong>
+                                        3-4-5
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i> <strong>Trạng
+                                        thái:</strong>
+                                        <span class="red">Đang chờ</span>
+                                    </p>
+                                    <p class="quost-doi">
+                                        A e văn phòng, đá lấy sức khoẻ, k chân tay miệng, ebola các kiểu,<br>Ae đội nào
+                                        cùng chung mục đích giao lưu với đội e vui lòng liên hệ: e Dũng 28+ 0934686959
+                                    </p>
+
+                                    <div class="btn-doi-bottom mobile-only mobile-only">
+
+
+                                        <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                data-modal-tpl="match.recipientMaker"
+                                                login-required="true"
+                                                data-modal-qs="toTeamId=13467&toUserId=3143&toMatchId=75807&matchId=75807&teamId=13467&toTeamName=Fc DC (D&#226;y chằng)">
+                                            <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                        </button>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+
+                        <li class="item-card match-finding-item" idd="77183">
+                            <div class="row">
+                                <div class="col-md-12 right-item-san right-item-doi">
+
+                                    <div class="header-item-doi header-tim-doi team-logo-enabled">
+                                        <div class="match-team-logo">
+                                            <a href="/ttvn-fc.html?matchId=77183" title="TTVN FC">
+                                                <img class="img-responsive"
+                                                     src="https://res.givator.com/pictures/11017/600/2019_02/medium/viber-image_1.jpg"
+                                                     align="thumbnail" alt="TTVN FC">
+                                            </a>
+                                        </div>
+                                        <div class="match-header-texts">
+                                            <h2>
+                                                <a href="/ttvn-fc.html?matchId=77183" title="TTVN FC">TTVN FC</a>
+                                                <span class="match-taginfo">
+                            <i class="fa fa-tag" aria-hidden="true"></i> C&#243; s&#226;n nh&#224;
+                        </span>
+                                            </h2>
+
+                                            <p class="captain-item noborder" owner-id="3936">
+                                                <a href="/user/profile/3936"><i class="fa fa-user"
+                                                                                aria-hidden="true"></i> nguyễn vinh</a>
+                                                <span class="captain-item-status offline hide"></span>
+                                                <span class="chat-nhanh" ng-click="onQuickChat(3936);"><i
+                                                        class="fa fa-comments" aria-hidden="true"></i>Nói chuyện</span>
+                                            </p>
+                                        </div>
+                                        <div class="btn-doi-top pull-right">
+
+
+                                            <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                    data-modal-tpl="match.recipientMaker"
+                                                    login-required="true"
+                                                    data-modal-qs="toTeamId=16396&toUserId=3936&toMatchId=77183&matchId=77183&teamId=16396&toTeamName=TTVN FC">
+                                                <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                            </button>
+
+
+                                        </div>
+                                    </div>
+
+                                    <p class="tim-doi-time"><i class="fa fa-calendar-check-o"
+                                                               aria-hidden="true"></i><strong>Thời gian:</strong>19h00
+                                        Thứ Hai ngày 18/03/2019</p>
+
+                                    <p class="item-stadium-p">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Sân nhà:</strong><a
+                                            href="/san-bong-dam-hong-ii.html" target="_blank">Sân Bóng Đầm Hồng II (Sân
+                                        7 số 7)</a>
+                                        <span class="price-san">850.000<sup>vnđ</sup> / trận</span>
+                                    </p>
+                                    <p class="item-stadium-address"><i class="fa fa-shirtsinbulk"
+                                                                       aria-hidden="true"></i><strong>Địa chỉ:</strong>Ngõ
+                                        93 - Hoàng Văn Thái (Quận Thanh Xuân Hà Nội)</p>
+                                    <p class="level-row">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Trình độ:</strong>Trung
+                                        b&#236;nh
+                                    </p>
+                                    <p class="match-contract">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Kèo:</strong>
+                                        3-4-5
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i> <strong>Trạng
+                                        thái:</strong>
+                                        <span class="red">Đang chờ</span>
+                                    </p>
+                                    <p class="quost-doi">
+                                        Đội bóng của văn phòng Cty cổ phần tập đoàn Trường Thành Việt Nam muốn đá giao
+                                        lưu với các đội bóng với trình độ trung bình, cam kết đá lịch sự không CTM
+                                    </p>
+
+                                    <div class="btn-doi-bottom mobile-only mobile-only">
+
+
+                                        <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                data-modal-tpl="match.recipientMaker"
+                                                login-required="true"
+                                                data-modal-qs="toTeamId=16396&toUserId=3936&toMatchId=77183&matchId=77183&teamId=16396&toTeamName=TTVN FC">
+                                            <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                        </button>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+
+                        <li class="item-card match-finding-item" idd="78534">
+                            <div class="row">
+                                <div class="col-md-12 right-item-san right-item-doi">
+
+                                    <div class="header-item-doi header-tim-doi ">
+                                        <div class="match-header-texts">
+                                            <h2>
+                                                <a href="/pgt-da-nang.html?matchId=78534" title="Pgt đ&#224; nẵng">Pgt đ&#224;
+                                                    nẵng</a>
+                                                <span class="match-taginfo">
+                            <i class="fa fa-tag" aria-hidden="true"></i> C&#243; s&#226;n nh&#224;
+                        </span>
+                                            </h2>
+
+                                            <p class="captain-item noborder" owner-id="4039">
+                                                <a href="/user/profile/4039"><i class="fa fa-user"
+                                                                                aria-hidden="true"></i> Nguyễn Văn long</a>
+                                                <span class="captain-item-status offline hide"></span>
+                                                <span class="chat-nhanh" ng-click="onQuickChat(4039);"><i
+                                                        class="fa fa-comments" aria-hidden="true"></i>Nói chuyện</span>
+                                            </p>
+                                        </div>
+                                        <div class="btn-doi-top pull-right">
+
+
+                                            <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                    data-modal-tpl="match.recipientMaker"
+                                                    login-required="true"
+                                                    data-modal-qs="toTeamId=16625&toUserId=4039&toMatchId=78534&matchId=78534&teamId=16625&toTeamName=Pgt đ&#224; nẵng">
+                                                <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                            </button>
+
+
+                                        </div>
+                                    </div>
+
+                                    <p class="tim-doi-time"><i class="fa fa-calendar-check-o"
+                                                               aria-hidden="true"></i><strong>Thời gian:</strong>17h30
+                                        Thứ Tư ngày 20/03/2019</p>
+
+                                    <p class="item-stadium-p">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Sân nhà:</strong><a
+                                            href="/san-bong-da-chuyen-viet.html" target="_blank">Sân bóng đá Chuyên Việt
+                                        (Sân 5 số 1)</a>
+                                    </p>
+                                    <p class="item-stadium-address"><i class="fa fa-shirtsinbulk"
+                                                                       aria-hidden="true"></i><strong>Địa chỉ:</strong>98
+                                        Tiểu La, Hoà Thuận Đông (Quận Hải Châu Đà Nẵng)</p>
+                                    <p class="level-row">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Trình độ:</strong>Trung
+                                        b&#236;nh kh&#225;
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i> <strong>Trạng
+                                        thái:</strong>
+                                        <span class="red">Đang chờ</span>
+                                    </p>
+                                    <p class="quost-doi">
+                                        Đội văn phòng nên đá nhẹ nhàng, tinh thần thể thao
+                                    </p>
+
+                                    <div class="btn-doi-bottom mobile-only mobile-only">
+
+
+                                        <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                data-modal-tpl="match.recipientMaker"
+                                                login-required="true"
+                                                data-modal-qs="toTeamId=16625&toUserId=4039&toMatchId=78534&matchId=78534&teamId=16625&toTeamName=Pgt đ&#224; nẵng">
+                                            <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                        </button>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+
+                        <li class="item-card match-finding-item" idd="75808">
+                            <div class="row">
+                                <div class="col-md-12 right-item-san right-item-doi">
+
+                                    <div class="header-item-doi header-tim-doi ">
+                                        <div class="match-header-texts">
+                                            <h2>
+                                                <a href="/fc-dc-day-chang.html?matchId=75808"
+                                                   title="Fc DC (D&#226;y chằng)">Fc DC (D&#226;y chằng)</a>
+                                                <span class="match-taginfo">
+                            <i class="fa fa-tag" aria-hidden="true"></i> C&#243; s&#226;n nh&#224;
+                        </span>
+                                            </h2>
+
+                                            <p class="captain-item noborder" owner-id="3143">
+                                                <a href="/user/profile/3143"><i class="fa fa-user"
+                                                                                aria-hidden="true"></i> Nguyễn Dũng</a>
+                                                <span class="captain-item-status offline hide"></span>
+                                                <span class="chat-nhanh" ng-click="onQuickChat(3143);"><i
+                                                        class="fa fa-comments" aria-hidden="true"></i>Nói chuyện</span>
+                                            </p>
+                                        </div>
+                                        <div class="btn-doi-top pull-right">
+
+
+                                            <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                    data-modal-tpl="match.recipientMaker"
+                                                    login-required="true"
+                                                    data-modal-qs="toTeamId=13467&toUserId=3143&toMatchId=75808&matchId=75808&teamId=13467&toTeamName=Fc DC (D&#226;y chằng)">
+                                                <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                            </button>
+
+
+                                        </div>
+                                    </div>
+
+                                    <p class="tim-doi-time"><i class="fa fa-calendar-check-o"
+                                                               aria-hidden="true"></i><strong>Thời gian:</strong>19h00
+                                        Thứ Sáu ngày 22/03/2019</p>
+
+                                    <p class="item-stadium-p">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Sân nhà:</strong><a
+                                            href="/san-bong-dai-hoc-thuy-loi.html" target="_blank">Sân bóng Đại học Thủy
+                                        lợi (Sân 7 số 1)</a>
+                                    </p>
+                                    <p class="item-stadium-address"><i class="fa fa-shirtsinbulk"
+                                                                       aria-hidden="true"></i><strong>Địa chỉ:</strong>Ngõ
+                                        95 Chùa Bộc, Trung Liệt (Quận Đống Đa Hà Nội)</p>
+                                    <p class="level-row">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Trình độ:</strong>Trung
+                                        b&#236;nh
+                                    </p>
+                                    <p class="match-contract">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Kèo:</strong>
+                                        3-4-5
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i> <strong>Trạng
+                                        thái:</strong>
+                                        <span class="red">Đang chờ</span>
+                                    </p>
+                                    <p class="quost-doi">
+                                        A e văn phòng, đá lấy sức khoẻ, k chân tay miệng, ebola các kiểu,<br>Ae đội nào
+                                        cùng chung mục đích giao lưu với đội e vui lòng liên hệ: e Dũng 28+ 0934686959
+                                    </p>
+
+                                    <div class="btn-doi-bottom mobile-only mobile-only">
+
+
+                                        <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                data-modal-tpl="match.recipientMaker"
+                                                login-required="true"
+                                                data-modal-qs="toTeamId=13467&toUserId=3143&toMatchId=75808&matchId=75808&teamId=13467&toTeamName=Fc DC (D&#226;y chằng)">
+                                            <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                        </button>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+
+                        <li class="item-card match-finding-item" idd="78535">
+                            <div class="row">
+                                <div class="col-md-12 right-item-san right-item-doi">
+
+                                    <div class="header-item-doi header-tim-doi ">
+                                        <div class="match-header-texts">
+                                            <h2>
+                                                <a href="/pgt-da-nang.html?matchId=78535" title="Pgt đ&#224; nẵng">Pgt đ&#224;
+                                                    nẵng</a>
+                                                <span class="match-taginfo">
+                            <i class="fa fa-tag" aria-hidden="true"></i> C&#243; s&#226;n nh&#224;
+                        </span>
+                                            </h2>
+
+                                            <p class="captain-item noborder" owner-id="4039">
+                                                <a href="/user/profile/4039"><i class="fa fa-user"
+                                                                                aria-hidden="true"></i> Nguyễn Văn long</a>
+                                                <span class="captain-item-status offline hide"></span>
+                                                <span class="chat-nhanh" ng-click="onQuickChat(4039);"><i
+                                                        class="fa fa-comments" aria-hidden="true"></i>Nói chuyện</span>
+                                            </p>
+                                        </div>
+                                        <div class="btn-doi-top pull-right">
+
+
+                                            <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                    data-modal-tpl="match.recipientMaker"
+                                                    login-required="true"
+                                                    data-modal-qs="toTeamId=16625&toUserId=4039&toMatchId=78535&matchId=78535&teamId=16625&toTeamName=Pgt đ&#224; nẵng">
+                                                <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                            </button>
+
+
+                                        </div>
+                                    </div>
+
+                                    <p class="tim-doi-time"><i class="fa fa-calendar-check-o"
+                                                               aria-hidden="true"></i><strong>Thời gian:</strong>17h30
+                                        Thứ Tư ngày 27/03/2019</p>
+
+                                    <p class="item-stadium-p">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Sân nhà:</strong><a
+                                            href="/san-bong-da-chuyen-viet.html" target="_blank">Sân bóng đá Chuyên Việt
+                                        (Sân 5 số 1)</a>
+                                    </p>
+                                    <p class="item-stadium-address"><i class="fa fa-shirtsinbulk"
+                                                                       aria-hidden="true"></i><strong>Địa chỉ:</strong>98
+                                        Tiểu La, Hoà Thuận Đông (Quận Hải Châu Đà Nẵng)</p>
+                                    <p class="level-row">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Trình độ:</strong>Trung
+                                        b&#236;nh kh&#225;
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i> <strong>Trạng
+                                        thái:</strong>
+                                        <span class="red">Đang chờ</span>
+                                    </p>
+                                    <p class="quost-doi">
+                                        Đội văn phòng nên đá nhẹ nhàng, tinh thần thể thao
+                                    </p>
+
+                                    <div class="btn-doi-bottom mobile-only mobile-only">
+
+
+                                        <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                data-modal-tpl="match.recipientMaker"
+                                                login-required="true"
+                                                data-modal-qs="toTeamId=16625&toUserId=4039&toMatchId=78535&matchId=78535&teamId=16625&toTeamName=Pgt đ&#224; nẵng">
+                                            <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                        </button>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+
+                        <li class="item-card match-finding-item" idd="75809">
+                            <div class="row">
+                                <div class="col-md-12 right-item-san right-item-doi">
+
+                                    <div class="header-item-doi header-tim-doi ">
+                                        <div class="match-header-texts">
+                                            <h2>
+                                                <a href="/fc-dc-day-chang.html?matchId=75809"
+                                                   title="Fc DC (D&#226;y chằng)">Fc DC (D&#226;y chằng)</a>
+                                                <span class="match-taginfo">
+                            <i class="fa fa-tag" aria-hidden="true"></i> C&#243; s&#226;n nh&#224;
+                        </span>
+                                            </h2>
+
+                                            <p class="captain-item noborder" owner-id="3143">
+                                                <a href="/user/profile/3143"><i class="fa fa-user"
+                                                                                aria-hidden="true"></i> Nguyễn Dũng</a>
+                                                <span class="captain-item-status offline hide"></span>
+                                                <span class="chat-nhanh" ng-click="onQuickChat(3143);"><i
+                                                        class="fa fa-comments" aria-hidden="true"></i>Nói chuyện</span>
+                                            </p>
+                                        </div>
+                                        <div class="btn-doi-top pull-right">
+
+
+                                            <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                    data-modal-tpl="match.recipientMaker"
+                                                    login-required="true"
+                                                    data-modal-qs="toTeamId=13467&toUserId=3143&toMatchId=75809&matchId=75809&teamId=13467&toTeamName=Fc DC (D&#226;y chằng)">
+                                                <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                            </button>
+
+
+                                        </div>
+                                    </div>
+
+                                    <p class="tim-doi-time"><i class="fa fa-calendar-check-o"
+                                                               aria-hidden="true"></i><strong>Thời gian:</strong>19h00
+                                        Thứ Sáu ngày 29/03/2019</p>
+
+                                    <p class="item-stadium-p">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Sân nhà:</strong><a
+                                            href="/san-bong-dai-hoc-thuy-loi.html" target="_blank">Sân bóng Đại học Thủy
+                                        lợi (Sân 7 số 1)</a>
+                                    </p>
+                                    <p class="item-stadium-address"><i class="fa fa-shirtsinbulk"
+                                                                       aria-hidden="true"></i><strong>Địa chỉ:</strong>Ngõ
+                                        95 Chùa Bộc, Trung Liệt (Quận Đống Đa Hà Nội)</p>
+                                    <p class="level-row">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Trình độ:</strong>Trung
+                                        b&#236;nh
+                                    </p>
+                                    <p class="match-contract">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Kèo:</strong>
+                                        3-4-5
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i> <strong>Trạng
+                                        thái:</strong>
+                                        <span class="red">Đang chờ</span>
+                                    </p>
+                                    <p class="quost-doi">
+                                        A e văn phòng, đá lấy sức khoẻ, k chân tay miệng, ebola các kiểu,<br>Ae đội nào
+                                        cùng chung mục đích giao lưu với đội e vui lòng liên hệ: e Dũng 28+ 0934686959
+                                    </p>
+
+                                    <div class="btn-doi-bottom mobile-only mobile-only">
+
+
+                                        <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                data-modal-tpl="match.recipientMaker"
+                                                login-required="true"
+                                                data-modal-qs="toTeamId=13467&toUserId=3143&toMatchId=75809&matchId=75809&teamId=13467&toTeamName=Fc DC (D&#226;y chằng)">
+                                            <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                        </button>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+
+                        <li class="item-card match-finding-item" idd="78536">
+                            <div class="row">
+                                <div class="col-md-12 right-item-san right-item-doi">
+
+                                    <div class="header-item-doi header-tim-doi ">
+                                        <div class="match-header-texts">
+                                            <h2>
+                                                <a href="/pgt-da-nang.html?matchId=78536" title="Pgt đ&#224; nẵng">Pgt đ&#224;
+                                                    nẵng</a>
+                                                <span class="match-taginfo">
+                            <i class="fa fa-tag" aria-hidden="true"></i> C&#243; s&#226;n nh&#224;
+                        </span>
+                                            </h2>
+
+                                            <p class="captain-item noborder" owner-id="4039">
+                                                <a href="/user/profile/4039"><i class="fa fa-user"
+                                                                                aria-hidden="true"></i> Nguyễn Văn long</a>
+                                                <span class="captain-item-status offline hide"></span>
+                                                <span class="chat-nhanh" ng-click="onQuickChat(4039);"><i
+                                                        class="fa fa-comments" aria-hidden="true"></i>Nói chuyện</span>
+                                            </p>
+                                        </div>
+                                        <div class="btn-doi-top pull-right">
+
+
+                                            <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                    data-modal-tpl="match.recipientMaker"
+                                                    login-required="true"
+                                                    data-modal-qs="toTeamId=16625&toUserId=4039&toMatchId=78536&matchId=78536&teamId=16625&toTeamName=Pgt đ&#224; nẵng">
+                                                <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                            </button>
+
+
+                                        </div>
+                                    </div>
+
+                                    <p class="tim-doi-time"><i class="fa fa-calendar-check-o"
+                                                               aria-hidden="true"></i><strong>Thời gian:</strong>17h30
+                                        Thứ Tư ngày 03/04/2019</p>
+
+                                    <p class="item-stadium-p">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Sân nhà:</strong><a
+                                            href="/san-bong-da-chuyen-viet.html" target="_blank">Sân bóng đá Chuyên Việt
+                                        (Sân 5 số 1)</a>
+                                    </p>
+                                    <p class="item-stadium-address"><i class="fa fa-shirtsinbulk"
+                                                                       aria-hidden="true"></i><strong>Địa chỉ:</strong>98
+                                        Tiểu La, Hoà Thuận Đông (Quận Hải Châu Đà Nẵng)</p>
+                                    <p class="level-row">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Trình độ:</strong>Trung
+                                        b&#236;nh kh&#225;
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i> <strong>Trạng
+                                        thái:</strong>
+                                        <span class="red">Đang chờ</span>
+                                    </p>
+                                    <p class="quost-doi">
+                                        Đội văn phòng nên đá nhẹ nhàng, tinh thần thể thao
+                                    </p>
+
+                                    <div class="btn-doi-bottom mobile-only mobile-only">
+
+
+                                        <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                data-modal-tpl="match.recipientMaker"
+                                                login-required="true"
+                                                data-modal-qs="toTeamId=16625&toUserId=4039&toMatchId=78536&matchId=78536&teamId=16625&toTeamName=Pgt đ&#224; nẵng">
+                                            <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                        </button>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+
+                        <li class="item-card match-finding-item" idd="75810">
+                            <div class="row">
+                                <div class="col-md-12 right-item-san right-item-doi">
+
+                                    <div class="header-item-doi header-tim-doi ">
+                                        <div class="match-header-texts">
+                                            <h2>
+                                                <a href="/fc-dc-day-chang.html?matchId=75810"
+                                                   title="Fc DC (D&#226;y chằng)">Fc DC (D&#226;y chằng)</a>
+                                                <span class="match-taginfo">
+                            <i class="fa fa-tag" aria-hidden="true"></i> C&#243; s&#226;n nh&#224;
+                        </span>
+                                            </h2>
+
+                                            <p class="captain-item noborder" owner-id="3143">
+                                                <a href="/user/profile/3143"><i class="fa fa-user"
+                                                                                aria-hidden="true"></i> Nguyễn Dũng</a>
+                                                <span class="captain-item-status offline hide"></span>
+                                                <span class="chat-nhanh" ng-click="onQuickChat(3143);"><i
+                                                        class="fa fa-comments" aria-hidden="true"></i>Nói chuyện</span>
+                                            </p>
+                                        </div>
+                                        <div class="btn-doi-top pull-right">
+
+
+                                            <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                    data-modal-tpl="match.recipientMaker"
+                                                    login-required="true"
+                                                    data-modal-qs="toTeamId=13467&toUserId=3143&toMatchId=75810&matchId=75810&teamId=13467&toTeamName=Fc DC (D&#226;y chằng)">
+                                                <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                            </button>
+
+
+                                        </div>
+                                    </div>
+
+                                    <p class="tim-doi-time"><i class="fa fa-calendar-check-o"
+                                                               aria-hidden="true"></i><strong>Thời gian:</strong>19h00
+                                        Thứ Sáu ngày 05/04/2019</p>
+
+                                    <p class="item-stadium-p">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Sân nhà:</strong><a
+                                            href="/san-bong-dai-hoc-thuy-loi.html" target="_blank">Sân bóng Đại học Thủy
+                                        lợi (Sân 7 số 1)</a>
+                                    </p>
+                                    <p class="item-stadium-address"><i class="fa fa-shirtsinbulk"
+                                                                       aria-hidden="true"></i><strong>Địa chỉ:</strong>Ngõ
+                                        95 Chùa Bộc, Trung Liệt (Quận Đống Đa Hà Nội)</p>
+                                    <p class="level-row">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Trình độ:</strong>Trung
+                                        b&#236;nh
+                                    </p>
+                                    <p class="match-contract">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Kèo:</strong>
+                                        3-4-5
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i> <strong>Trạng
+                                        thái:</strong>
+                                        <span class="red">Đang chờ</span>
+                                    </p>
+                                    <p class="quost-doi">
+                                        A e văn phòng, đá lấy sức khoẻ, k chân tay miệng, ebola các kiểu,<br>Ae đội nào
+                                        cùng chung mục đích giao lưu với đội e vui lòng liên hệ: e Dũng 28+ 0934686959
+                                    </p>
+
+                                    <div class="btn-doi-bottom mobile-only mobile-only">
+
+
+                                        <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                data-modal-tpl="match.recipientMaker"
+                                                login-required="true"
+                                                data-modal-qs="toTeamId=13467&toUserId=3143&toMatchId=75810&matchId=75810&teamId=13467&toTeamName=Fc DC (D&#226;y chằng)">
+                                            <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                        </button>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+
+                        <li class="item-card match-finding-item" idd="78537">
+                            <div class="row">
+                                <div class="col-md-12 right-item-san right-item-doi">
+
+                                    <div class="header-item-doi header-tim-doi ">
+                                        <div class="match-header-texts">
+                                            <h2>
+                                                <a href="/pgt-da-nang.html?matchId=78537" title="Pgt đ&#224; nẵng">Pgt đ&#224;
+                                                    nẵng</a>
+                                                <span class="match-taginfo">
+                            <i class="fa fa-tag" aria-hidden="true"></i> C&#243; s&#226;n nh&#224;
+                        </span>
+                                            </h2>
+
+                                            <p class="captain-item noborder" owner-id="4039">
+                                                <a href="/user/profile/4039"><i class="fa fa-user"
+                                                                                aria-hidden="true"></i> Nguyễn Văn long</a>
+                                                <span class="captain-item-status offline hide"></span>
+                                                <span class="chat-nhanh" ng-click="onQuickChat(4039);"><i
+                                                        class="fa fa-comments" aria-hidden="true"></i>Nói chuyện</span>
+                                            </p>
+                                        </div>
+                                        <div class="btn-doi-top pull-right">
+
+
+                                            <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                    data-modal-tpl="match.recipientMaker"
+                                                    login-required="true"
+                                                    data-modal-qs="toTeamId=16625&toUserId=4039&toMatchId=78537&matchId=78537&teamId=16625&toTeamName=Pgt đ&#224; nẵng">
+                                                <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                            </button>
+
+
+                                        </div>
+                                    </div>
+
+                                    <p class="tim-doi-time"><i class="fa fa-calendar-check-o"
+                                                               aria-hidden="true"></i><strong>Thời gian:</strong>17h30
+                                        Thứ Tư ngày 10/04/2019</p>
+
+                                    <p class="item-stadium-p">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Sân nhà:</strong><a
+                                            href="/san-bong-da-chuyen-viet.html" target="_blank">Sân bóng đá Chuyên Việt
+                                        (Sân 5 số 1)</a>
+                                    </p>
+                                    <p class="item-stadium-address"><i class="fa fa-shirtsinbulk"
+                                                                       aria-hidden="true"></i><strong>Địa chỉ:</strong>98
+                                        Tiểu La, Hoà Thuận Đông (Quận Hải Châu Đà Nẵng)</p>
+                                    <p class="level-row">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Trình độ:</strong>Trung
+                                        b&#236;nh kh&#225;
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i> <strong>Trạng
+                                        thái:</strong>
+                                        <span class="red">Đang chờ</span>
+                                    </p>
+                                    <p class="quost-doi">
+                                        Đội văn phòng nên đá nhẹ nhàng, tinh thần thể thao
+                                    </p>
+
+                                    <div class="btn-doi-bottom mobile-only mobile-only">
+
+
+                                        <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                data-modal-tpl="match.recipientMaker"
+                                                login-required="true"
+                                                data-modal-qs="toTeamId=16625&toUserId=4039&toMatchId=78537&matchId=78537&teamId=16625&toTeamName=Pgt đ&#224; nẵng">
+                                            <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                        </button>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="col-md-12">
+                        <div class="pagination_container">
+                            <div class="pagination"><span class="noLinkPager hnpageprev_inactive"><i
+                                    class="fa fa-angle-left" aria-hidden="true"></i></span><span
+                                    class="noLinkPager hncurrpage">1</span><a href="/tim-doi-da-bong?pi=2"
+                                                                              class="linkPager hnpagelink"
+                                                                              title="2"><span
+                                    class="hnotherpage">2</span></a><a href="/tim-doi-da-bong?pi=3"
+                                                                       class="linkPager hnpagelink" title="3"><span
+                                    class="hnotherpage">3</span></a><a href="/tim-doi-da-bong?pi=4"
+                                                                       class="linkPager hnpagelink" title="4"><span
+                                    class="hnotherpage">4</span></a><a href="/tim-doi-da-bong?pi=5"
+                                                                       class="linkPager hnpagelink" title="5"><span
+                                    class="hnotherpage">5</span></a><a href="/tim-doi-da-bong?pi=6"
+                                                                       class="linkPager hnpagelink" title="6"><span
+                                    class="hnotherpage">6</span></a><a href="/tim-doi-da-bong?pi=2"
+                                                                       class="linkPager hnpagenext"
+                                                                       title="Trang sau"><span class="hnotherpage"><i
+                                    class="fa fa-angle-right" aria-hidden="true"></i></span></a></div>
+                        </div>
+                    </div>
+
+                    <div class="form-filter-doi">
+                        <div class="title-btn-moi-doi">
+                            <span>Team của bạn Không tìm được đối tác phù hợp?</span>
+                            <a href="/match/post" class="btn btn-default btn-moi-doi"><i class="fa fa-beer"
+                                                                                         aria-hidden="true"></i> Mời đối
+                                giao lưu</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="ads-banner-right" id="s9adright">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--#top hero box-->
+<style type="text/css">
+    .sp-autocomplete img {
+        display: none;
+    }
+</style>
+<script type="text/javascript">
+    function onSearchMatchStadiumSelectedChange(data) {
+        $('#searchMatchStadiumId').val(data.params.data.id);
+    }
+</script>
+
+<footer th:replace="fragments/footer::footer"></footer>
+<div th:replace="fragments/modals::modals"></div>
+</body>
+</html>

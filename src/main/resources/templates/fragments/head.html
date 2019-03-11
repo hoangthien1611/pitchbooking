@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/images/favicons/apple-touch-icon.png}">
+    <link rel="icon" type="image/png" th:href="@{/images/favicons/favicon-32x32.png}" sizes="32x32">
+    <link rel="icon" type="image/png" th:href="@{/images/favicons/favicon-16x16.png}" sizes="16x16">
+    <link rel="manifest" th:href="@{/images/favicons/manifest.json}">
+    <link rel="mask-icon" th:href="@{/images/favicons/safari-pinned-tab.svg}" color="#5bbad5">
+    <meta name="theme-color" content="#ffffff">
+    <!--Booking verify-->
+    <meta name="B-verify" content="04bdaaddca34266cf70ff8a7946fb9c26505fe05"/>
+
+
+    <meta property="og:title" content="Tìm đối đá bóng, đặt sân trực tuyến - Tìm Đối Nhanh"/>
+    <meta property="og:description"
+          content="Cung cấp các tiện ích thông minh cho việc tìm đối đá bóng, đặt sân hiệu quả. Tổng hợp danh sách tìm đối tại hà nội, hồ chí mình, đà nẵng và nhiều tỉnh/ thành phố trên cả nước."/>
+    <meta property="og:image" itemprop="image primaryImageOfPage" content="@{/images/timdoinhanh-min.png}"/>
+
+
+    <title>Tìm đối đá bóng, đặt sân trực tuyến - Tìm Đối Nhanh - Tìm đối nhanh, đặt sân rẻ</title>
+    <link rel="shortcut icon" th:href="@{/images/favicons/favicon.ico}"/>
+    <meta name="description"
+          content="Cung cấp các tiện ích thông minh cho việc tìm đối đá bóng, đặt sân hiệu quả. Tổng hợp danh sách tìm đối tại hà nội, hồ chí mình, đà nẵng và nhiều tỉnh/ thành phố trên cả nước."/>
+    <meta name="keywords"
+          content="Tìm đối đá bóng, tìm đối gấp, đội bóng tại hà nội, đội bóng tại hồ chí minh, phần mềm quản lý sân bóng, sân bóng giảm giá, sân bóng hà nội, giao lưu bóng đá hà nội, sân bóng hồ chí minh, đội bóng tại hà nội, đội bóng tại hồ chí minh, tìm đối chơi tennis, câu lạc bộ bóng bàn"/>
+
+
+    <!-- Google Font -->
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800' rel="stylesheet" type="text/css">
+    <link th:href="@{/css/font-awesome.css}" rel="stylesheet"/>
+
+    <!--Stylesheets-->
+    <link th:href="@{/css/plugins.css?v=Ahqo92Qjg_5hNgokcNbdDKqsKgb-VMnRUm9SH4imTUk1}" rel="stylesheet"/>
+
+    <link th:href="@{/css/main.css?v=RwDoE9XGqem7Sr734GLhRvhyCWNYEeCfNpMFQ5ZZx_41}" rel="stylesheet"/>
+
+    <!--Libraries-->
+    <script th:src="@{/js/libs.js}"></script>
+
+    <script th:src="@{/js/firebase.js}"></script>
+
+
+    <!--angularjs ui-select-->
+    <link th:href="@{/css/ui-select.css?v=RJBwKvQnmD4rGTsXquzpUKTBdS5YnyDb5u0OMMZ_kas1}" rel="stylesheet"/>
+
+    <script th:src="@{/js/ui-select.js}"></script>
+
+
+    <!--angularjs moment-picker-->
+    <link th:href="@{/js/moment-picker.css?v=hpNcxpWioY99YYUxBpNgkzo56BZ4qMwXBi1z4b_d-rE1}" rel="stylesheet"/>
+
+    <script th:src="@{/js/moment-picker.js}"></script>
+
+    <script>
+        var sportApp = angular.module('sportApp', [
+            'ui.bootstrap',
+            'autocomplete',
+            'ngRoute',
+            'ngAnimate',
+            'firebase',
+            'ui.select',
+            'ngSanitize',
+            //'mwl.calendar',
+            'moment-picker',
+            'ui.utils.masks']);
+
+        sportApp.factory('httpRequestInterceptor', function ($q, $location) {
+            return {
+                'responseError': function (rejection) {
+                    // do something on error
+                    if (rejection.status === 404) {
+                        $location.path('/404/');
+                    } else if (rejection.status === 401) {
+                        alert('Có lỗi xảy ra trong quá trình tải dữ liệu, vui lòng đăng nhập lại');
+                        location.href = '/dang-nhap.html';
+                    }
+                    return $q.reject(rejection);
+                }
+            };
+        });
+    </script>
+    <!--<script type="text/javascript" th:src="Angular/js/angularHelper.js"></script>-->
+    <script th:src="@{/js/common.js}"></script>
+
+    <script th:src="@{/js/directives.js}"></script>
+
+    <script th:src="@{/js/services.js}"></script>
+
+    <script th:src="@{/js/controllers.js}"></script>
+
+    <script th:src="@{/js/custom.js}"></script>
+
+    <script th:src="@{/js/filters.js}"></script>
+
+    <!--Common-->
+
+
+    <!--<script>-->
+    <!--common.config.userId = '';-->
+    <!--common.config.avatar = '';-->
+    <!--common.config.name = '';-->
+    <!--common.config.xAuthToken = '';-->
+    <!--common.config.serviceDomain = '/';-->
+    <!--common.config.webDomain = '/';-->
+    <!--var jsonMyTeams = '';-->
+    <!--if (jsonMyTeams != '') {-->
+    <!--common.config.myTeams = jQuery.parseJSON(jsonMyTeams);-->
+    <!--} else {-->
+    <!--common.config.myTeams = [];-->
+    <!--}-->
+
+    <!--</script>-->
+
+    <!--<script>-->
+    <!--// Initialize Firebase-->
+    <!--// Initialize Firebase-->
+    <!--var config = {-->
+    <!--apiKey: "AIzaSyAF-FW6r0uAuQ6kUdPTRT_RrpQUZn8lFFE",-->
+    <!--authDomain: "timdoinhanh-4538b.firebaseapp.com",-->
+    <!--databaseURL: "https://timdoinhanh-4538b.firebaseio.com",-->
+    <!--projectId: "timdoinhanh-4538b",-->
+    <!--storageBucket: "timdoinhanh-4538b.appspot.com",-->
+    <!--messagingSenderId: "986749593380"-->
+    <!--};-->
+    <!--firebase.initializeApp(config);-->
+
+    <!--// Initialize Firebase messaging object-->
+    <!--var firebaseMessaging = firebase.messaging();-->
+
+    <!--// [START refresh_token]-->
+    <!--// Callback fired if Instance ID token is updated.-->
+    <!--firebaseMessaging.onTokenRefresh(function () {-->
+    <!--firebaseMessaging.getToken()-->
+    <!--.then(function (refreshedToken) {-->
+    <!--onFirebabseMessagingTokenRefresh();-->
+    <!--})-->
+    <!--.catch(function (err) {-->
+    <!--console.log('Unable to retrieve refreshed token ', err);-->
+    <!--});-->
+    <!--});-->
+    <!--// [END refresh_token]-->
+
+    <!--// [START receive_message]-->
+    <!--// Handle incoming messages. Called when:-->
+    <!--// - a message is received while the app has focus-->
+    <!--// - the user clicks on an app notification created by a sevice worker-->
+    <!--//   `messaging.setBackgroundMessageHandler` handler.-->
+    <!--firebaseMessaging.onMessage(function (payload) {-->
+    <!--onFirebaseMessagingMessage();-->
+    <!--});-->
+    <!--// [END receive_message]-->
+
+    <!--initializeFirebaseMessaging();-->
+    <!--</script>-->
+
+    <!-- end notifications -->
+
+    <script th:src="@{/js/countUp.js}"></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-92981242-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+    <!-- Facebook Pixel Code -->
+    <!--<script>-->
+    <!--!function (f, b, e, v, n, t, s) {-->
+    <!--if (f.fbq) return;-->
+    <!--n = f.fbq = function () {-->
+    <!--n.callMethod ?-->
+    <!--n.callMethod.apply(n, arguments) : n.queue.push(arguments)-->
+    <!--};-->
+    <!--if (!f._fbq) f._fbq = n;-->
+    <!--n.push = n;-->
+    <!--n.loaded = !0;-->
+    <!--n.version = '2.0';-->
+    <!--n.queue = [];-->
+    <!--t = b.createElement(e);-->
+    <!--t.async = !0;-->
+    <!--t.src = v;-->
+    <!--s = b.getElementsByTagName(e)[0];-->
+    <!--s.parentNode.insertBefore(t, s)-->
+    <!--}(window, document, 'script',-->
+    <!--'https://connect.facebook.net/en_US/fbevents.js');-->
+    <!--fbq('init', '2191128120920718');-->
+    <!--fbq('track', 'PageView');-->
+    <!--</script>-->
+    <!--<noscript>-->
+    <!--<img height="1" width="1" style="display:none"-->
+    <!--src="https://www.facebook.com/tr?id=2191128120920718&amp;ev=PageView&noscript=1"/>-->
+    <!--</noscript>-->
+    <!-- End Facebook Pixel Code -->
+</head>
+<body>
+
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="modals">
+    <div class="copyright">
+        <div class="container">
+            <p>Timdoinhanh © 2016. All rights reserved</p>
+        </div>
+    </div>
+    <a href="javascript:void(0)" class="back-to-top" style="display: none;"
+        id="goTopBtn" onclick="topFunction()"><i class="fa fa-angle-up" aria-hidden="true"></i></a>
+    <div id="divAjaxLoadingRequest" style="display:none">
+    </div>
+    <a id="layout_modal_button" class="hidden" data-toggle="modal" role="button" href="javascript:void(0);"
+       data-target="#"></a>
+    <!-- modal info -->
+    <div id="layout_modal_info" class="modal fade in" tabindex="-1" role="dialog" aria-hidden="false"
+         style="display: none;">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title"><i class="icon-warning"></i>Tìm đối nhanh thông báo!</h4>
+                </div>
+
+                <div class="modal-body with-padding">
+                    <p class="modal-content-info"></p>
+                </div>
+
+                <div class="modal-footer">
+                    <center>
+                        <button class="btn btn-tertiary" data-dismiss="modal">Ok</button>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--login-->
+    <div id="loginModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Đăng nhập</h4>
+                </div>
+                <div class="modal-body">
+
+                    <form id="frmSignIn" class="modal-forms">
+                        <div class="login-error">
+
+
+                        </div>
+                        <input name="UserName" type="text" placeholder="Số điện thoại hoặc email" required id="UserName"
+                               oninvalid="sport.account.validateControl(this);"
+                               oninput="sport.account.validateControl(this);"
+                               data-msg-require="Tài khoản đăng nhập không được để trống">
+                        <input type="password" name="Password" placeholder="Mật khẩu" required id="Password"
+                               oninvalid="sport.account.validateControl(this);"
+                               oninput="sport.account.validateControl(this);"
+                               data-msg-require="Mật khẩu không được để trống">
+
+                        <input type="hidden" id="facebookId" value="930986897045312"/>
+                        <input type="hidden" id="googleClientId"
+                               value="894662634145-oge0jk4ofsq4afq81niurkh4potclkl9.apps.googleusercontent.com"/>
+                        <input type="hidden" id="returnUrl" name="returnUrl" value=""/>
+                        <button id="btnSignIn" type="submit">Đăng nhập</button>
+                    </form>
+                    <div class="a-btn-modal">
+                        <div class="social-login-group">
+                            <p>Hoặc đăng nhập với</p>
+                            <a class="logon-facebook" href="#"><i class="fa fa-facebook-square" aria-hidden="true"></i></a>
+                            <a class="login-google" href="#"><i class="fa fa-google-plus-square" aria-hidden="true"></i></a>
+
+                        </div>
+                        <p class="footer-group" style="margin-top:15px;">
+                            <a href="/user/forgotpassword" class="forgot-pass">Quên mật khẩu</a>
+                            <a href="javascript:location.href='/'" class="register-link pull-right">Tạo tài khoản mới</a>
+                        </p>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <!--#login-->
+    <div id="modalNotAuthorize" class="modal modal-styled fade" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 class="modal-title">Thông báo</h3>
+                </div> <!-- /.modal-header -->
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <h3>Bạn phải đăng nhập để sử dụng tính năng</h3>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <a data-dismiss="modal" href="javascript:;" onclick="global.showModalLoginPopup();"
+                                       class="btn btn-success">Đăng nhập</a>
+                                    <a href="#" onclick="location.href = '/';" class="btn btn-danger">Đăng kí</a>
+                                </div>
+                            </div>
+                        </div> <!-- /.portlet-body -->
+                    </form>
+                </div> <!-- /.modal-body -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                </div> <!-- /.modal-footer -->
+            </div> <!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+
+    <div id="gmapModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Bản đồ</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="loading-overlay text-center" id="gmap-loading">
+                    <span>
+                        <i class="fa fa-spinner fa-pulse fa-3x fa-fw margin-bottom"></i>
+                        <br/>
+                        Đang tải dữ liệu...
+                    </span>
+                    </div>
+                    <div id="map-iframe-container">Đang tài bản đồ....</div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div id="commonModal" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Title</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center">
+                    <span>
+                        <i class="fa fa-spinner fa-pulse fa-3x fa-fw margin-bottom"></i>
+                        <br/>
+                        Đang tải dữ liệu...
+                    </span>
+                    </p>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <!--<script th:src="Angular/libs/fireChat/fireService.js"></script>-->
+    <input type="hidden" id="matchHNTotalHidden" value="236"/>
+    <input type="hidden" id="matchHCMTotalHidden" value="0"/>
+    <input type="hidden" id="teamAllTotalHidden" value="13441"/>
+    <input type="hidden" id="stadiumHNTotalHidden" value="180"/>
+    <input type="hidden" id="stadiumHCMTotalHidden" value="141"/>
+    <div id="isMobileDevice"></div>
+
+    <script type="text/javascript" th:src="@{/js/s9.js}"></script>
+    <script>
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function() {scrollFunction()};
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                document.getElementById("goTopBtn").style.display = "block";
+            } else {
+                document.getElementById("goTopBtn").style.display = "none";
+            }
+        }
+
+        // When the user clicks on the button, scroll to the top of the document
+        function topFunction() {
+            $("html, body").animate({ scrollTop: 0 }, 600);
+            return false;
+        }
+    </script>
+</div>
+</body>
+</html>

@@ -1,0 +1,1115 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body ng-app="sportApp" class="page-sportstadiumdetails ">
+
+<div th:replace="fragments/header :: header"></div>
+
+<style>
+    .ui-autocomplete {
+        z-index: 9999;
+    }
+
+    #ticket-select-date table tr th {
+        text-transform: capitalize;
+    }
+</style>
+<script type="text/javascript">
+    // Used for angularjs
+    moment.locale('zh-cn');
+    var stadiumModel = {
+        "StadiumId": 1314,
+        "Name": "Sân bóng Phạm Văn Đồng 3",
+        "LogicalName": "/san-bong-pham-van-dong-3.html",
+        "NagivateUrl": "/san-bong-pham-van-dong-3.html",
+        "MainPhoto": "https://res.givator.com/pictures/11017/600/2019_01/medium/4ccb8afb4162425482594f685f982d88.jpeg",
+        "Photos": null,
+        "Address": "Quận Nam Từ Liêm, Hà Nội",
+        "Street": "232 Phạm Văn Đồng, Cạnh tòa nhà Bộ Công an",
+        "Latitute": null,
+        "Longitude": null,
+        "Summary": "Sân 7-11 người mới khai trương",
+        "About": "<p>Sân mới ở cạnh tòa nhà Bộ Công an, kích thước tiêu chuẩn, điện cực sáng</p>",
+        "Facebook": "",
+        "EmailAddress": "Sou0704@gmail.com",
+        "Website": "",
+        "PriceSummaries": [{
+            "Prices": [{
+                "FormatedPrice": "400.000<sup>vnđ</sup>",
+                "DisplayedStadiumNumber": "Sân 7 người",
+                "DisplayedTimeFrames": "16:00 - 17:30 ",
+                "NumberOfPlayers": 7,
+                "Price": 400000.0,
+                "TimeFrames": [{
+                    "Code": "T2-T6T7CN",
+                    "StartHour": "16:00:00",
+                    "EndHour": "17:30:00",
+                    "DisplayedText": ""
+                }]
+            }, {
+                "FormatedPrice": "800.000<sup>vnđ</sup>",
+                "DisplayedStadiumNumber": "Sân 7 người",
+                "DisplayedTimeFrames": "17:30 - 19:00 ",
+                "NumberOfPlayers": 7,
+                "Price": 800000.0,
+                "TimeFrames": [{
+                    "Code": "T2-T6T7CN",
+                    "StartHour": "17:30:00",
+                    "EndHour": "19:00:00",
+                    "DisplayedText": ""
+                }]
+            }, {
+                "FormatedPrice": "800.000<sup>vnđ</sup>",
+                "DisplayedStadiumNumber": "Sân 7 người",
+                "DisplayedTimeFrames": "19:00 - 20:30 ",
+                "NumberOfPlayers": 7,
+                "Price": 800000.0,
+                "TimeFrames": [{
+                    "Code": "T2-T6T7CN",
+                    "StartHour": "19:00:00",
+                    "EndHour": "20:30:00",
+                    "DisplayedText": ""
+                }]
+            }, {
+                "FormatedPrice": "400.000<sup>vnđ</sup>",
+                "DisplayedStadiumNumber": "Sân 7 người",
+                "DisplayedTimeFrames": "20:30 - 22:00 ",
+                "NumberOfPlayers": 7,
+                "Price": 400000.0,
+                "TimeFrames": [{
+                    "Code": "T2-T6T7CN",
+                    "StartHour": "20:30:00",
+                    "EndHour": "22:00:00",
+                    "DisplayedText": ""
+                }]
+            }], "PriceHeadline": "Giá thuê sân 7 người", "NumberOfPlayers": 7, "Availability": null
+        }],
+        "Managers": [{
+            "UserId": 3806,
+            "Name": "Vương Dung",
+            "Mobiles": ["0947200456"],
+            "DisplayedText": "Vương Dung - 0947200456",
+            "IsSystemUser": false
+        }],
+        "IsManagerUserActive": true,
+        "IsManagerAcceptedToUseApp": true,
+        "SameLocationStadiums": [{
+            "StadiumId": 740,
+            "Name": "Sân bóng Hải Đăng",
+            "LogicalName": "/san-bong-hai-dang-26674011.html",
+            "NagivateUrl": "/san-bong-hai-dang-26674011.html",
+            "MainPhoto": "https://res.givator.com/pictures/11017/600/2017_02/medium/P1080096.JPG",
+            "Photos": null,
+            "Address": "Quận Nam Từ Liêm, Hà Nội",
+            "Street": "56 Tố Hữu , Trung Văn",
+            "Latitute": 20.9943949,
+            "Longitude": 105.7873625,
+            "Summary": "Sân bóng hải đăng nằm trên mặt đường 218 Trần Duy Hưng cạnh tòa nhà trung tâm Mobi Phone. Với khu để xe và chỗ ngồi đường biên khá tốt, mặt sân, diện tích, hệ thống chiếu sáng tốt",
+            "About": "",
+            "Facebook": "https://www.facebook.com/S%C3%A2n-b%C3%B3ng-H%E1%BA%A3i-%C4%90%C4%83ng-56-t%E1%BB%91-h%E1%BB%AFu-2040737436243094/",
+            "EmailAddress": "",
+            "Website": "",
+            "PriceSummaries": [{
+                "Prices": [{
+                    "FormatedPrice": "300.000<sup>vnđ</sup>",
+                    "DisplayedStadiumNumber": "Sân 7 người",
+                    "DisplayedTimeFrames": "06:00 - 16:00 ",
+                    "NumberOfPlayers": 7,
+                    "Price": 300000.0,
+                    "TimeFrames": [{
+                        "Code": "T2-T6T7CN",
+                        "StartHour": "06:00:00",
+                        "EndHour": "16:00:00",
+                        "DisplayedText": ""
+                    }]
+                }, {
+                    "FormatedPrice": "600.000<sup>vnđ</sup>",
+                    "DisplayedStadiumNumber": "Sân 7 người",
+                    "DisplayedTimeFrames": "16:00 - 17:30 ",
+                    "NumberOfPlayers": 7,
+                    "Price": 600000.0,
+                    "TimeFrames": [{
+                        "Code": "T2-T6T7CN",
+                        "StartHour": "16:00:00",
+                        "EndHour": "17:30:00",
+                        "DisplayedText": ""
+                    }]
+                }, {
+                    "FormatedPrice": "800.000<sup>vnđ</sup>",
+                    "DisplayedStadiumNumber": "Sân 7 người",
+                    "DisplayedTimeFrames": "17:30 - 20:30 ",
+                    "NumberOfPlayers": 7,
+                    "Price": 800000.0,
+                    "TimeFrames": [{
+                        "Code": "T2-T6T7CN",
+                        "StartHour": "17:30:00",
+                        "EndHour": "20:30:00",
+                        "DisplayedText": ""
+                    }]
+                }, {
+                    "FormatedPrice": "400.000<sup>vnđ</sup>",
+                    "DisplayedStadiumNumber": "Sân 7 người",
+                    "DisplayedTimeFrames": "20:30 - 22:00 ",
+                    "NumberOfPlayers": 7,
+                    "Price": 400000.0,
+                    "TimeFrames": [{
+                        "Code": "T2-T6T7CN",
+                        "StartHour": "20:30:00",
+                        "EndHour": "22:00:00",
+                        "DisplayedText": ""
+                    }]
+                }], "PriceHeadline": "Giá thuê sân 7 người", "NumberOfPlayers": 7, "Availability": null
+            }],
+            "Managers": [{
+                "UserId": 0,
+                "Name": "",
+                "Mobiles": ["0961678071"],
+                "DisplayedText": "0961678071",
+                "IsSystemUser": false
+            }],
+            "IsManagerUserActive": true,
+            "IsManagerAcceptedToUseApp": false,
+            "SameLocationStadiums": null,
+            "MainSlider": {
+                "Name": "Stadium gallery",
+                "MediaItems": [{
+                    "FilePath": "https://res.givator.com/pictures/11017/500/2017_02/original/P1080094.JPG",
+                    "FileName": "",
+                    "Name": ""
+                }, {
+                    "FilePath": "https://res.givator.com/pictures/11017/500/2017_02/original/P1080096.JPG",
+                    "FileName": "",
+                    "Name": ""
+                }, {
+                    "FilePath": "https://res.givator.com/pictures/11017/600/2017_02/original/P1080096.JPG",
+                    "FileName": "",
+                    "Name": null
+                }]
+            },
+            "Breadcrumb": null,
+            "MatchFindingRequests": null,
+            "View": "~/Views/Blocks/Sport/FrontEnd/Stadium/_StadiumDetails.cshtml",
+            "BlockId": 0,
+            "CurrencySymbolFormat": "{0:N0}₫",
+            "ViewData": {},
+            "Pager": {
+                "PageIndex": 0,
+                "PageSize": 0,
+                "TotalPages": 0,
+                "TotalRecords": 0,
+                "CssClass": "pagination",
+                "GuideText": null,
+                "PageLinksHTML": null
+            },
+            "IsAuthenticated": false
+        }, {
+            "StadiumId": 1304,
+            "Name": "Sân Bóng Hải Đăng",
+            "LogicalName": "/san-bong-hai-dang.html",
+            "NagivateUrl": "/san-bong-hai-dang.html",
+            "MainPhoto": "https://res.givator.com/pictures/11017/500/2018_09/original/4077841420828588653642844484330754813198336n.jpg",
+            "Photos": null,
+            "Address": "Quận Nam Từ Liêm, Hà Nội",
+            "Street": "56 Đường Tố Hữu",
+            "Latitute": null,
+            "Longitude": null,
+            "Summary": "",
+            "About": "<p><br></p>",
+            "Facebook": "https://web.facebook.com/pages/category/Personal-Blog/S%C3%A2n-b%C3%B3ng-H%E1%BA%A3i-%C4%90%C4%83ng-56-t%E1%BB%91-h%E1%BB%AFu-2040737436243094/?_rdc=1&_rdr",
+            "EmailAddress": "",
+            "Website": "",
+            "PriceSummaries": null,
+            "Managers": [{
+                "UserId": 0,
+                "Name": "",
+                "Mobiles": ["0961678071"],
+                "DisplayedText": "0961678071",
+                "IsSystemUser": false
+            }],
+            "IsManagerUserActive": true,
+            "IsManagerAcceptedToUseApp": false,
+            "SameLocationStadiums": null,
+            "MainSlider": {
+                "Name": "Stadium gallery",
+                "MediaItems": [{
+                    "FilePath": "https://res.givator.com/pictures/11017/500/2018_09/original/4077841420828588653642844484330754813198336n.jpg",
+                    "FileName": "",
+                    "Name": ""
+                }, {
+                    "FilePath": "https://res.givator.com/pictures/11017/500/2018_09/original/4077841420828588653642844484330754813198336n.jpg",
+                    "FileName": "",
+                    "Name": null
+                }]
+            },
+            "Breadcrumb": null,
+            "MatchFindingRequests": null,
+            "View": "~/Views/Blocks/Sport/FrontEnd/Stadium/_StadiumDetails.cshtml",
+            "BlockId": 0,
+            "CurrencySymbolFormat": "{0:N0}₫",
+            "ViewData": {},
+            "Pager": {
+                "PageIndex": 0,
+                "PageSize": 0,
+                "TotalPages": 0,
+                "TotalRecords": 0,
+                "CssClass": "pagination",
+                "GuideText": null,
+                "PageLinksHTML": null
+            },
+            "IsAuthenticated": false
+        }, {
+            "StadiumId": 1284,
+            "Name": "Coma 6 - Tây Mỗ - Từ Liêm",
+            "LogicalName": "/coma-6-tay-mo-tu-liem.html",
+            "NagivateUrl": "/coma-6-tay-mo-tu-liem.html",
+            "MainPhoto": "https://res.givator.com/pictures/11017/600/2018_06/medium/khu-the-thao-coma6.jpg",
+            "Photos": null,
+            "Address": "Quận Nam Từ Liêm, Hà Nội",
+            "Street": "Khu đô thị Dream Town, Đường 70, Phường Tây Mỗ - Quận Nam Từ Liêm - Thành phố Hà Nội",
+            "Latitute": null,
+            "Longitude": null,
+            "Summary": "",
+            "About": "<p><br></p>",
+            "Facebook": "",
+            "EmailAddress": "",
+            "Website": "",
+            "PriceSummaries": [{
+                "Prices": [{
+                    "FormatedPrice": "600.000<sup>vnđ</sup>",
+                    "DisplayedStadiumNumber": "Sân 7 người",
+                    "DisplayedTimeFrames": "17:30 - 19:00 ",
+                    "NumberOfPlayers": 7,
+                    "Price": 600000.0,
+                    "TimeFrames": [{
+                        "Code": "T2-T6T7CN",
+                        "StartHour": "17:30:00",
+                        "EndHour": "19:00:00",
+                        "DisplayedText": ""
+                    }]
+                }, {
+                    "FormatedPrice": "600.000<sup>vnđ</sup>",
+                    "DisplayedStadiumNumber": "Sân 7 người",
+                    "DisplayedTimeFrames": "19:00 - 20:30 ",
+                    "NumberOfPlayers": 7,
+                    "Price": 600000.0,
+                    "TimeFrames": [{
+                        "Code": "T2-T6T7CN",
+                        "StartHour": "19:00:00",
+                        "EndHour": "20:30:00",
+                        "DisplayedText": ""
+                    }]
+                }, {
+                    "FormatedPrice": "Liên hệ",
+                    "DisplayedStadiumNumber": "Sân 7 người",
+                    "DisplayedTimeFrames": "20:30 - 22:00 ",
+                    "NumberOfPlayers": 7,
+                    "Price": 0.0,
+                    "TimeFrames": [{
+                        "Code": "T2-T6T7CN",
+                        "StartHour": "20:30:00",
+                        "EndHour": "22:00:00",
+                        "DisplayedText": ""
+                    }]
+                }], "PriceHeadline": "Giá thuê sân 7 người", "NumberOfPlayers": 7, "Availability": null
+            }],
+            "Managers": [{
+                "UserId": 2089,
+                "Name": "Phương Phùng",
+                "Mobiles": ["0902298111"],
+                "DisplayedText": "Phương Phùng - 0902298111",
+                "IsSystemUser": false
+            }],
+            "IsManagerUserActive": true,
+            "IsManagerAcceptedToUseApp": true,
+            "SameLocationStadiums": null,
+            "MainSlider": {
+                "Name": null,
+                "MediaItems": [{
+                    "FilePath": "https://res.givator.com/pictures/11017/600/2018_06/original/khu-the-thao-coma6.jpg",
+                    "FileName": "",
+                    "Name": null
+                }]
+            },
+            "Breadcrumb": null,
+            "MatchFindingRequests": null,
+            "View": "~/Views/Blocks/Sport/FrontEnd/Stadium/_StadiumDetails.cshtml",
+            "BlockId": 0,
+            "CurrencySymbolFormat": "{0:N0}₫",
+            "ViewData": {},
+            "Pager": {
+                "PageIndex": 0,
+                "PageSize": 0,
+                "TotalPages": 0,
+                "TotalRecords": 0,
+                "CssClass": "pagination",
+                "GuideText": null,
+                "PageLinksHTML": null
+            },
+            "IsAuthenticated": false
+        }, {
+            "StadiumId": 742,
+            "Name": "Sân bóng đá Sơn Trang 5",
+            "LogicalName": "/san-bong-da-son-trang-5.html",
+            "NagivateUrl": "/san-bong-da-son-trang-5.html",
+            "MainPhoto": "https://res.givator.com/pictures/11017/600/2017_02/medium/P1080074.JPG",
+            "Photos": null,
+            "Address": "Quận Nam Từ Liêm, Hà Nội",
+            "Street": "54 Tố Hữu ( Lê Văn Lương kéo dài), Trung Văn",
+            "Latitute": 20.9946158,
+            "Longitude": 105.7874595,
+            "Summary": "Sân gồm 3 sân nhỏ, chất lượng cỏ trung bình nằm trên đường Lương Thế Vinh cách đường Lê Văn Lương khoảng vài trăm mét.",
+            "About": "",
+            "Facebook": "",
+            "EmailAddress": "",
+            "Website": "",
+            "PriceSummaries": [{
+                "Prices": [{
+                    "FormatedPrice": "300.000<sup>vnđ</sup>",
+                    "DisplayedStadiumNumber": "Sân 7 người",
+                    "DisplayedTimeFrames": "06:00 - 16:00 ",
+                    "NumberOfPlayers": 7,
+                    "Price": 300000.0,
+                    "TimeFrames": [{
+                        "Code": "T2-T6T7CN",
+                        "StartHour": "06:00:00",
+                        "EndHour": "16:00:00",
+                        "DisplayedText": ""
+                    }]
+                }, {
+                    "FormatedPrice": "600.000<sup>vnđ</sup>",
+                    "DisplayedStadiumNumber": "Sân 7 người",
+                    "DisplayedTimeFrames": "16:00 - 17:30 ",
+                    "NumberOfPlayers": 7,
+                    "Price": 600000.0,
+                    "TimeFrames": [{
+                        "Code": "T2-T6T7CN",
+                        "StartHour": "16:00:00",
+                        "EndHour": "17:30:00",
+                        "DisplayedText": ""
+                    }]
+                }, {
+                    "FormatedPrice": "800.000<sup>vnđ</sup>",
+                    "DisplayedStadiumNumber": "Sân 7 người",
+                    "DisplayedTimeFrames": "17:30 - 20:30 ",
+                    "NumberOfPlayers": 7,
+                    "Price": 800000.0,
+                    "TimeFrames": [{
+                        "Code": "T2-T6T7CN",
+                        "StartHour": "17:30:00",
+                        "EndHour": "20:30:00",
+                        "DisplayedText": ""
+                    }]
+                }, {
+                    "FormatedPrice": "400.000<sup>vnđ</sup>",
+                    "DisplayedStadiumNumber": "Sân 7 người",
+                    "DisplayedTimeFrames": "20:30 - 22:00 ",
+                    "NumberOfPlayers": 7,
+                    "Price": 400000.0,
+                    "TimeFrames": [{
+                        "Code": "T2-T6T7CN",
+                        "StartHour": "20:30:00",
+                        "EndHour": "22:00:00",
+                        "DisplayedText": ""
+                    }]
+                }], "PriceHeadline": "Giá thuê sân 7 người", "NumberOfPlayers": 7, "Availability": null
+            }],
+            "Managers": [{
+                "UserId": 416,
+                "Name": "Sân bóng Sơn Trang 5",
+                "Mobiles": ["0912221518"],
+                "DisplayedText": "Sân bóng Sơn Trang 5 - 0912221518",
+                "IsSystemUser": false
+            }],
+            "IsManagerUserActive": true,
+            "IsManagerAcceptedToUseApp": false,
+            "SameLocationStadiums": null,
+            "MainSlider": {
+                "Name": "Stadium gallery",
+                "MediaItems": [{
+                    "FilePath": "https://res.givator.com/pictures/11017/500/2017_02/original/P1080074.JPG",
+                    "FileName": "",
+                    "Name": ""
+                }, {
+                    "FilePath": "https://res.givator.com/pictures/11017/500/2017_02/original/P1080072.JPG",
+                    "FileName": "",
+                    "Name": ""
+                }, {
+                    "FilePath": "https://res.givator.com/pictures/11017/500/2017_02/original/P1080071.JPG",
+                    "FileName": "",
+                    "Name": ""
+                }, {
+                    "FilePath": "https://res.givator.com/pictures/11017/500/2017_02/original/P1080070.JPG",
+                    "FileName": "",
+                    "Name": ""
+                }, {
+                    "FilePath": "https://res.givator.com/pictures/11017/600/2017_02/original/P1080074.JPG",
+                    "FileName": "",
+                    "Name": null
+                }]
+            },
+            "Breadcrumb": null,
+            "MatchFindingRequests": null,
+            "View": "~/Views/Blocks/Sport/FrontEnd/Stadium/_StadiumDetails.cshtml",
+            "BlockId": 0,
+            "CurrencySymbolFormat": "{0:N0}₫",
+            "ViewData": {},
+            "Pager": {
+                "PageIndex": 0,
+                "PageSize": 0,
+                "TotalPages": 0,
+                "TotalRecords": 0,
+                "CssClass": "pagination",
+                "GuideText": null,
+                "PageLinksHTML": null
+            },
+            "IsAuthenticated": false
+        }, {
+            "StadiumId": 1174,
+            "Name": "Sân bóng đá trường Việt - Úc Khu đô thị Mỹ đình 1",
+            "LogicalName": "/san-bong-da-truong-viet-uc-khu-do-thi-my-dinh-1.html",
+            "NagivateUrl": "/san-bong-da-truong-viet-uc-khu-do-thi-my-dinh-1.html",
+            "MainPhoto": "https://res.givator.com/pictures/11017/600/2017_05/medium/san-bong-da-truong-viet-uc.jpg",
+            "Photos": null,
+            "Address": "Quận Nam Từ Liêm, Hà Nội",
+            "Street": "Khu đô thị Mỹ Đình I",
+            "Latitute": 21.0322961,
+            "Longitude": 105.7600939,
+            "Summary": "",
+            "About": "<p><span style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\">Sau một thời gian thi công, ngày 19/8/2010 trường Việt-Úc Hà Nội sẽ tổ chức lễ khánh thành sân bóng đá sử dụng cỏ nhân tạo nằm trong khuôn viên của trường. Cùng với kí túc xá chuẩn bị hoàn thành, đây là những hạng mục cuối cùng của dự án đầu tư xây dựng trường.&nbsp;</span><br style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\"><br style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\"><span style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\">Sân bóng đá cỏ nhân tạo của trường Việt-Úc Hà Nội được mang tên \"</span><b style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\">Sân vận động Thăng Long</b><span style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\">\". Đây là công trình của trường dâng lên Đại lễ 1000 năm Thăng Long - Hà Nội.&nbsp;</span><br style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\"><br style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\"><span style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\">Cỏ nhân tạo phủ mặt sân sản xuất từ sợi pibre cao cấp cấu tạo từ chất politero – một loại nhựa tổng hợp độ dẻo cao, có đặc tính giống cỏ tự nhiên. Thảm cỏ nhân tạo có lớp hạt cao su và cát tạo độ đệm, cảm giác êm và không gây chấn thương cho người chơi. Lớp hạt cao su và hạt cát tạo độ nảy và độ lăn bóng rất tốt.&nbsp;</span><br style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\"><br style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\"></p><div align=\"center\" style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\"><img src=\"http://www.vashanoi.edu.vn/Images/News/341.JPG\"></div><div align=\"center\" style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\"><font size=\"2\"><i>Công nhân đang rải cát và hạt cao su, hoàn tất các công đoạn cuối cùng của việc xây dựng sân</i></font></div><p><br style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\"><span style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\">Sân bóng đá được trang bị hệ thống dàn đèn để có thể chơi bóng ban đêm. Kích thước của sân là&nbsp;</span><b style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\">40m x 55m</b><span style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\">, dùng để thi đấu bóng đá 7 người hoặc chia làm hai sân bóng đá 5 người.&nbsp;</span><br style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\"><br style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\"><span style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\">Trường Việt-Úc Hà Nội tổ chức lễ khánh thành sân vào&nbsp;</span><b style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\"><u>tiết 8, thứ Năm ngày 19/8/2010</u></b><span style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\">. Lễ khánh thành sân vận động Thăng Long là một trong những hoạt động của thầy trò nhà trường chào mừng kỷ niệm 65 năm Cách mạng Tháng Tám và Quốc khánh 2-9.&nbsp;</span><br style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\"><br style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\"><span style=\"font-family: Verdana, Arial, Helvetica, sans-serif;\">Trận đấu giữa đội tuyển giáo viên gặp đội tuyển học sinh sẽ là trận đầu tiên trên sân mới.</span><br></p>",
+            "Facebook": "",
+            "EmailAddress": "",
+            "Website": "",
+            "PriceSummaries": [{
+                "Prices": [{
+                    "FormatedPrice": "300.000<sup>vnđ</sup>",
+                    "DisplayedStadiumNumber": "Sân 7 người",
+                    "DisplayedTimeFrames": "06:00 - 16:00 ",
+                    "NumberOfPlayers": 7,
+                    "Price": 300000.0,
+                    "TimeFrames": [{
+                        "Code": "T2-T6T7CN",
+                        "StartHour": "06:00:00",
+                        "EndHour": "16:00:00",
+                        "DisplayedText": ""
+                    }]
+                }, {
+                    "FormatedPrice": "600.000<sup>vnđ</sup>",
+                    "DisplayedStadiumNumber": "Sân 7 người",
+                    "DisplayedTimeFrames": "16:00 - 17:30 ",
+                    "NumberOfPlayers": 7,
+                    "Price": 600000.0,
+                    "TimeFrames": [{
+                        "Code": "T2-T6T7CN",
+                        "StartHour": "16:00:00",
+                        "EndHour": "17:30:00",
+                        "DisplayedText": ""
+                    }]
+                }, {
+                    "FormatedPrice": "800.000<sup>vnđ</sup>",
+                    "DisplayedStadiumNumber": "Sân 7 người",
+                    "DisplayedTimeFrames": "17:30 - 20:30 ",
+                    "NumberOfPlayers": 7,
+                    "Price": 800000.0,
+                    "TimeFrames": [{
+                        "Code": "T2-T6T7CN",
+                        "StartHour": "17:30:00",
+                        "EndHour": "20:30:00",
+                        "DisplayedText": ""
+                    }]
+                }, {
+                    "FormatedPrice": "400.000<sup>vnđ</sup>",
+                    "DisplayedStadiumNumber": "Sân 7 người",
+                    "DisplayedTimeFrames": "20:30 - 22:00 ",
+                    "NumberOfPlayers": 7,
+                    "Price": 400000.0,
+                    "TimeFrames": [{
+                        "Code": "T2-T6T7CN",
+                        "StartHour": "20:30:00",
+                        "EndHour": "22:00:00",
+                        "DisplayedText": ""
+                    }]
+                }], "PriceHeadline": "Giá thuê sân 7 người", "NumberOfPlayers": 7, "Availability": null
+            }],
+            "Managers": [{
+                "UserId": 137,
+                "Name": "Hỗ Trợ",
+                "Mobiles": ["0462872869", "0462878889"],
+                "DisplayedText": "Hỗ Trợ - 0462872869 / 0462878889",
+                "IsSystemUser": false
+            }, {
+                "UserId": 531,
+                "Name": "Sân bóng trường Việt - Úc",
+                "Mobiles": ["0462872869"],
+                "DisplayedText": "Sân bóng trường Việt - Úc - 0462872869",
+                "IsSystemUser": false
+            }, {
+                "UserId": 532,
+                "Name": "Sân bóng trường Việt - Úc",
+                "Mobiles": ["0462878889"],
+                "DisplayedText": "Sân bóng trường Việt - Úc - 0462878889",
+                "IsSystemUser": false
+            }],
+            "IsManagerUserActive": true,
+            "IsManagerAcceptedToUseApp": false,
+            "SameLocationStadiums": null,
+            "MainSlider": {
+                "Name": "Stadium gallery",
+                "MediaItems": [{
+                    "FilePath": "https://res.givator.com/pictures/11017/500/2017_05/original/myc20172.jpg",
+                    "FileName": "",
+                    "Name": ""
+                }, {
+                    "FilePath": "https://res.givator.com/pictures/11017/500/2017_05/original/myc20174.jpg",
+                    "FileName": "",
+                    "Name": ""
+                }, {
+                    "FilePath": "https://res.givator.com/pictures/11017/500/2017_05/original/myc20173.jpg",
+                    "FileName": "",
+                    "Name": ""
+                }, {
+                    "FilePath": "https://res.givator.com/pictures/11017/600/2017_05/original/san-bong-da-truong-viet-uc.jpg",
+                    "FileName": "",
+                    "Name": null
+                }]
+            },
+            "Breadcrumb": null,
+            "MatchFindingRequests": null,
+            "View": "~/Views/Blocks/Sport/FrontEnd/Stadium/_StadiumDetails.cshtml",
+            "BlockId": 0,
+            "CurrencySymbolFormat": "{0:N0}₫",
+            "ViewData": {},
+            "Pager": {
+                "PageIndex": 0,
+                "PageSize": 0,
+                "TotalPages": 0,
+                "TotalRecords": 0,
+                "CssClass": "pagination",
+                "GuideText": null,
+                "PageLinksHTML": null
+            },
+            "IsAuthenticated": false
+        }],
+        "MainSlider": {
+            "Name": null,
+            "MediaItems": [{
+                "FilePath": "https://res.givator.com/pictures/11017/600/2019_01/original/4ccb8afb4162425482594f685f982d88.jpeg",
+                "FileName": "",
+                "Name": null
+            }]
+        },
+        "Breadcrumb": {
+            "Items": [{
+                "Link": "/san-bong",
+                "Text": "Sân bóng",
+                "CssClass": "",
+                "Title": "Sân bóng",
+                "IsLast": false
+            }, {
+                "Link": "/san-bong-tai-ha-noi",
+                "Text": "Sân bóng tại Hà Nội",
+                "CssClass": "",
+                "Title": "Sân bóng tại Hà Nội",
+                "IsLast": false
+            }, {
+                "Link": "",
+                "Text": "Sân bóng Phạm Văn Đồng 3",
+                "CssClass": "",
+                "Title": "Sân bóng Phạm Văn Đồng 3",
+                "IsLast": true
+            }]
+        },
+        "MatchFindingRequests": [],
+        "View": "~/Views/Blocks/Sport/FrontEnd/Stadium/_StadiumDetails.cshtml",
+        "BlockId": 0,
+        "CurrencySymbolFormat": "{0:N0}₫",
+        "ViewData": {},
+        "Pager": {
+            "PageIndex": 0,
+            "PageSize": 0,
+            "TotalPages": 0,
+            "TotalRecords": 0,
+            "CssClass": "pagination",
+            "GuideText": null,
+            "PageLinksHTML": null
+        },
+        "IsAuthenticated": false
+    };
+</script>
+
+<div class="breadcrum">
+    <div class="container">
+        <div class="breadcrum-line">
+            <a href="/">Trang chủ</a>
+            <a href="/san-bong" class="" title="S&#226;n b&#243;ng">S&#226;n b&#243;ng</a>
+            <a href="/san-bong-tai-ha-noi" class="" title="S&#226;n b&#243;ng tại H&#224; Nội">S&#226;n b&#243;ng tại H&#224;
+                Nội</a>
+            <a>S&#226;n b&#243;ng Phạm Văn Đồng 3</a>
+        </div>
+    </div>
+</div>
+
+<div class="content-wrap">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="content-cts">
+                    <div class="item-card">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h1 class="title-sans">S&#226;n b&#243;ng Phạm Văn Đồng 3</h1>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="des-san">
+                                            <div class="san-address-line">
+                                                <i class="fa fa-map-o" aria-hidden="true"></i> 232 Phạm Văn Đồng, Cạnh t&#242;a
+                                                nh&#224; Bộ C&#244;ng an (Quận Nam Từ Li&#234;m, H&#224; Nội)
+                                            </div>
+                                            <div>
+                                                <strong>Gi&#225; thu&#234; s&#226;n 7 người</strong>
+                                            </div>
+                                            <div class="san-price-line calendar-row" data-numberofplays="7"
+                                                 data-price="400000" data-stadiumId="1314"
+                                                 data-stadiumnumberid="16:00 - 17:30 ">
+                                                16:00 - 17:30
+                                                <div>
+                                                    <span class="price-san">400.000<sup>vnđ</sup></span>
+                                                    <button class="check-san"
+                                                            onclick="sport.stadiumDetail.showCalendar(this)">
+                                                        <i class="fa fa-calendar-check-o" aria-hidden="true"></i> Đặt
+                                                        sân
+                                                    </button>
+                                                </div>
+
+
+                                                <div class="stadium-calendar">
+                                                    <div class="stadium-container">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="san-price-line calendar-row" data-numberofplays="7"
+                                                 data-price="800000" data-stadiumId="1314"
+                                                 data-stadiumnumberid="17:30 - 19:00 ">
+                                                17:30 - 19:00
+                                                <div>
+                                                    <span class="price-san">800.000<sup>vnđ</sup></span>
+                                                    <button class="check-san"
+                                                            onclick="sport.stadiumDetail.showCalendar(this)">
+                                                        <i class="fa fa-calendar-check-o" aria-hidden="true"></i> Đặt
+                                                        sân
+                                                    </button>
+                                                </div>
+
+
+                                                <div class="stadium-calendar">
+                                                    <div class="stadium-container">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="san-price-line calendar-row" data-numberofplays="7"
+                                                 data-price="800000" data-stadiumId="1314"
+                                                 data-stadiumnumberid="19:00 - 20:30 ">
+                                                19:00 - 20:30
+                                                <div>
+                                                    <span class="price-san">800.000<sup>vnđ</sup></span>
+                                                    <button class="check-san"
+                                                            onclick="sport.stadiumDetail.showCalendar(this)">
+                                                        <i class="fa fa-calendar-check-o" aria-hidden="true"></i> Đặt
+                                                        sân
+                                                    </button>
+                                                </div>
+
+
+                                                <div class="stadium-calendar">
+                                                    <div class="stadium-container">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="san-price-line calendar-row" data-numberofplays="7"
+                                                 data-price="400000" data-stadiumId="1314"
+                                                 data-stadiumnumberid="20:30 - 22:00 ">
+                                                20:30 - 22:00
+                                                <div>
+                                                    <span class="price-san">400.000<sup>vnđ</sup></span>
+                                                    <button class="check-san"
+                                                            onclick="sport.stadiumDetail.showCalendar(this)">
+                                                        <i class="fa fa-calendar-check-o" aria-hidden="true"></i> Đặt
+                                                        sân
+                                                    </button>
+                                                </div>
+
+
+                                                <div class="stadium-calendar">
+                                                    <div class="stadium-container">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="title-img">Liên hệ đặt sân</div>
+                                        <div class="des-san contact-info">
+                                            <div class="phone-numb">
+                                                <i class="fa fa-phone-square" aria-hidden="true"></i> <a
+                                                    href="/user/profile/3806" class="text-highlight" target="_blank">Vương
+                                                Dung - 0947200456</a>
+                                                <div class="manager-chat user-online-status-container" owner-id="3806">
+                                                    <span class="user-online-status offline"></span>
+                                                    <span class="chat-nhanh" ng-click="onQuickChat(3806);"><i
+                                                            class="fa fa-comments" aria-hidden="true"></i> Liên hệ nhanh</span>
+                                                </div>
+                                            </div>
+                                            <div class="des-email">
+                                                <a href="mailto:Sou0704@gmail.com"><i class="fa fa-envelope"
+                                                                                      aria-hidden="true"></i>
+                                                    Sou0704@gmail.com</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="title-img">Giới thiệu về sân</div>
+                                        <div class="des-san-group san-short-summary">
+                                            Sân 7-11 người mới khai trương
+                                        </div>
+                                        <div class="content-sans">
+                                            <p>Sân mới ở cạnh tòa nhà Bộ Công an, kích thước tiêu chuẩn, điện cực
+                                                sáng</p>
+                                        </div>
+                                        <div class="slider-home-banner slider-chi-san owl-carousel">
+                                            <div>
+                                                <img class="img-responsivex"
+                                                     src="https://res.givator.com/pictures/11017/600/2019_01/original/4ccb8afb4162425482594f685f982d88.jpeg"
+                                                     align="thumbnail">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="fb-comments" data-href="/san-bong-pham-van-dong-3.html" data-numposts="5"></div>
+                </div>
+            </div>
+            <!--STadium list right-->
+            <div class="col-md-4">
+                <div class="ads-banner-right" id="s9adright">
+                </div>
+                <div class="sidebar sidebar-tien-san">
+                    <p class="title-box"><i class="fa fa-map-marker" aria-hidden="true"></i> Sân bóng cùng địa bàn</p>
+                    <div class="list-item-san list-item-san-sidebar">
+                        <div class="slider-near-san owl-carousel owl-theme" style="opacity: 1; display: block;">
+                            <div>
+                                <div class="item-card">
+                                    <div class="row">
+                                        <div class="col-md-12 item-preview-image">
+                                            <a href="/san-bong-hai-dang-26674011.html"
+                                               title="S&#226;n b&#243;ng Hải Đăng">
+                                                <img class="img-responsive"
+                                                     src="https://res.givator.com/pictures/11017/600/2017_02/medium/P1080096.JPG"
+                                                     alt="S&#226;n b&#243;ng Hải Đăng" align="thumbnail">
+                                            </a>
+                                        </div>
+                                        <div class="col-md-12 right-item-san">
+                                            <h2><a href="/san-bong-hai-dang-26674011.html" class="item-name-link">S&#226;n
+                                                b&#243;ng Hải Đăng</a></h2>
+                                            <p>
+                                                <i class="fa fa-map-o" aria-hidden="true"></i> 56 Tố Hữu , Trung Văn
+                                                (Quận Nam Từ Li&#234;m, H&#224; Nội)
+                                                <a href="javascript:showGmapPopup('map_canvas', 20.9943949, 105.7873625, 'S&#226;n b&#243;ng Hải Đăng')"><span
+                                                        class="fa fa-map-marker"></span></a>
+                                            </p>
+                                            <div>
+                                                <p><strong>Gi&#225; thu&#234; s&#226;n 7 người</strong></p>
+                                                <p>06:00 - 16:00 <span class="price-san">300.000<sup>vnđ</sup></span>
+                                                </p>
+                                                <p>16:00 - 17:30 <span class="price-san">600.000<sup>vnđ</sup></span>
+                                                </p>
+                                                <p>17:30 - 20:30 <span class="price-san">800.000<sup>vnđ</sup></span>
+                                                </p>
+                                                <p>20:30 - 22:00 <span class="price-san">400.000<sup>vnđ</sup></span>
+                                                </p>
+                                            </div>
+
+                                            <p class="phone-numb"><i class="fa fa-phone-square" aria-hidden="true"></i>
+                                                0961678071</p>
+
+                                            <a href="/san-bong-hai-dang-26674011.html"
+                                               title="S&#226;n b&#243;ng Hải Đăng" class="btn-chi-tiet"><i
+                                                    class="fa fa-long-arrow-right" aria-hidden="true"></i> Chi tiết</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="item-card">
+                                    <div class="row">
+                                        <div class="col-md-12 item-preview-image">
+                                            <a href="/san-bong-hai-dang.html" title="S&#226;n B&#243;ng Hải Đăng">
+                                                <img class="img-responsive"
+                                                     src="https://res.givator.com/pictures/11017/500/2018_09/original/4077841420828588653642844484330754813198336n.jpg"
+                                                     alt="S&#226;n B&#243;ng Hải Đăng" align="thumbnail">
+                                            </a>
+                                        </div>
+                                        <div class="col-md-12 right-item-san">
+                                            <h2><a href="/san-bong-hai-dang.html" class="item-name-link">S&#226;n B&#243;ng
+                                                Hải Đăng</a></h2>
+                                            <p>
+                                                <i class="fa fa-map-o" aria-hidden="true"></i> 56 Đường Tố Hữu (Quận Nam
+                                                Từ Li&#234;m, H&#224; Nội)
+                                            </p>
+                                            <p>Thông tin giá chưa được cập nhật. Bạn vui lòng gọi điện trực tiếp tới
+                                                quản lý sân để biết thông tin giá </p>
+
+                                            <p class="phone-numb"><i class="fa fa-phone-square" aria-hidden="true"></i>
+                                                0961678071</p>
+
+                                            <a href="/san-bong-hai-dang.html" title="S&#226;n B&#243;ng Hải Đăng"
+                                               class="btn-chi-tiet"><i class="fa fa-long-arrow-right"
+                                                                       aria-hidden="true"></i> Chi tiết</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="item-card">
+                                    <div class="row">
+                                        <div class="col-md-12 item-preview-image">
+                                            <a href="/coma-6-tay-mo-tu-liem.html"
+                                               title="Coma 6 - T&#226;y Mỗ - Từ Li&#234;m">
+                                                <img class="img-responsive"
+                                                     src="https://res.givator.com/pictures/11017/600/2018_06/medium/khu-the-thao-coma6.jpg"
+                                                     alt="Coma 6 - T&#226;y Mỗ - Từ Li&#234;m" align="thumbnail">
+                                            </a>
+                                        </div>
+                                        <div class="col-md-12 right-item-san">
+                                            <h2><a href="/coma-6-tay-mo-tu-liem.html" class="item-name-link">Coma 6 - T&#226;y
+                                                Mỗ - Từ Li&#234;m</a></h2>
+                                            <p>
+                                                <i class="fa fa-map-o" aria-hidden="true"></i> Khu đ&#244; thị Dream
+                                                Town, Đường 70, Phường T&#226;y Mỗ - Quận Nam Từ Li&#234;m - Th&#224;nh
+                                                phố H&#224; Nội (Quận Nam Từ Li&#234;m, H&#224; Nội)
+                                            </p>
+                                            <div>
+                                                <p><strong>Gi&#225; thu&#234; s&#226;n 7 người</strong></p>
+                                                <p>17:30 - 19:00 <span class="price-san">600.000<sup>vnđ</sup></span>
+                                                </p>
+                                                <p>19:00 - 20:30 <span class="price-san">600.000<sup>vnđ</sup></span>
+                                                </p>
+                                                <p>20:30 - 22:00 <span class="price-san">Liên hệ</span></p>
+                                            </div>
+
+                                            <p class="phone-numb"><i class="fa fa-phone-square" aria-hidden="true"></i>
+                                                Phương Ph&#249;ng - 0902298111</p>
+
+                                            <a href="/coma-6-tay-mo-tu-liem.html"
+                                               title="Coma 6 - T&#226;y Mỗ - Từ Li&#234;m" class="btn-chi-tiet"><i
+                                                    class="fa fa-long-arrow-right" aria-hidden="true"></i> Chi tiết</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="item-card">
+                                    <div class="row">
+                                        <div class="col-md-12 item-preview-image">
+                                            <a href="/san-bong-da-son-trang-5.html"
+                                               title="S&#226;n b&#243;ng đ&#225; Sơn Trang 5">
+                                                <img class="img-responsive"
+                                                     src="https://res.givator.com/pictures/11017/600/2017_02/medium/P1080074.JPG"
+                                                     alt="S&#226;n b&#243;ng đ&#225; Sơn Trang 5" align="thumbnail">
+                                            </a>
+                                        </div>
+                                        <div class="col-md-12 right-item-san">
+                                            <h2><a href="/san-bong-da-son-trang-5.html" class="item-name-link">S&#226;n
+                                                b&#243;ng đ&#225; Sơn Trang 5</a></h2>
+                                            <p>
+                                                <i class="fa fa-map-o" aria-hidden="true"></i> 54 Tố Hữu ( L&#234; Văn
+                                                Lương k&#233;o d&#224;i), Trung Văn (Quận Nam Từ Li&#234;m, H&#224; Nội)
+                                                <a href="javascript:showGmapPopup('map_canvas', 20.9946158, 105.7874595, 'S&#226;n b&#243;ng đ&#225; Sơn Trang 5')"><span
+                                                        class="fa fa-map-marker"></span></a>
+                                            </p>
+                                            <div>
+                                                <p><strong>Gi&#225; thu&#234; s&#226;n 7 người</strong></p>
+                                                <p>06:00 - 16:00 <span class="price-san">300.000<sup>vnđ</sup></span>
+                                                </p>
+                                                <p>16:00 - 17:30 <span class="price-san">600.000<sup>vnđ</sup></span>
+                                                </p>
+                                                <p>17:30 - 20:30 <span class="price-san">800.000<sup>vnđ</sup></span>
+                                                </p>
+                                                <p>20:30 - 22:00 <span class="price-san">400.000<sup>vnđ</sup></span>
+                                                </p>
+                                            </div>
+
+                                            <p class="phone-numb"><i class="fa fa-phone-square" aria-hidden="true"></i>
+                                                S&#226;n b&#243;ng Sơn Trang 5 - 0912221518</p>
+
+                                            <a href="/san-bong-da-son-trang-5.html"
+                                               title="S&#226;n b&#243;ng đ&#225; Sơn Trang 5" class="btn-chi-tiet"><i
+                                                    class="fa fa-long-arrow-right" aria-hidden="true"></i> Chi tiết</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="item-card">
+                                    <div class="row">
+                                        <div class="col-md-12 item-preview-image">
+                                            <a href="/san-bong-da-truong-viet-uc-khu-do-thi-my-dinh-1.html"
+                                               title="S&#226;n b&#243;ng đ&#225; trường Việt - &#218;c Khu đ&#244; thị Mỹ đ&#236;nh 1">
+                                                <img class="img-responsive"
+                                                     src="https://res.givator.com/pictures/11017/600/2017_05/medium/san-bong-da-truong-viet-uc.jpg"
+                                                     alt="S&#226;n b&#243;ng đ&#225; trường Việt - &#218;c Khu đ&#244; thị Mỹ đ&#236;nh 1"
+                                                     align="thumbnail">
+                                            </a>
+                                        </div>
+                                        <div class="col-md-12 right-item-san">
+                                            <h2><a href="/san-bong-da-truong-viet-uc-khu-do-thi-my-dinh-1.html"
+                                                   class="item-name-link">S&#226;n b&#243;ng đ&#225; trường Việt -
+                                                &#218;c Khu đ&#244; thị Mỹ đ&#236;nh 1</a></h2>
+                                            <p>
+                                                <i class="fa fa-map-o" aria-hidden="true"></i> Khu đ&#244; thị Mỹ Đ&#236;nh
+                                                I (Quận Nam Từ Li&#234;m, H&#224; Nội)
+                                                <a href="javascript:showGmapPopup('map_canvas', 21.0322961, 105.7600939, 'S&#226;n b&#243;ng đ&#225; trường Việt - &#218;c Khu đ&#244; thị Mỹ đ&#236;nh 1')"><span
+                                                        class="fa fa-map-marker"></span></a>
+                                            </p>
+                                            <div>
+                                                <p><strong>Gi&#225; thu&#234; s&#226;n 7 người</strong></p>
+                                                <p>06:00 - 16:00 <span class="price-san">300.000<sup>vnđ</sup></span>
+                                                </p>
+                                                <p>16:00 - 17:30 <span class="price-san">600.000<sup>vnđ</sup></span>
+                                                </p>
+                                                <p>17:30 - 20:30 <span class="price-san">800.000<sup>vnđ</sup></span>
+                                                </p>
+                                                <p>20:30 - 22:00 <span class="price-san">400.000<sup>vnđ</sup></span>
+                                                </p>
+                                            </div>
+
+                                            <p class="phone-numb"><i class="fa fa-phone-square" aria-hidden="true"></i>
+                                                Hỗ Trợ - 0462872869 / 0462878889</p>
+                                            <p class="phone-numb"><i class="fa fa-phone-square" aria-hidden="true"></i>
+                                                S&#226;n b&#243;ng trường Việt - &#218;c - 0462872869</p>
+                                            <p class="phone-numb"><i class="fa fa-phone-square" aria-hidden="true"></i>
+                                                S&#226;n b&#243;ng trường Việt - &#218;c - 0462878889</p>
+
+                                            <a href="/san-bong-da-truong-viet-uc-khu-do-thi-my-dinh-1.html"
+                                               title="S&#226;n b&#243;ng đ&#225; trường Việt - &#218;c Khu đ&#244; thị Mỹ đ&#236;nh 1"
+                                               class="btn-chi-tiet"><i class="fa fa-long-arrow-right"
+                                                                       aria-hidden="true"></i> Chi tiết</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <!--Stadium list right END-->
+        </div>
+    </div>
+</div>
+<input type="hidden" id="hasSignin" value="False"/>
+
+<div class="hidden calendar-tpl">
+    <div class="item-other-detail">
+        <div id="ticket-select-date-time" class="ticket-select-date-time item-other-detail-section">
+            <div class="item-other-detail-section-header">
+                <strong>ĐẶT SÂN</strong>
+            </div>
+            <div class="row item-other-detail-section-content">
+                <div class="form-group">
+                    <div class="col-md-7">
+                        <div id="ticket-select-date" class="ticket-select-date"></div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="ticket-select-time-wrapper">
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-12">
+                                    <div class="ticket-select-time-title">NGÀY ĐẶT</div>
+                                    <div class="ticket-select-day-summary"><span class="currentDay"></span>
+                                        <small class="currentMonth"></small>
+                                    </div>
+                                    <hr>
+                                </div>
+                                <div class="col-xs-6 col-sm-12">
+                                    <input type="hidden" id="stadium-booking-data"/>
+                                    <div id="calendarBookingTime">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="booking-popup" class="modal fade" role="dialog" style="display: none;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 class="modal-title">Đặt sân</h3>
+            </div> <!-- /.modal-header -->
+            <div class="modal-body ">
+
+            </div> <!-- /.modal-body -->
+            <div class="modal-footer">
+                <button onclick="sport.stadiumDetail.createBooking(event);" id="reserveCalendar"
+                        data-loading-text="<i class='fa fa-spinner fa-spin '></i> Đang xử lý..."
+                        class="btn btn-primary btn-primary-extra">
+                    <i class="fa fa-calendar-check-o" aria-hidden="true"></i> Đặt lịch
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+            </div> <!-- /.modal-footer -->
+        </div> <!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<div id="booking-unavailable-subscribe" class="modal fade" role="dialog" style="display: none;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 class="modal-title">Đặt sân</h3>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <label class="control-label col-md-2 col-xs-12">Thời gian:</label>
+                            <div class="col-xs-12 col-md-6">
+                                <input type="text" class="form-control modal-std-booking-time" disabled
+                                       value="17:30 - 19:00 ngày 15/02/2017"/>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-10 col-md-offset-2">
+                                Hiện tại không còn sân trống để đặt vào giờ này.
+                                <br/>
+                                Hãy cung cấp thông tin dưới đây để nhận thông báo khi có sân trống
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+
+            </div>
+            <!-- /.modal-footer -->
+        </div>
+    </div>
+</div>
+
+<footer class="footer" th:replace="fragments/footer :: footer"></footer>
+
+<div th:replace="fragments/modals::modals"></div>
+</body>
+</html>

@@ -1,4 +1,4 @@
-package com.hoangthien.pitchbooking.controller;
+package com.hoangthien.pitchbooking.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

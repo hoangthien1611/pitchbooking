@@ -36,4 +36,9 @@ public class User {
             orphanRemoval = true,
             cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Team> owningTeams;
+
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "user",
+            cascade = CascadeType.ALL)
+    private List<Notification> notifications;
 }

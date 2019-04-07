@@ -4,7 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "booking")
@@ -17,13 +18,21 @@ public class Booking {
 
     private String content;
 
-    private Timestamp timeBooking;
+    private LocalDate dateBooking;
+
+    private String fromTime;
+
+    private String toTime;
 
     private boolean status;
 
-    private Timestamp timeCreated;
+    private LocalDateTime timeCreated;
 
     @ManyToOne
     @JoinColumn(name = "teamId")
     private Team teamBooking;
+
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User userBooking;
 }

@@ -4,24 +4,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "notification")
+@Table(name = "group_specific_pitches")
 @Data
 @NoArgsConstructor
-public class Notification {
+public class GroupSpecificPitches {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String content;
-
-    private LocalDateTime timeCreated;
-
-    private boolean seen = false;
+    @ManyToOne
+    @JoinColumn(name = "pitchId")
+    private Pitch pitch;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
-    private User user;
+    @JoinColumn(name = "pitchTypeId")
+    private PitchType pitchType;
+
+    private int number;
 }

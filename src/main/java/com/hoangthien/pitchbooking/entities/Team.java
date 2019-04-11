@@ -24,6 +24,14 @@ public class Team {
 
     private String logo;
 
+    private int youngest;
+
+    private int oldest;
+
+    private String home;
+
+    private String time;
+
     @ManyToOne
     @JoinColumn(name = "levelId")
     private Level level;

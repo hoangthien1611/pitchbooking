@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head::head"></head>
+<body ng-app="sportApp" class="page-sportteammanagement  ng-scope" data-gr-c-s-loaded="true">
+<div th:replace="fragments/header::header"></div>
+
+<div class="top-banner-box top-banner-box-doi">
+    <div class="container">
+        <p class="page-title">Thêm mới Team</p>
+    </div>
+</div>
+<div class="content-wrap is-admin-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="sidebar sidebar-tien-ich">
+                    <ul class="list-left-links">
+                        <li><a href="https://www.timdoinhanh.com/match/inviting" class="red">Đang bắt đối</a></li>
+                        <li><a href="https://www.timdoinhanh.com/stadium/bookinghistory">Đặt sân</a></li>
+                        <li>
+                            <a href="https://www.timdoinhanh.com/team/management">Quản lý đội bóng</a>
+                            <!-- ngIf: myTeams.length>0 -->
+                        </li>
+                        <li><a href="https://www.timdoinhanh.com/stadium/management">Quản lý sân</a></li>
+                        <li><a href="https://www.timdoinhanh.com/user/profile">Tài khoản</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-9 sidebar team-management-page">
+                <script>
+                    common.config.currentDefaultPage = '/newteam';
+                    common.config.pageUrl = common.config.webDomain + '/team/management';
+                    teamData.activeTeamGuid = 0;
+                </script>
+
+                <div class="layout-main">
+                    <!-- ngView: -->
+                    <div id="settings-content" class="tab-content stacked-content ng-scope" ng-view="">
+                        <div class="alert alert-warning ng-scope">
+                            <strong>Chú ý!</strong>
+                            <br>
+                            Bạn nên cập nhật số điện thoại vào tài khoản để đối tác có thể liên hệ trực tiếp.
+                            <br>
+                            Cập nhật số điện thoại <a href="https://www.timdoinhanh.com/user/profile" target="_blank">tại
+                            đây</a>
+                        </div>
+                        <div class="page-team-setting layout-main-content ng-scope">
+                            <div class="heading-block">
+                                <p ng-if="vm.teamId == 0" class="title-box ng-scope"><i
+                                        class="fa fa-map-marker" aria-hidden="true"></i> Thêm đội bóng mới</p>
+                            </div>
+                            <form class="form-horizontal" role="form" th:action="@{/team/create}" method="post" enctype="multipart/form-data">
+                                <div class="form-group alert alert-warning">
+                                    <label class="control-label col-sm-3"><strong>Địa chỉ truy cập:</strong></label>
+                                    <div class="col-sm-9">
+                                        <a target="_blank" th:href="${#httpServletRequest.getContextPath()}">a</a>
+                                        <input type="text" name="path" class="input-transparent">
+                                        <button type="button" id="btn-check-path"
+                                                class="btn btn-primary inlineBlock btn-sm">Kiểm tra
+                                        </button>
+                                        <p style="font-style:italic; color:blue; display:none;"
+                                           class="path-can-use">
+                                            <i class="fa fa-check"></i> Địa chỉ khả dụng
+                                        </p>
+                                        <p style="font-style:italic; color:red; display:none;"
+                                           class="path-cannot-use">
+                                            <i class="fa fa-ban"></i> Địa chỉ KHÔNG khả dụng
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-group-sm">
+                                    <label class="control-label col-sm-3">Tên đội:</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="name"
+                                               id="name" placeholder="Nhập tên đội bóng của bạn">
+                                    </div>
+                                </div>
+                                <div class="form-group form-group-sm">
+                                    <label class="control-label col-sm-3">Khu vực:</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control" name="areaId">
+                                            <th:block th:if="${#lists.isEmpty(listDistricts)}">
+                                                <option value="?">Không có dữ liệu!</option>
+                                            </th:block>
+                                            <th:block th:unless="${#lists.isEmpty(listDistricts)}">
+                                                <option th:each="district,iterStat:${listDistricts}"
+                                                        th:text="${district.name}"
+                                                        th:value="${district.id}"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group form-group-sm">
+                                    <label class="control-label col-sm-3">Trình độ:</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control" name="levelId">
+                                            <option th:each="level,iterStat:${listLevels}"
+                                                    th:text="${level.name}"
+                                                    th:value="${level.id}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group form-group-sm">
+                                    <label class="control-label col-sm-3">Logo:</label>
+                                    <div class="col-sm-9" style="padding-top:5px;">
+                                        <input id="fileLogoFilePath" name="imgLogo" type="file">
+                                        <img id="imageLogo" />
+                                    </div>
+                                </div>
+                                <div class="form-group form-group-sm">
+                                    <label class="control-label col-sm-3">Ảnh đội:</label>
+                                    <div class="col-sm-9" style="padding-top:5px;">
+                                        <input id="fileBannerFilePath" type="file" name="imgTeam">
+                                        <img id="imageTeam" />
+                                    </div>
+                                </div>
+                                <div class="form-group age-range  form-group-sm">
+                                    <label class="control-label col-sm-3">Độ tuổi:</label>
+                                    <div class="col-md-9 row">
+                                        <div class="col-sm-4 inlineBlock">
+                                            <input type="number" class="form-control" name="youngest"
+                                                   id="inpYoungestAge" placeholder="Ít tuổi nhất">
+                                        </div>
+                                        <div class="col-sm-4 inlineBlock mobile-pull-right">
+                                            <input type="number" class="form-control" name="oldest"
+                                                   id="inpOldestAge" placeholder="Lớn tuổi nhất">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-group-sm">
+                                    <label class="control-label col-sm-3">Giới thiệu:</label>
+                                    <div class="col-sm-9">
+                                        <textarea cols="5" id="inpAbout" name="description" class="form-control"
+                                                  placeholder="Giới thiệu"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="clear-bordered"></div>
+                                </div>
+                                <div class="form-group form-group-sm">
+                                    <label class="control-label col-sm-3 font-bold">
+                                        Sân nhà
+                                    </label>
+                                    <div class="col-sm-9">
+                                        <input type="text" name="home" class="form-control" placeholder="Nhập sân nhà" list="pitches">
+                                        <datalist id="pitches">
+                                            <option value="Boston"></option>
+                                            <option value="San Duy Tan"></option>
+                                        </datalist>
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-group-sm">
+                                    <label class="control-label col-sm-3 mobile-hidden">Thời gian đá:</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" name="time"
+                                               id="time" placeholder="Nhập thời gian đá">
+                                    </div>
+                                </div>
+
+                                <div class="form-group text-right">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-primary btn-primary-extra">
+                                            <i class="fa fa-save"></i>
+                                            Submit
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div> <!-- /.tab-content -->
+                </div> <!-- /.col -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="fragments/footer::footer"></footer>
+<div th:replace="fragments/modals::modals"></div>
+<script th:src="@{/js/my-custom/team.js}"></script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 package com.hoangthien.pitchbooking.services;
 
+import com.hoangthien.pitchbooking.exception.PitchBookingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,7 +41,7 @@ public class FileServiceImpl implements FileService {
         try {
             // Check if the file's name contains invalid characters
             if (fileName.contains("..")) {
-                return "";
+                throw new PitchBookingException("Tên file ảnh không hợp lệ!");
             }
 
             // Copy file to the target location (Replacing existing file with the same name - it's not gonna happen)
@@ -50,7 +51,7 @@ public class FileServiceImpl implements FileService {
             return fileName;
         } catch (IOException e) {
             e.printStackTrace();
-            return "";
+            throw new PitchBookingException(("Không thể lưu được file ảnh!"));
         }
     }
 }

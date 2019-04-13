@@ -1,11 +1,15 @@
 package com.hoangthien.pitchbooking.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -23,7 +27,7 @@ public class User {
 
     private String phoneNumber;
 
-    private String picture;
+    private String avatar;
 
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "owner",
@@ -41,4 +45,13 @@ public class User {
             mappedBy = "user",
             cascade = CascadeType.ALL)
     private List<Notification> notifications;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "members")
+    @EqualsAndHashCode.Exclude
+    private Set<Team> joiningTeams = new HashSet<>();
 }

@@ -22,8 +22,6 @@ public class TeamDTO {
 
     private int oldest;
 
-    private String home;
-
     private String time;
 
     private Long levelId;
@@ -31,4 +29,6 @@ public class TeamDTO {
     private Long captainId;
 
     private Long areaId;
+
+    private Long homeId;
 }

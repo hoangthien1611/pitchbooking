@@ -10,7 +10,5 @@ public interface TeamMapper {
 
     TeamMapper INSTANCE = Mappers.getMapper(TeamMapper.class);
 
-    TeamDTO teamToTeamDTO(Team team);
-
     Team teamDTOToTeam(TeamDTO teamDTO);
 }

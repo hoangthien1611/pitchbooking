@@ -18,7 +18,7 @@
                         <li><a href="https://www.timdoinhanh.com/match/inviting" class="red">Đang bắt đối</a></li>
                         <li><a href="https://www.timdoinhanh.com/stadium/bookinghistory">Đặt sân</a></li>
                         <li>
-                            <a href="https://www.timdoinhanh.com/team/management">Quản lý đội bóng</a>
+                            <a th:href="@{/team/create}">Quản lý đội bóng</a>
                             <!-- ngIf: myTeams.length>0 -->
                         </li>
                         <li><a href="https://www.timdoinhanh.com/stadium/management">Quản lý sân</a></li>
@@ -46,9 +46,14 @@
                         </div>
                         <div class="page-team-setting layout-main-content ng-scope">
                             <div class="heading-block">
-                                <p ng-if="vm.teamId == 0" class="title-box ng-scope"><i
+                                <p class="title-box ng-scope"><i
                                         class="fa fa-map-marker" aria-hidden="true"></i> Thêm đội bóng mới</p>
                             </div>
+                            <th:block th:if="${msg != null}" th:with="type=${msg.type == 1 ? 'success' : 'danger'}">
+                                <div th:class="${'alert msg-noti alert-' + type}" style="text-align: center">
+                                    <strong th:text="${msg.message}"></strong>
+                                </div>
+                            </th:block>
                             <form class="form-horizontal" role="form" th:action="@{/team/create}" method="post" enctype="multipart/form-data">
                                 <div class="form-group alert alert-warning">
                                     <label class="control-label col-sm-3"><strong>Địa chỉ truy cập:</strong></label>

@@ -1,0 +1,551 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head::head"></head>
+
+<body ng-app="sportApp" class="mobile-app-false team-detail-body">
+<div th:replace="fragments/header::header"></div>
+
+
+<div class="top-banner-box top-banner-box-doi">
+    <div class="container">
+        <p class="page-title"></p>
+        <div class="team-banner-btn-container">
+            <a class="btn btn-info btn-sm modal-link-angularjs" data-modal-tpl="P_JoinTeamRequest" login-required="true"
+               data-modal-qs="teamId=16692">
+                <i class="fa fa-send-o"></i>
+                Tham gia đội bóng
+            </a>
+            <a idd="16692" class="btn btn-info btn-sm modal-link-angularjs" data-modal-tpl="match.invitation"
+               login-required="true" data-modal-qs="toTeamId=16692&toUserId=4308&toTeamName=FC Th&#225;i Thuần">
+                <i class="fa fa-calendar" aria-hidden="true"></i> Mời đối
+            </a>
+        </div>
+    </div>
+</div>
+<div class="tabs-chi-tiet-doi">
+    <div class="container">
+        <div class="img-doio">
+            <img class="img-responsive" th:src="@{/uploads/__${team.logo}__}" align="thumb" style="height: 100%">
+        </div>
+        <div class="title-doi">
+            <h1 th:text="${team.name}"><span class="gender"><i class="fa fa-mars" aria-hidden="true"></i></span></h1>
+            <p class="captain-item" owner-id="4308">
+                    <span>
+                        <a th:href="@{/user/profile/__${team.captain.id}__}" th:text="${team.captain.fullName}"></a> (đội trưởng)
+                        <span class="captain-item-status offline"></span>
+                    </span>
+                <span class="chat-nhanh" ng-click="onQuickChat(4308);"><i class="fa fa-comments" aria-hidden="true"></i> Nói chuyện</span>
+            </p>
+        </div>
+        <div class="wrap-ul-doi">
+            <ul class="list-link-doi">
+                <li th:class="${tab == 1 ? 'active' : ''}"><a th:href="@{/team/detail/__${team.path}__}">Tìm đối</a>
+                </li>
+                <li th:class="${tab == 2 ? 'active' : ''}"><a th:href="@{/team/detail/__${team.path}__?tab=2}">Thành
+                    viên</a></li>
+                <li th:class="${tab == 3 ? 'active' : ''}"><a th:href="@{/team/detail/__${team.path}__?tab=3}">Giới
+                    thiệu</a></li>
+                <li th:class="${tab == 4 ? 'active' : ''}"><a th:href="@{/team/detail/__${team.path}__?tab=4}">Quỹ
+                    bóng</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div class="content-wrap">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8" id="chitiet-doi-left">
+                <th:block th:if="${tab == 1}">
+                    <div class="content-cts">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="p-content">
+                                    <ul class="list-item-san" ng-controller="matchFindingCtrl">
+                                        <li class="item-card match-finding-item" idd="78632">
+                                            <div class="row">
+                                                <div class="col-md-12 right-item-san right-item-doi">
+                                                    <h2 class="team-match-headlink">
+                                                        <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+                                                        <a href="/fc-thai-thuan-262011.html?matchId=78632">20h30 Thứ
+                                                            Sáu
+                                                            ngày 19/04/2019</a>
+                                                    </h2>
+                                                    <div class="btn-doi-top pull-right chi-tiet-doi-main btn-doi-inteam">
+
+
+                                                        <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                                data-modal-tpl="match.recipientMaker"
+                                                                login-required="true"
+                                                                data-modal-qs="toTeamId=16692&toUserId=4308&toMatchId=78632&matchId=78632&teamId=16692&toTeamName=FC Th&#225;i Thuần">
+                                                            <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                                        </button>
+
+
+                                                    </div>
+
+                                                    <p>
+                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Sân
+                                                        nhà:</strong><a href="/san-bong-viettel-2.html" target="_blank">Sân
+                                                        bóng viettel 2 (Sân 7 số 1)</a>
+                                                        <span class="price-san">400.000<sup>vnđ</sup> / trận</span>
+                                                    </p>
+                                                    <p class="item-stadium-address"><i class="fa fa-map-o"
+                                                                                       aria-hidden="true"></i><strong>Địa
+                                                        chỉ:</strong>Ngõ 155, Ngách 155/206 Trường Chinh - Cầu Phương
+                                                        Liệt
+                                                        (Quận Thanh Xuân Hà Nội)</p>
+
+                                                    <p class="level-row">
+                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Trình
+                                                        độ:</strong>Trung b&#236;nh
+                                                    </p>
+
+
+                                                    <p class="match-contract">
+                                                        <i class="fa fa-shirtsinbulk"
+                                                           aria-hidden="true"></i><strong>Kèo:</strong>
+                                                        thương lượng
+                                                    </p>
+
+                                                    <p>
+                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i> <strong>Trạng
+                                                        thái:</strong>
+                                                        <span class="red">Đang chờ</span>
+                                                    </p>
+
+
+                                                    <p class="quost-doi">
+                                                        đội mới đá được vài tháng, trình độ trung bình, toàn anh em cùng
+                                                        quê, cam kết đá đẹp, rất mong được giao lưu với mọi người, có gì
+                                                        alo
+                                                        mình Sơn(1995) 0981184403
+                                                    </p>
+
+
+                                                    <div class="mobile-only match-button-container">
+
+
+                                                        <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                                data-modal-tpl="match.recipientMaker"
+                                                                login-required="true"
+                                                                data-modal-qs="toTeamId=16692&toUserId=4308&toMatchId=78632&matchId=78632&teamId=16692&toTeamName=FC Th&#225;i Thuần">
+                                                            <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                                        </button>
+
+
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                        <li class="item-card match-finding-item" idd="78631">
+                                            <div class="row">
+                                                <div class="col-md-12 right-item-san right-item-doi">
+                                                    <h2 class="team-match-headlink">
+                                                        <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+                                                        <a href="/fc-thai-thuan-262011.html?matchId=78631">17h30 Thứ
+                                                            Bảy
+                                                            ngày 13/04/2019</a>
+                                                    </h2>
+                                                    <div class="btn-doi-top pull-right chi-tiet-doi-main btn-doi-inteam">
+
+
+                                                    </div>
+
+                                                    <p>
+                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Sân
+                                                        nhà:</strong><a href="/san-bong-viettel-2.html" target="_blank">Sân
+                                                        bóng viettel 2 (Sân 7 số 4)</a>
+                                                    </p>
+                                                    <p class="item-stadium-address"><i class="fa fa-map-o"
+                                                                                       aria-hidden="true"></i><strong>Địa
+                                                        chỉ:</strong>Ngõ 155, Ngách 155/206 Trường Chinh - Cầu Phương
+                                                        Liệt
+                                                        (Quận Thanh Xuân Hà Nội)</p>
+
+                                                    <p class="level-row">
+                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Trình
+                                                        độ:</strong>Trung b&#236;nh
+                                                    </p>
+
+
+                                                    <p class="match-contract">
+                                                        <i class="fa fa-shirtsinbulk"
+                                                           aria-hidden="true"></i><strong>Kèo:</strong>
+                                                        thương lượng tại s&#226;n
+                                                    </p>
+
+                                                    <p>
+                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i> <strong>Trạng
+                                                        thái:</strong>
+                                                        <span class="red">Đã hủy</span>
+                                                    </p>
+
+
+                                                    <p class="quost-doi">
+                                                        đội mới đá được vài tháng, trình độ trung bình, toàn anh em cùng
+                                                        quê, cam kết đá đẹp, rất mong được giao lưu với mọi người, có gì
+                                                        alo
+                                                        mình Sơn(1995) 0981184403
+                                                    </p>
+
+
+                                                    <div class="mobile-only match-button-container">
+
+
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                        <li class="item-card match-finding-item" idd="78632">
+                                            <div class="row">
+                                                <div class="col-md-12 right-item-san right-item-doi">
+                                                    <h2 class="team-match-headlink">
+                                                        <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+                                                        <a href="/fc-thai-thuan-262011.html?matchId=78632">20h30 Thứ
+                                                            Sáu
+                                                            ngày 19/04/2019</a>
+                                                    </h2>
+                                                    <div class="btn-doi-top pull-right chi-tiet-doi-main btn-doi-inteam">
+
+
+                                                        <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                                data-modal-tpl="match.recipientMaker"
+                                                                login-required="true"
+                                                                data-modal-qs="toTeamId=16692&toUserId=4308&toMatchId=78632&matchId=78632&teamId=16692&toTeamName=FC Th&#225;i Thuần">
+                                                            <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                                        </button>
+
+
+                                                    </div>
+
+                                                    <p>
+                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Sân
+                                                        nhà:</strong><a href="/san-bong-viettel-2.html" target="_blank">Sân
+                                                        bóng viettel 2 (Sân 7 số 1)</a>
+                                                        <span class="price-san">400.000<sup>vnđ</sup> / trận</span>
+                                                    </p>
+                                                    <p class="item-stadium-address"><i class="fa fa-map-o"
+                                                                                       aria-hidden="true"></i><strong>Địa
+                                                        chỉ:</strong>Ngõ 155, Ngách 155/206 Trường Chinh - Cầu Phương
+                                                        Liệt
+                                                        (Quận Thanh Xuân Hà Nội)</p>
+
+                                                    <p class="level-row">
+                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Trình
+                                                        độ:</strong>Trung b&#236;nh
+                                                    </p>
+
+
+                                                    <p class="match-contract">
+                                                        <i class="fa fa-shirtsinbulk"
+                                                           aria-hidden="true"></i><strong>Kèo:</strong>
+                                                        thương lượng
+                                                    </p>
+
+                                                    <p>
+                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i> <strong>Trạng
+                                                        thái:</strong>
+                                                        <span class="red">Đang chờ</span>
+                                                    </p>
+
+
+                                                    <p class="quost-doi">
+                                                        đội mới đá được vài tháng, trình độ trung bình, toàn anh em cùng
+                                                        quê, cam kết đá đẹp, rất mong được giao lưu với mọi người, có gì
+                                                        alo
+                                                        mình Sơn(1995) 0981184403
+                                                    </p>
+
+
+                                                    <div class="mobile-only match-button-container">
+
+
+                                                        <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
+                                                                data-modal-tpl="match.recipientMaker"
+                                                                login-required="true"
+                                                                data-modal-qs="toTeamId=16692&toUserId=4308&toMatchId=78632&matchId=78632&teamId=16692&toTeamName=FC Th&#225;i Thuần">
+                                                            <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                                        </button>
+
+
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+                <th:block th:if="${tab == 2}">
+                    <div class="content-cts">
+                        <div class="item-card">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="right-item-san right-item-doi right-item-doi-ct">
+                                        <div class="bs-example bs-example-tabs" data-example-id=togglable-tabs>
+                                            <ul class="nav nav-tabs" id=myTabs role=tablist>
+                                                <li role=presentation class=active><a href="javascript:void(0)">Thành
+                                                    viên đội</a>
+                                                </li>
+                                            </ul>
+                                            <div class=tab-content id=myTabContent>
+                                                <div class="tab-pane fade in active">
+                                                    <div class="row">
+                                                        <div class="col-md-3 col-xs-6 team-member-card" th:each="member,iterStat:${team.members}">
+                                                            <img class="img-responsive avatar-list" style="height: 50px"
+                                                                 th:src="@{/uploads/__${member.avatar}__}" align="thumb"
+                                                                 th:alt="${member.fullName}">
+                                                            <a th:href="@{/user/profile/__${member.id}__}"
+                                                               th:text="${member.fullName}"></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+                <th:block th:if="${tab == 3}">
+                    <div class="content-cts">
+                        <div class="item-card">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="right-item-san right-item-doi">
+                                        <div class="header-item-doi">
+                                            <h2><a href="#" th:text="${team.name}"></a></h2>
+                                            <fieldset class="rating">
+                                                <input type="radio" id="star5" name="rating" value="5"/><label
+                                                    class="full" for="star5" title="Awesome - 5 stars"></label>
+                                                <input type="radio" id="star4half" name="rating"
+                                                       value="4 and a half"/><label class="half" for="star4half"
+                                                                                    title="Pretty good - 4.5 stars"></label>
+                                                <input type="radio" id="star4" name="rating" value="4"/><label
+                                                    class="full" for="star4" title="Pretty good - 4 stars"></label>
+                                                <input type="radio" id="star3half" name="rating"
+                                                       value="3 and a half"/><label class="half" for="star3half"
+                                                                                    title="Meh - 3.5 stars"></label>
+                                                <input type="radio" id="star3" name="rating" value="3"/><label
+                                                    class="full" for="star3" title="Meh - 3 stars"></label>
+                                                <input type="radio" id="star2half" name="rating"
+                                                       value="2 and a half"/><label class="half" for="star2half"
+                                                                                    title="Kinda bad - 2.5 stars"></label>
+                                                <input type="radio" id="star2" name="rating" value="2"/><label
+                                                    class="full" for="star2" title="Kinda bad - 2 stars"></label>
+                                                <input type="radio" id="star1half" name="rating"
+                                                       value="1 and a half"/><label class="half" for="star1half"
+                                                                                    title="Meh - 1.5 stars"></label>
+                                                <input type="radio" id="star1" name="rating" value="1"/><label
+                                                    class="full" for="star1" title="Sucks big time - 1 star"></label>
+                                                <input type="radio" id="starhalf" name="rating" value="half"/><label
+                                                    class="half" for="starhalf"
+                                                    title="Sucks big time - 0.5 stars"></label>
+                                            </fieldset>
+                                            <span class="gender"><i class="fa fa-mars" aria-hidden="true"></i></span>
+                                        </div>
+                                        <th:block th:if="${team.home != null}">
+                                        <p>
+                                            <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                            <strong> Sân nhà:</strong>
+                                            <a href="#" target="_blank" th:text="${team.home.name}"></a>
+                                        </p>
+                                        <p>
+                                            <i class="fa fa-map-o" aria-hidden="true"></i>
+                                            <strong> Địa chỉ:</strong>
+                                            <th:block th:text="${team.home.address}"></th:block>
+                                        </p>
+                                        </th:block>
+                                        <p>
+                                            <i class="fa fa-map-o" aria-hidden="true"></i>
+                                            <strong> Quận/Huyện:</strong>
+                                            <th:block th:text="${team.area.name}"></th:block>
+                                        </p>
+                                        <p>
+                                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                            <strong> Thời gian đá:</strong>
+                                            <th:block th:text="${team.time}"></th:block>
+                                        </p>
+                                        <p>
+                                            <i class="fa fa-user" aria-hidden="true"></i>
+                                            <strong> Độ tuổi:</strong>
+                                            <th:block th:text="${team.youngest + ' - ' + team.oldest}"></th:block>
+                                        </p>
+                                        <p>
+                                            <i class="fa fa-user" aria-hidden="true"></i>
+                                            <strong> Trình độ:</strong>
+                                            <th:block th:text="${team.level.name}"></th:block>
+                                        </p>
+
+                                    </div>
+                                    <div class="cl">
+                                        <div class="title-img" th:text="${'Giới thiệu về ' + team.name}"></div>
+                                        <div class="content-sans">
+                                            <p th:text="${team.description}"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+                <th:block th:if="${tab == 4}">
+                    <div class="content-cts">
+                        <div class="item-card" style="padding-bottom:30px;">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div class="col-sm-12">
+                                            <p class="alert alert-info">
+                                                <strong>Chỉ thành viên đội bóng mới xem được thông tin này</strong>
+                                                <br />
+                                                <a data-dismiss="modal" href="javascript:;" onclick="global.showModalLoginPopup();" class="btn btn-success">Đăng nhập</a>
+                                                <a href="#" onclick="location.href = '/';" class="btn btn-danger">Đăng kí</a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+
+            <div class="col-md-4" id="chitiet-doi-right">
+                <div class="ads-banner-right" id="s9adright">
+                </div>
+
+
+                <div class="sidebar sidebar-tien-san">
+                    <p class="title-box">
+                        <i class="fa fa-soccer-ball-o" aria-hidden="true"></i> Cùng trình độ
+                    </p>
+                    <div class="list-doi-new">
+                        <ul class="ul-list-doi-new">
+                            <li>
+                                <div class="doi-lis-img">
+                                    <a href="/fc-yen-thanh-3-hn.html"><img class="img-responsive"
+                                                                           src="https://res.givator.com/pictures/11017/600/2019_04/medium/104303666763107391465518737438332643109243n.png"
+                                                                           alt="FC Y&#202;N TH&#192;NH 3 HN"
+                                                                           align="thumbnail"></a>
+                                </div>
+                                <div class="doi-lis-content">
+                                    <h3>
+                                        <a href="/fc-yen-thanh-3-hn.html" title="FC Y&#202;N TH&#192;NH 3 HN">FC Y&#202;N
+                                            TH&#192;NH 3 HN</a>
+                                    </h3>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        Trung b&#236;nh
+                                    </p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="doi-lis-img">
+                                    <a href="/huyhao"><img class="img-responsive" src="images/team/sport.png" alt="ABC"
+                                                           align="thumbnail"></a>
+                                </div>
+                                <div class="doi-lis-content">
+                                    <h3>
+                                        <a href="/huyhao" title="ABC">ABC</a>
+                                    </h3>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        Trung b&#236;nh
+                                    </p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="doi-lis-img">
+                                    <a href="/d13h1.html"><img class="img-responsive" src="images/team/sport.png"
+                                                               alt="D13H1" align="thumbnail"></a>
+                                </div>
+                                <div class="doi-lis-content">
+                                    <h3>
+                                        <a href="/d13h1.html" title="D13H1">D13H1</a>
+                                    </h3>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        Trung b&#236;nh
+                                    </p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="doi-lis-img">
+                                    <a href="/team.kdqt"><img class="img-responsive" src="images/team/sport.png"
+                                                              alt="Đội b&#243;ng Trung t&#226;m Kinh doanh Quốc tế - TCT VTS"
+                                                              align="thumbnail"></a>
+                                </div>
+                                <div class="doi-lis-content">
+                                    <h3>
+                                        <a href="/team.kdqt"
+                                           title="Đội b&#243;ng Trung t&#226;m Kinh doanh Quốc tế - TCT VTS">Đội b&#243;ng
+                                            Trung t&#226;m Kinh doanh Quốc tế - TCT VTS</a>
+                                    </h3>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        Trung b&#236;nh
+                                    </p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="doi-lis-img">
+                                    <a href="/fc-yen-my.html"><img class="img-responsive" src="images/team/sport.png"
+                                                                   alt="FC Y&#234;n Mỹ" align="thumbnail"></a>
+                                </div>
+                                <div class="doi-lis-content">
+                                    <h3>
+                                        <a href="/fc-yen-my.html" title="FC Y&#234;n Mỹ">FC Y&#234;n Mỹ</a>
+                                    </h3>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        Trung b&#236;nh
+                                    </p>
+                                </div>
+                            </li>
+                        </ul>
+                        <a href="/doi-bong?level=2&provinceId=3" class="doi-xem-them"><i class="fa fa-long-arrow-right"
+                                                                                         aria-hidden="true"></i> Xem
+                            thêm</a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function voteForItem(itemId) {
+        var voteRequest = {id: itemId};
+        makeAjaxRequest('api/matchAttendance/vote', 'POST', voteRequest, function (response) {
+            $('a[data-voteitem-id="' + itemId + '"]').html(response.data + ' lượt');
+
+            if (!response.isSuccessful) {
+                alert('Có lỗi, vui lòng thử lại');
+                setTimeout(function () {
+                    location.reload();
+                });
+            }
+        });
+    }
+</script>
+<footer th:replace="fragments/footer::footer"></footer>
+<div th:replace="fragments/modals::modals"></div>
+</body>
+</html>

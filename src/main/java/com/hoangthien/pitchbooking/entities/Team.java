@@ -1,9 +1,12 @@
 package com.hoangthien.pitchbooking.entities;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "team")
@@ -28,8 +31,6 @@ public class Team {
 
     private int oldest;
 
-    private String home;
-
     private String time;
 
     @ManyToOne
@@ -43,4 +44,22 @@ public class Team {
     @ManyToOne
     @JoinColumn(name = "districtId")
     private District area;
+
+    @OneToOne(cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinColumn(name = "pitchId")
+    private Pitch home;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "team_user",
+            joinColumns = {@JoinColumn(name = "teamId")},
+            inverseJoinColumns = {@JoinColumn(name = "userId")})
+    @EqualsAndHashCode.Exclude
+    private Set<User> members = new HashSet<>();
 }

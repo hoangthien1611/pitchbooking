@@ -1,0 +1,1029 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head::head"></head>
+
+<body ng-app="sportApp" class="mobile-app-false">
+<div th:replace="fragments/header::header"></div>
+
+<div class="breadcrum">
+    <div class="container">
+        <div class="breadcrum-line">
+            <a href="/">Trang chủ</a>
+            <a href="/doi-bong" class="" title="Đội b&#243;ng">Đội b&#243;ng</a>
+            <a>Đội b&#243;ng tại H&#224; Nội</a>
+        </div>
+    </div>
+</div>
+
+<div class="content-wrap">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="sidebar-filter-container">
+                    <div class="m-btn-expand-holder mobile-only">
+                        <span class="form-filter-san-span">Lọc kết quả <i class="fa fa-filter"
+                                                                             aria-hidden="true"></i></span>
+                    </div>
+                    <h2 id="a" class="title-intent title-pages mobile-hidden"><i class="fa fa-filter"
+                                                                                 aria-hidden="true"></i>Lọc kết quả</h2>
+
+                    <div class="sidebar sidebar-tien-ich sidebar-province">
+                        <p class="title-box"><i class="fa fa-map-marker" aria-hidden="true"></i> Tỉnh / Thành phố</p>
+                        <ul class="list-left-links">
+                            <li class="active">
+                                <a href="/doi-bong-tai-ha-noi">H&#224; Nội <span>13391</span></a>
+                            </li>
+                            <li>
+                                <a href="/doi-bong-tai-da-nang">Đ&#224; Nẵng <span>23</span></a>
+                            </li>
+                            <li>
+                                <a href="/doi-bong-tai-ho-chi-minh">Hồ Ch&#237; Minh <span>60</span></a>
+                            </li>
+                            <li>
+                                <a href="/doi-bong-tai-ba-ria-vung-tau">B&#224; Rịa - Vũng T&#224;u <span>2</span></a>
+                            </li>
+                            <li>
+                                <a href="/doi-bong-tai-bac-ninh">Bắc Ninh <span>4</span></a>
+                            </li>
+                            <li>
+                                <a href="/doi-bong-tai-ca-mau">C&#224; Mau <span>2</span></a>
+                            </li>
+                            <li>
+                                <a href="/doi-bong-tai-thua-thien-hue">Thừa Thi&#234;n Huế <span>3</span></a>
+                            </li>
+                            <li>
+                                <a href="/doi-bong-tai-dien-bien">Điện Bi&#234;n <span>1</span></a>
+                            </li>
+                            <li>
+                                <a href="/doi-bong-tai-hai-phong">Hải Ph&#242;ng <span>1</span></a>
+                            </li>
+                            <li>
+                                <a href="/doi-bong-tai-can-tho">Cần Thơ <span>1</span></a>
+                            </li>
+                            <li>
+                                <a href="/doi-bong-tai-bac-giang">Bắc Giang <span>2</span></a>
+                            </li>
+                            <li>
+                                <a href="/doi-bong-tai-kon-tum">Kon Tum <span>1</span></a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="sidebar sidebar-tim-doi ">
+                        <ul class="list-left-links list-left-check">
+                            <li>
+                                <strong>Tr&#236;nh độ</strong>
+                                <ul>
+                                    <li onclick="location.href='/doi-bong-tai-ha-noi?level=8';">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input id="fo" name="fo" type="checkbox" value="true"/><input name="fo"
+                                                                                                              type="hidden"
+                                                                                                              value="false"/>
+                                                Kh&#225;
+                                                <span class="pull-right filter-count">14</span>
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li onclick="location.href='/doi-bong-tai-ha-noi?level=9';">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input id="fo" name="fo" type="checkbox" value="true"/><input name="fo"
+                                                                                                              type="hidden"
+                                                                                                              value="false"/>
+                                                Kh&#225; mạnh
+                                                <span class="pull-right filter-count">2</span>
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li onclick="location.href='/doi-bong-tai-ha-noi?level=6';">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input id="fo" name="fo" type="checkbox" value="true"/><input name="fo"
+                                                                                                              type="hidden"
+                                                                                                              value="false"/>
+                                                Mềm
+                                                <span class="pull-right filter-count">110</span>
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li onclick="location.href='/doi-bong-tai-ha-noi?level=1';">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input id="fo" name="fo" type="checkbox" value="true"/><input name="fo"
+                                                                                                              type="hidden"
+                                                                                                              value="false"/>
+                                                Mới chơi
+                                                <span class="pull-right filter-count">367</span>
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li onclick="location.href='/doi-bong-tai-ha-noi?level=4';">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input id="fo" name="fo" type="checkbox" value="true"/><input name="fo"
+                                                                                                              type="hidden"
+                                                                                                              value="false"/>
+                                                Phủi
+                                                <span class="pull-right filter-count">4</span>
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li onclick="location.href='/doi-bong-tai-ha-noi?level=7';">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input id="fo" name="fo" type="checkbox" value="true"/><input name="fo"
+                                                                                                              type="hidden"
+                                                                                                              value="false"/>
+                                                Rất mềm
+                                                <span class="pull-right filter-count">57</span>
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li onclick="location.href='/doi-bong-tai-ha-noi?level=2';">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input id="fo" name="fo" type="checkbox" value="true"/><input name="fo"
+                                                                                                              type="hidden"
+                                                                                                              value="false"/>
+                                                Trung b&#236;nh
+                                                <span class="pull-right filter-count">1307</span>
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li onclick="location.href='/doi-bong-tai-ha-noi?level=3';">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input id="fo" name="fo" type="checkbox" value="true"/><input name="fo"
+                                                                                                              type="hidden"
+                                                                                                              value="false"/>
+                                                Trung b&#236;nh kh&#225;
+                                                <span class="pull-right filter-count">364</span>
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <li onclick="location.href='/doi-bong-tai-ha-noi?level=5';">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input id="fo" name="fo" type="checkbox" value="true"/><input name="fo"
+                                                                                                              type="hidden"
+                                                                                                              value="false"/>
+                                                Trung b&#236;nh yếu
+                                                <span class="pull-right filter-count">11033</span>
+                                            </label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-8 l-30">
+                <div class="p-content">
+                    <h1 id="a" class="title-intent title-pages mobile-marginlr-15"><i class="fa fa-futbol-o"
+                                                                                      aria-hidden="true"></i> Đội b&#243;ng
+                        tại H&#224; Nội</h1>
+
+                    <div class="form-group row mobile-marginlr-15">
+                        <form method="get" action="/doi-bong-tai-ha-noi">
+                            <div class="col-md-9 col-xs-9 margin-b10">
+                                <input type="text" name="keyword" class="form-control"
+                                       placeholder="Ví dụ: 17h30 thứ 6, hoàng minh giám, thành phát"/>
+                            </div>
+                            <div class="col-md-3 col-xs-3 margin-b10">
+                                <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <ul class="list-item-san">
+                        <li class="item-card">
+                            <div class="row">
+                                <div class="col-md-2 item-preview-image">
+                                    <a href="/genify.html" title="Genify"><img class="img-responsive"
+                                                                               src="images/team/sport.png" alt="Genify"
+                                                                               align="thumbnail"></a>
+                                </div>
+                                <div class="col-md-10 right-item-san right-item-doi">
+                                    <div class="header-item-doi">
+                                        <h2><a href="/genify.html" title="Genify">Genify</a></h2>
+
+                                        <button idd="16628"
+                                                class="btn btn-default mobile-hidden pull-right btn-sm modal-link-angularjs"
+                                                data-modal-tpl="match.invitation" login-required="true"
+                                                data-modal-qs="toTeamId=16628&toUserId=4048&toTeamName=Genify">
+                                            <i class="fa fa-send"></i>
+                                            Mời giao lưu
+                                        </button>
+                                    </div>
+                                    <p class="team-leader-name user-online-status-container" owner-id="4048">
+                                        <a href="/user/profile/4048"><i class="fa fa-user" aria-hidden="true"></i> Kh&#225;nh
+                                            Đinh</a>
+                                        <span class="captain-item-status offline hide"></span>
+                                        <span class="chat-nhanh" ng-click="onQuickChat(4048);"><i class="fa fa-comments"
+                                                                                                  aria-hidden="true"></i> Nói chuyện</span>
+                                    </p>
+                                    <p class="quost-doi">Mong được giao lưu học hỏi</p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Trình độ: </strong> Trung b&#236;nh
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Nhóm tuổi: </strong> Dưới 25 tuổi
+                                    </p>
+
+
+                                </div>
+
+                                <div class="btn-doi-bottom mobile-only">
+                                    <button idd="16628" class="btn btn-primary pull-right btn-sm modal-link-angularjs"
+                                            data-modal-tpl="match.invitation" login-required="true"
+                                            data-modal-qs="toTeamId=16628&toUserId=4048&toTeamName=Genify">
+                                        <i class="fa fa-send-o"></i>
+                                        Mời giao lưu
+                                    </button>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li class="item-card">
+                            <div class="row">
+                                <div class="col-md-2 item-preview-image">
+                                    <a href="/wedo-fc-262011.html" title="WEDO FC"><img class="img-responsive"
+                                                                                        src="images/team/sport.png"
+                                                                                        alt="WEDO FC" align="thumbnail"></a>
+                                </div>
+                                <div class="col-md-10 right-item-san right-item-doi">
+                                    <div class="header-item-doi">
+                                        <h2><a href="/wedo-fc-262011.html" title="WEDO FC">WEDO FC</a></h2>
+
+                                        <button idd="16627"
+                                                class="btn btn-default mobile-hidden pull-right btn-sm modal-link-angularjs"
+                                                data-modal-tpl="match.invitation" login-required="true"
+                                                data-modal-qs="toTeamId=16627&toUserId=4041&toTeamName=WEDO FC">
+                                            <i class="fa fa-send"></i>
+                                            Mời giao lưu
+                                        </button>
+                                    </div>
+                                    <p class="team-leader-name user-online-status-container" owner-id="4041">
+                                        <a href="/user/profile/4041"><i class="fa fa-user" aria-hidden="true"></i> Qu&#253;
+                                            L&#234;</a>
+                                        <span class="captain-item-status offline hide"></span>
+                                        <span class="chat-nhanh" ng-click="onQuickChat(4041);"><i class="fa fa-comments"
+                                                                                                  aria-hidden="true"></i> Nói chuyện</span>
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Trình độ: </strong> Rất mềm
+                                    </p>
+
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong> Sân nhà:</strong><a href="/san-bong-son-trang-2-266011.html">Sân bóng
+                                        Sơn Trang 2 (Sân 7 số 1)</a>
+
+                                    </p>
+                                    <p><i class="fa fa-map-o" aria-hidden="true"></i><strong> Địa chỉ:</strong> Số 1 Ho&#224;ng
+                                        Minh Gi&#225;m, Nh&#226;n Ch&#237;nh (Quận Thanh Xu&#226;n H&#224; Nội)</p>
+
+
+                                </div>
+
+                                <div class="btn-doi-bottom mobile-only">
+                                    <button idd="16627" class="btn btn-primary pull-right btn-sm modal-link-angularjs"
+                                            data-modal-tpl="match.invitation" login-required="true"
+                                            data-modal-qs="toTeamId=16627&toUserId=4041&toTeamName=WEDO FC">
+                                        <i class="fa fa-send-o"></i>
+                                        Mời giao lưu
+                                    </button>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li class="item-card">
+                            <div class="row">
+                                <div class="col-md-2 item-preview-image">
+                                    <a href="/team/view/16626" title="FC_7Cốc"><img class="img-responsive"
+                                                                                    src="images/team/sport.png"
+                                                                                    alt="FC_7Cốc" align="thumbnail"></a>
+                                </div>
+                                <div class="col-md-10 right-item-san right-item-doi">
+                                    <div class="header-item-doi">
+                                        <h2><a href="/team/view/16626" title="FC_7Cốc">FC_7Cốc</a></h2>
+
+                                        <button idd="16626"
+                                                class="btn btn-default mobile-hidden pull-right btn-sm modal-link-angularjs"
+                                                data-modal-tpl="match.invitation" login-required="true"
+                                                data-modal-qs="toTeamId=16626&toUserId=4040&toTeamName=FC_7Cốc">
+                                            <i class="fa fa-send"></i>
+                                            Mời giao lưu
+                                        </button>
+                                    </div>
+                                    <p class="team-leader-name user-online-status-container" owner-id="4040">
+                                        <a href="/user/profile/4040"><i class="fa fa-user" aria-hidden="true"></i> Đặng
+                                            Xu&#226;n Tiến</a>
+                                        <span class="captain-item-status offline hide"></span>
+                                        <span class="chat-nhanh" ng-click="onQuickChat(4040);"><i class="fa fa-comments"
+                                                                                                  aria-hidden="true"></i> Nói chuyện</span>
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Trình độ: </strong> Trung b&#236;nh yếu
+                                    </p>
+
+
+                                </div>
+
+                                <div class="btn-doi-bottom mobile-only">
+                                    <button idd="16626" class="btn btn-primary pull-right btn-sm modal-link-angularjs"
+                                            data-modal-tpl="match.invitation" login-required="true"
+                                            data-modal-qs="toTeamId=16626&toUserId=4040&toTeamName=FC_7Cốc">
+                                        <i class="fa fa-send-o"></i>
+                                        Mời giao lưu
+                                    </button>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li class="item-card">
+                            <div class="row">
+                                <div class="col-md-2 item-preview-image">
+                                    <a href="/eac-clb.html" title="EAC CLB"><img class="img-responsive"
+                                                                                 src="images/team/sport.png"
+                                                                                 alt="EAC CLB" align="thumbnail"></a>
+                                </div>
+                                <div class="col-md-10 right-item-san right-item-doi">
+                                    <div class="header-item-doi">
+                                        <h2><a href="/eac-clb.html" title="EAC CLB">EAC CLB</a></h2>
+
+                                        <button idd="16623"
+                                                class="btn btn-default mobile-hidden pull-right btn-sm modal-link-angularjs"
+                                                data-modal-tpl="match.invitation" login-required="true"
+                                                data-modal-qs="toTeamId=16623&toUserId=4036&toTeamName=EAC CLB">
+                                            <i class="fa fa-send"></i>
+                                            Mời giao lưu
+                                        </button>
+                                    </div>
+                                    <p class="team-leader-name user-online-status-container" owner-id="4036">
+                                        <a href="/user/profile/4036"><i class="fa fa-user" aria-hidden="true"></i> Bảo
+                                            Nguyễn</a>
+                                        <span class="captain-item-status offline hide"></span>
+                                        <span class="chat-nhanh" ng-click="onQuickChat(4036);"><i class="fa fa-comments"
+                                                                                                  aria-hidden="true"></i> Nói chuyện</span>
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Trình độ: </strong> Mới chơi
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Nhóm tuổi: </strong> Dưới 22 tuổi
+                                    </p>
+
+
+                                </div>
+
+                                <div class="btn-doi-bottom mobile-only">
+                                    <button idd="16623" class="btn btn-primary pull-right btn-sm modal-link-angularjs"
+                                            data-modal-tpl="match.invitation" login-required="true"
+                                            data-modal-qs="toTeamId=16623&toUserId=4036&toTeamName=EAC CLB">
+                                        <i class="fa fa-send-o"></i>
+                                        Mời giao lưu
+                                    </button>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li class="item-card">
+                            <div class="row">
+                                <div class="col-md-2 item-preview-image">
+                                    <a href="/fc-sky-central.html" title="FC Sky central"><img class="img-responsive"
+                                                                                               src="images/team/sport.png"
+                                                                                               alt="FC Sky central"
+                                                                                               align="thumbnail"></a>
+                                </div>
+                                <div class="col-md-10 right-item-san right-item-doi">
+                                    <div class="header-item-doi">
+                                        <h2><a href="/fc-sky-central.html" title="FC Sky central">FC Sky central</a>
+                                        </h2>
+
+                                        <button idd="16622"
+                                                class="btn btn-default mobile-hidden pull-right btn-sm modal-link-angularjs"
+                                                data-modal-tpl="match.invitation" login-required="true"
+                                                data-modal-qs="toTeamId=16622&toUserId=4034&toTeamName=FC Sky central">
+                                            <i class="fa fa-send"></i>
+                                            Mời giao lưu
+                                        </button>
+                                    </div>
+                                    <p class="team-leader-name user-online-status-container" owner-id="4034">
+                                        <a href="/user/profile/4034"><i class="fa fa-user" aria-hidden="true"></i> Đặng
+                                            Kh&#225;nh duy</a>
+                                        <span class="captain-item-status offline hide"></span>
+                                        <span class="chat-nhanh" ng-click="onQuickChat(4034);"><i class="fa fa-comments"
+                                                                                                  aria-hidden="true"></i> Nói chuyện</span>
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Trình độ: </strong> Mới chơi
+                                    </p>
+
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong> Sân nhà:</strong><a
+                                            href="/san-bong-da-co-nhan-tao-phuong-nam-ha-noi.html">Sân bóng đá cỏ nhân
+                                        tạo Phương Nam – Hà Nội (Sân 7 số 2)</a>
+
+                                    </p>
+                                    <p><i class="fa fa-map-o" aria-hidden="true"></i><strong> Địa chỉ:</strong> Khu đ&#244;
+                                        thị Định C&#244;ng, Định C&#244;ng (Quận Ho&#224;ng Mai H&#224; Nội)</p>
+
+
+                                </div>
+
+                                <div class="btn-doi-bottom mobile-only">
+                                    <button idd="16622" class="btn btn-primary pull-right btn-sm modal-link-angularjs"
+                                            data-modal-tpl="match.invitation" login-required="true"
+                                            data-modal-qs="toTeamId=16622&toUserId=4034&toTeamName=FC Sky central">
+                                        <i class="fa fa-send-o"></i>
+                                        Mời giao lưu
+                                    </button>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li class="item-card">
+                            <div class="row">
+                                <div class="col-md-2 item-preview-image">
+                                    <a href="/fc-tho-san.html" title="FC Thợ Săn"><img class="img-responsive"
+                                                                                       src="images/team/sport.png"
+                                                                                       alt="FC Thợ Săn"
+                                                                                       align="thumbnail"></a>
+                                </div>
+                                <div class="col-md-10 right-item-san right-item-doi">
+                                    <div class="header-item-doi">
+                                        <h2><a href="/fc-tho-san.html" title="FC Thợ Săn">FC Thợ Săn</a></h2>
+
+                                        <button idd="16621"
+                                                class="btn btn-default mobile-hidden pull-right btn-sm modal-link-angularjs"
+                                                data-modal-tpl="match.invitation" login-required="true"
+                                                data-modal-qs="toTeamId=16621&toUserId=4023&toTeamName=FC Thợ Săn">
+                                            <i class="fa fa-send"></i>
+                                            Mời giao lưu
+                                        </button>
+                                    </div>
+                                    <p class="team-leader-name user-online-status-container" owner-id="4023">
+                                        <a href="/user/profile/4023"><i class="fa fa-user" aria-hidden="true"></i>
+                                            Nguyễn Dương</a>
+                                        <span class="captain-item-status offline hide"></span>
+                                        <span class="chat-nhanh" ng-click="onQuickChat(4023);"><i class="fa fa-comments"
+                                                                                                  aria-hidden="true"></i> Nói chuyện</span>
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Trình độ: </strong> Trung b&#236;nh
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Nhóm tuổi: </strong> Dưới 23 tuổi
+                                    </p>
+
+
+                                </div>
+
+                                <div class="btn-doi-bottom mobile-only">
+                                    <button idd="16621" class="btn btn-primary pull-right btn-sm modal-link-angularjs"
+                                            data-modal-tpl="match.invitation" login-required="true"
+                                            data-modal-qs="toTeamId=16621&toUserId=4023&toTeamName=FC Thợ Săn">
+                                        <i class="fa fa-send-o"></i>
+                                        Mời giao lưu
+                                    </button>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li class="item-card">
+                            <div class="row">
+                                <div class="col-md-2 item-preview-image">
+                                    <a href="/fc365" title="FC 365"><img class="img-responsive"
+                                                                         src="images/team/sport.png" alt="FC 365"
+                                                                         align="thumbnail"></a>
+                                </div>
+                                <div class="col-md-10 right-item-san right-item-doi">
+                                    <div class="header-item-doi">
+                                        <h2><a href="/fc365" title="FC 365">FC 365</a></h2>
+
+                                        <button idd="16612"
+                                                class="btn btn-default mobile-hidden pull-right btn-sm modal-link-angularjs"
+                                                data-modal-tpl="match.invitation" login-required="true"
+                                                data-modal-qs="toTeamId=16612&toUserId=4017&toTeamName=FC 365">
+                                            <i class="fa fa-send"></i>
+                                            Mời giao lưu
+                                        </button>
+                                    </div>
+                                    <p class="team-leader-name user-online-status-container" owner-id="4017">
+                                        <a href="/user/profile/4017"><i class="fa fa-user" aria-hidden="true"></i> Phạm
+                                            An</a>
+                                        <span class="captain-item-status offline hide"></span>
+                                        <span class="chat-nhanh" ng-click="onQuickChat(4017);"><i class="fa fa-comments"
+                                                                                                  aria-hidden="true"></i> Nói chuyện</span>
+                                    </p>
+                                    <p class="quost-doi">FC 365 Giao Lưu Vui Vẻ Kh&#244;ng TCM</p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Trình độ: </strong> Trung b&#236;nh yếu
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Nhóm tuổi: </strong> Dưới 30 tuổi
+                                    </p>
+
+
+                                </div>
+
+                                <div class="btn-doi-bottom mobile-only">
+                                    <button idd="16612" class="btn btn-primary pull-right btn-sm modal-link-angularjs"
+                                            data-modal-tpl="match.invitation" login-required="true"
+                                            data-modal-qs="toTeamId=16612&toUserId=4017&toTeamName=FC 365">
+                                        <i class="fa fa-send-o"></i>
+                                        Mời giao lưu
+                                    </button>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li class="item-card">
+                            <div class="row">
+                                <div class="col-md-2 item-preview-image">
+                                    <a href="/ao-lang-fc.html" title="Ao l&#224;ng FC"><img class="img-responsive"
+                                                                                            src="images/team/sport.png"
+                                                                                            alt="Ao l&#224;ng FC"
+                                                                                            align="thumbnail"></a>
+                                </div>
+                                <div class="col-md-10 right-item-san right-item-doi">
+                                    <div class="header-item-doi">
+                                        <h2><a href="/ao-lang-fc.html" title="Ao l&#224;ng FC">Ao l&#224;ng FC</a></h2>
+
+                                        <button idd="16585"
+                                                class="btn btn-default mobile-hidden pull-right btn-sm modal-link-angularjs"
+                                                data-modal-tpl="match.invitation" login-required="true"
+                                                data-modal-qs="toTeamId=16585&toUserId=4008&toTeamName=Ao l&#224;ng FC">
+                                            <i class="fa fa-send"></i>
+                                            Mời giao lưu
+                                        </button>
+                                    </div>
+                                    <p class="team-leader-name user-online-status-container" owner-id="4008">
+                                        <a href="/user/profile/4008"><i class="fa fa-user" aria-hidden="true"></i> Đặng
+                                            Đặng</a>
+                                        <span class="captain-item-status offline hide"></span>
+                                        <span class="chat-nhanh" ng-click="onQuickChat(4008);"><i class="fa fa-comments"
+                                                                                                  aria-hidden="true"></i> Nói chuyện</span>
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Trình độ: </strong> Mới chơi
+                                    </p>
+
+
+                                </div>
+
+                                <div class="btn-doi-bottom mobile-only">
+                                    <button idd="16585" class="btn btn-primary pull-right btn-sm modal-link-angularjs"
+                                            data-modal-tpl="match.invitation" login-required="true"
+                                            data-modal-qs="toTeamId=16585&toUserId=4008&toTeamName=Ao l&#224;ng FC">
+                                        <i class="fa fa-send-o"></i>
+                                        Mời giao lưu
+                                    </button>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li class="item-card">
+                            <div class="row">
+                                <div class="col-md-2 item-preview-image">
+                                    <a href="/team/view/16546" title="FC World best"><img class="img-responsive"
+                                                                                          src="images/team/sport.png"
+                                                                                          alt="FC World best"
+                                                                                          align="thumbnail"></a>
+                                </div>
+                                <div class="col-md-10 right-item-san right-item-doi">
+                                    <div class="header-item-doi">
+                                        <h2><a href="/team/view/16546" title="FC World best">FC World best</a></h2>
+
+                                        <button idd="16546"
+                                                class="btn btn-default mobile-hidden pull-right btn-sm modal-link-angularjs"
+                                                data-modal-tpl="match.invitation" login-required="true"
+                                                data-modal-qs="toTeamId=16546&toUserId=3997&toTeamName=FC World best">
+                                            <i class="fa fa-send"></i>
+                                            Mời giao lưu
+                                        </button>
+                                    </div>
+                                    <p class="team-leader-name user-online-status-container" owner-id="3997">
+                                        <a href="/user/profile/3997"><i class="fa fa-user" aria-hidden="true"></i> Vũ
+                                            Long</a>
+                                        <span class="captain-item-status offline hide"></span>
+                                        <span class="chat-nhanh" ng-click="onQuickChat(3997);"><i class="fa fa-comments"
+                                                                                                  aria-hidden="true"></i> Nói chuyện</span>
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Trình độ: </strong> Mềm
+                                    </p>
+
+
+                                </div>
+
+                                <div class="btn-doi-bottom mobile-only">
+                                    <button idd="16546" class="btn btn-primary pull-right btn-sm modal-link-angularjs"
+                                            data-modal-tpl="match.invitation" login-required="true"
+                                            data-modal-qs="toTeamId=16546&toUserId=3997&toTeamName=FC World best">
+                                        <i class="fa fa-send-o"></i>
+                                        Mời giao lưu
+                                    </button>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li class="item-card">
+                            <div class="row">
+                                <div class="col-md-2 item-preview-image">
+                                    <a href="/fcboxi" title="FC Boxi"><img class="img-responsive"
+                                                                           src="images/team/sport.png" alt="FC Boxi"
+                                                                           align="thumbnail"></a>
+                                </div>
+                                <div class="col-md-10 right-item-san right-item-doi">
+                                    <div class="header-item-doi">
+                                        <h2><a href="/fcboxi" title="FC Boxi">FC Boxi</a></h2>
+
+                                        <button idd="16530"
+                                                class="btn btn-default mobile-hidden pull-right btn-sm modal-link-angularjs"
+                                                data-modal-tpl="match.invitation" login-required="true"
+                                                data-modal-qs="toTeamId=16530&toUserId=3989&toTeamName=FC Boxi">
+                                            <i class="fa fa-send"></i>
+                                            Mời giao lưu
+                                        </button>
+                                    </div>
+                                    <p class="team-leader-name user-online-status-container" owner-id="3989">
+                                        <a href="/user/profile/3989"><i class="fa fa-user" aria-hidden="true"></i>
+                                            Nguyễn Đặng Thanh</a>
+                                        <span class="captain-item-status offline hide"></span>
+                                        <span class="chat-nhanh" ng-click="onQuickChat(3989);"><i class="fa fa-comments"
+                                                                                                  aria-hidden="true"></i> Nói chuyện</span>
+                                    </p>
+                                    <p class="quost-doi">Đội b&#243;ng của c&#244;ng ty Boxi</p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Trình độ: </strong> Trung b&#236;nh yếu
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Nhóm tuổi: </strong> Dưới 25 tuổi
+                                    </p>
+
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong> Sân nhà:</strong><a href="">Sân bóng Sư phạm</a>
+
+                                    </p>
+
+
+                                </div>
+
+                                <div class="btn-doi-bottom mobile-only">
+                                    <button idd="16530" class="btn btn-primary pull-right btn-sm modal-link-angularjs"
+                                            data-modal-tpl="match.invitation" login-required="true"
+                                            data-modal-qs="toTeamId=16530&toUserId=3989&toTeamName=FC Boxi">
+                                        <i class="fa fa-send-o"></i>
+                                        Mời giao lưu
+                                    </button>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li class="item-card">
+                            <div class="row">
+                                <div class="col-md-2 item-preview-image">
+                                    <a href="/abcdef" title="Minh Ghe"><img class="img-responsive"
+                                                                            src="images/team/sport.png" alt="Minh Ghe"
+                                                                            align="thumbnail"></a>
+                                </div>
+                                <div class="col-md-10 right-item-san right-item-doi">
+                                    <div class="header-item-doi">
+                                        <h2><a href="/abcdef" title="Minh Ghe">Minh Ghe</a></h2>
+
+                                        <button idd="16517"
+                                                class="btn btn-default mobile-hidden pull-right btn-sm modal-link-angularjs"
+                                                data-modal-tpl="match.invitation" login-required="true"
+                                                data-modal-qs="toTeamId=16517&toUserId=3979&toTeamName=Minh Ghe">
+                                            <i class="fa fa-send"></i>
+                                            Mời giao lưu
+                                        </button>
+                                    </div>
+                                    <p class="team-leader-name user-online-status-container" owner-id="3979">
+                                        <a href="/user/profile/3979"><i class="fa fa-user" aria-hidden="true"></i> Minh
+                                            Vũ Ho&#224;ng Minh</a>
+                                        <span class="captain-item-status offline hide"></span>
+                                        <span class="chat-nhanh" ng-click="onQuickChat(3979);"><i class="fa fa-comments"
+                                                                                                  aria-hidden="true"></i> Nói chuyện</span>
+                                    </p>
+                                    <p class="quost-doi">Tui da hay</p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Trình độ: </strong> Phủi
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Nhóm tuổi: </strong> Dưới 20 tuổi
+                                    </p>
+
+
+                                </div>
+
+                                <div class="btn-doi-bottom mobile-only">
+                                    <button idd="16517" class="btn btn-primary pull-right btn-sm modal-link-angularjs"
+                                            data-modal-tpl="match.invitation" login-required="true"
+                                            data-modal-qs="toTeamId=16517&toUserId=3979&toTeamName=Minh Ghe">
+                                        <i class="fa fa-send-o"></i>
+                                        Mời giao lưu
+                                    </button>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li class="item-card">
+                            <div class="row">
+                                <div class="col-md-2 item-preview-image">
+                                    <a href="/jvc.html" title="JVC"><img class="img-responsive"
+                                                                         src="images/team/sport.png" alt="JVC"
+                                                                         align="thumbnail"></a>
+                                </div>
+                                <div class="col-md-10 right-item-san right-item-doi">
+                                    <div class="header-item-doi">
+                                        <h2><a href="/jvc.html" title="JVC">JVC</a></h2>
+
+                                        <button idd="16514"
+                                                class="btn btn-default mobile-hidden pull-right btn-sm modal-link-angularjs"
+                                                data-modal-tpl="match.invitation" login-required="true"
+                                                data-modal-qs="toTeamId=16514&toUserId=3976&toTeamName=JVC">
+                                            <i class="fa fa-send"></i>
+                                            Mời giao lưu
+                                        </button>
+                                    </div>
+                                    <p class="team-leader-name user-online-status-container" owner-id="3976">
+                                        <a href="/user/profile/3976"><i class="fa fa-user" aria-hidden="true"></i> Giang
+                                            Ta</a>
+                                        <span class="captain-item-status offline hide"></span>
+                                        <span class="chat-nhanh" ng-click="onQuickChat(3976);"><i class="fa fa-comments"
+                                                                                                  aria-hidden="true"></i> Nói chuyện</span>
+                                    </p>
+                                    <p class="quost-doi">Đối văn ph&#242;ng</p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Trình độ: </strong> Trung b&#236;nh yếu
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Nhóm tuổi: </strong> Dưới 40 tuổi
+                                    </p>
+
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong> Sân nhà:</strong>17:30 - 19:00 Thứ Sáu hàng tuần
+
+                                    </p>
+
+
+                                </div>
+
+                                <div class="btn-doi-bottom mobile-only">
+                                    <button idd="16514" class="btn btn-primary pull-right btn-sm modal-link-angularjs"
+                                            data-modal-tpl="match.invitation" login-required="true"
+                                            data-modal-qs="toTeamId=16514&toUserId=3976&toTeamName=JVC">
+                                        <i class="fa fa-send-o"></i>
+                                        Mời giao lưu
+                                    </button>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li class="item-card">
+                            <div class="row">
+                                <div class="col-md-2 item-preview-image">
+                                    <a href="/pho-xinh.html" title="Phố xinh"><img class="img-responsive"
+                                                                                   src="images/team/sport.png"
+                                                                                   alt="Phố xinh" align="thumbnail"></a>
+                                </div>
+                                <div class="col-md-10 right-item-san right-item-doi">
+                                    <div class="header-item-doi">
+                                        <h2><a href="/pho-xinh.html" title="Phố xinh">Phố xinh</a></h2>
+
+                                        <button idd="16513"
+                                                class="btn btn-default mobile-hidden pull-right btn-sm modal-link-angularjs"
+                                                data-modal-tpl="match.invitation" login-required="true"
+                                                data-modal-qs="toTeamId=16513&toUserId=3974&toTeamName=Phố xinh">
+                                            <i class="fa fa-send"></i>
+                                            Mời giao lưu
+                                        </button>
+                                    </div>
+                                    <p class="team-leader-name user-online-status-container" owner-id="3974">
+                                        <a href="/user/profile/3974"><i class="fa fa-user" aria-hidden="true"></i> T&#224;i
+                                            Lại</a>
+                                        <span class="captain-item-status offline hide"></span>
+                                        <span class="chat-nhanh" ng-click="onQuickChat(3974);"><i class="fa fa-comments"
+                                                                                                  aria-hidden="true"></i> Nói chuyện</span>
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Trình độ: </strong> Mới chơi
+                                    </p>
+
+
+                                </div>
+
+                                <div class="btn-doi-bottom mobile-only">
+                                    <button idd="16513" class="btn btn-primary pull-right btn-sm modal-link-angularjs"
+                                            data-modal-tpl="match.invitation" login-required="true"
+                                            data-modal-qs="toTeamId=16513&toUserId=3974&toTeamName=Phố xinh">
+                                        <i class="fa fa-send-o"></i>
+                                        Mời giao lưu
+                                    </button>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li class="item-card">
+                            <div class="row">
+                                <div class="col-md-2 item-preview-image">
+                                    <a href="/new-fc-262011-262012-262013.html" title="NEW FC"><img
+                                            class="img-responsive" src="images/team/sport.png" alt="NEW FC"
+                                            align="thumbnail"></a>
+                                </div>
+                                <div class="col-md-10 right-item-san right-item-doi">
+                                    <div class="header-item-doi">
+                                        <h2><a href="/new-fc-262011-262012-262013.html" title="NEW FC">NEW FC</a></h2>
+
+                                        <button idd="16508"
+                                                class="btn btn-default mobile-hidden pull-right btn-sm modal-link-angularjs"
+                                                data-modal-tpl="match.invitation" login-required="true"
+                                                data-modal-qs="toTeamId=16508&toUserId=3973&toTeamName=NEW FC">
+                                            <i class="fa fa-send"></i>
+                                            Mời giao lưu
+                                        </button>
+                                    </div>
+                                    <p class="team-leader-name user-online-status-container" owner-id="3973">
+                                        <a href="/user/profile/3973"><i class="fa fa-user" aria-hidden="true"></i> Pham
+                                            Luc</a>
+                                        <span class="captain-item-status offline hide"></span>
+                                        <span class="chat-nhanh" ng-click="onQuickChat(3973);"><i class="fa fa-comments"
+                                                                                                  aria-hidden="true"></i> Nói chuyện</span>
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Trình độ: </strong> Trung b&#236;nh yếu
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Nhóm tuổi: </strong> Dưới 40 tuổi
+                                    </p>
+
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong> Sân nhà:</strong>17:30 - 19:00 Chủ Nhật hàng tuần
+
+                                    </p>
+
+
+                                </div>
+
+                                <div class="btn-doi-bottom mobile-only">
+                                    <button idd="16508" class="btn btn-primary pull-right btn-sm modal-link-angularjs"
+                                            data-modal-tpl="match.invitation" login-required="true"
+                                            data-modal-qs="toTeamId=16508&toUserId=3973&toTeamName=NEW FC">
+                                        <i class="fa fa-send-o"></i>
+                                        Mời giao lưu
+                                    </button>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li class="item-card">
+                            <div class="row">
+                                <div class="col-md-2 item-preview-image">
+                                    <a href="/new-fc-262011-262012.html" title="NEW FC"><img class="img-responsive"
+                                                                                             src="images/team/sport.png"
+                                                                                             alt="NEW FC"
+                                                                                             align="thumbnail"></a>
+                                </div>
+                                <div class="col-md-10 right-item-san right-item-doi">
+                                    <div class="header-item-doi">
+                                        <h2><a href="/new-fc-262011-262012.html" title="NEW FC">NEW FC</a></h2>
+
+                                        <button idd="16507"
+                                                class="btn btn-default mobile-hidden pull-right btn-sm modal-link-angularjs"
+                                                data-modal-tpl="match.invitation" login-required="true"
+                                                data-modal-qs="toTeamId=16507&toUserId=3973&toTeamName=NEW FC">
+                                            <i class="fa fa-send"></i>
+                                            Mời giao lưu
+                                        </button>
+                                    </div>
+                                    <p class="team-leader-name user-online-status-container" owner-id="3973">
+                                        <a href="/user/profile/3973"><i class="fa fa-user" aria-hidden="true"></i> Pham
+                                            Luc</a>
+                                        <span class="captain-item-status offline hide"></span>
+                                        <span class="chat-nhanh" ng-click="onQuickChat(3973);"><i class="fa fa-comments"
+                                                                                                  aria-hidden="true"></i> Nói chuyện</span>
+                                    </p>
+                                    <p class="quost-doi">L&#224; đội b&#243;ng mới th&#224;nh lập, anh em chủ yếu l&#224;
+                                        nh&#226;n vi&#234;n văn ph&#242;ng. cần r&#232;n luyện sức khỏe v&#224; mang t&#237;nh
+                                        giao lưu thể thao hơn l&#224; Thắng -Thua</p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Trình độ: </strong> Trung b&#236;nh yếu
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Nhóm tuổi: </strong> Dưới 40 tuổi
+                                    </p>
+
+                                    <p>
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong> Sân nhà:</strong>17:30 - 19:00 Chủ Nhật hàng tuần - <a href="">Sân
+                                        Bóng Đông Đô 2,</a>
+
+                                    </p>
+
+
+                                </div>
+
+                                <div class="btn-doi-bottom mobile-only">
+                                    <button idd="16507" class="btn btn-primary pull-right btn-sm modal-link-angularjs"
+                                            data-modal-tpl="match.invitation" login-required="true"
+                                            data-modal-qs="toTeamId=16507&toUserId=3973&toTeamName=NEW FC">
+                                        <i class="fa fa-send-o"></i>
+                                        Mời giao lưu
+                                    </button>
+                                </div>
+
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="col-md-12">
+                        <div class="pagination_container">
+                            <div class="pagination"><span class="noLinkPager hnpageprev_inactive"><i
+                                    class="fa fa-angle-left" aria-hidden="true"></i></span><span
+                                    class="noLinkPager hncurrpage">1</span><a href="/doi-bong-tai-ha-noi?pi=2"
+                                                                              class="linkPager hnpagelink"
+                                                                              title="2"><span
+                                    class="hnotherpage">2</span></a><a href="/doi-bong-tai-ha-noi?pi=3"
+                                                                       class="linkPager hnpagelink" title="3"><span
+                                    class="hnotherpage">3</span></a><a href="/doi-bong-tai-ha-noi?pi=4"
+                                                                       class="linkPager hnpagelink" title="4"><span
+                                    class="hnotherpage">4</span></a><a href="/doi-bong-tai-ha-noi?pi=5"
+                                                                       class="linkPager hnpagelink" title="5"><span
+                                    class="hnotherpage">5</span></a><span class="noLinkPager dot">...</span><a
+                                    href="/doi-bong-tai-ha-noi?pi=892" class="linkPager hnpagelink" title="892"><span
+                                    class="hnotherpage">892</span></a><a href="/doi-bong-tai-ha-noi?pi=893"
+                                                                         class="linkPager hnpagelink" title="893"><span
+                                    class="hnotherpage">893</span></a><a href="/doi-bong-tai-ha-noi?pi=2"
+                                                                         class="linkPager hnpagenext" title="Trang sau"><span
+                                    class="hnotherpage"><i class="fa fa-angle-right" aria-hidden="true"></i></span></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-filter-doi">
+                        <div class="title-btn-moi-doi">
+                            <span>team của bạn Không tìm được đối tác phù hợp?</span>
+                            <a href="/match/post" class="btn btn-default btn-moi-doi"><i class="fa fa-beer"
+                                                                                         aria-hidden="true"></i> Mời đối
+                                giao lưu</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="ads-banner-right" id="s9adright">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--#top hero box-->
+<style type="text/css">
+    .sp-autocomplete img {
+        display: none;
+    }
+</style>
+<script type="text/javascript">
+    function onSearchMatchStadiumSelectedChange(data) {
+        $('#searchMatchStadiumId').val(data.params.data.id);
+    }
+</script>
+
+<footer th:replace="fragments/footer::footer"></footer>
+<div th:replace="fragments/modals::modals"></div>
+</body>
+</html>

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LevelServiceImpl implements LevelService {
@@ -15,5 +16,10 @@ public class LevelServiceImpl implements LevelService {
     @Override
     public List<Level> getAllLevels() {
         return levelRepository.findAll();
+    }
+
+    @Override
+    public List<Level> getAllLevelsByArea(Long areaId) {
+        return levelRepository.findAllByAreaId(areaId);
     }
 }

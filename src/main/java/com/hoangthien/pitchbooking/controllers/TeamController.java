@@ -1,9 +1,10 @@
 package com.hoangthien.pitchbooking.controllers;
 
-import com.hoangthien.pitchbooking.constants.Define;
+import com.hoangthien.pitchbooking.constants.Defines;
 import com.hoangthien.pitchbooking.constants.MessageType;
 import com.hoangthien.pitchbooking.dto.Message;
 import com.hoangthien.pitchbooking.dto.TeamDTO;
+import com.hoangthien.pitchbooking.entities.District;
 import com.hoangthien.pitchbooking.entities.Level;
 import com.hoangthien.pitchbooking.entities.Team;
 import com.hoangthien.pitchbooking.exception.PitchBookingException;
@@ -13,6 +14,8 @@ import com.hoangthien.pitchbooking.services.LevelService;
 import com.hoangthien.pitchbooking.services.TeamService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,7 +26,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping(TeamController.BASE_URL)
@@ -97,44 +99,68 @@ public class TeamController {
         return "error/page_404";
     }
 
-    @GetMapping("/list")
-    public String getTeams(Model model, @RequestParam(value = "area", defaultValue = "1") String area,
+    @GetMapping("/search")
+    public String getTeams(Model model, @RequestParam(value = "area", defaultValue = "0") String area,
                            @RequestParam(value = "level", defaultValue = "0") String level,
                            @RequestParam(value = "page", defaultValue = "1") String pg) {
         log.info("GET: " + BASE_URL + "/list");
-        List<Team> teams = new ArrayList<>();
-        int page = 1;
 
         try {
+            Page<Team> pages;
             Long areaId = Long.valueOf(Integer.parseInt(area));
             Long levelId = Long.valueOf(Integer.parseInt(level));
-            page = Integer.parseInt(pg);
-            int offset = (page - 1) * Define.NUMBER_OF_ROWS_PER_PAGE;
+            int page = Integer.parseInt(pg);
+            int offset = (page - 1) * Defines.NUMBER_OF_ROWS_PER_PAGE;
 
-            if (levelId == 0) {
-                teams = teamService.getTeamsByArea(areaId, offset);
+            // All areas
+            if (areaId == 0) {
+                // All levels
+                if (levelId == 0) {
+                    pages = teamService.getAllTeamsPageable(offset);
+                } else {
+                    pages = teamService.getTeamsByLevelPageable(levelId, offset);
+                }
+
+                model.addAttribute("areaName", "Tất cả");
+                model.addAttribute("listLevels", levelService.getAllLevels());
             } else {
-                teams = teamService.getTeamsByAreaAndLevel(areaId, levelId, offset);
+                if (levelId == 0) {
+                    pages = teamService.getTeamsByAreaPageable(areaId, offset);
+                } else {
+                    pages = teamService.getTeamsByAreaAndLevelPageable(areaId, levelId, offset);
+                }
+
+                model.addAttribute("areaName", districtService.getDistrictById(areaId).getName());
+                model.addAttribute("listLevels", levelService.getAllLevelsByArea(areaId));
             }
+
+            int totalPages = pages.getTotalPages();
+            if (totalPages > 0) {
+                int pageEnd = (totalPages < 5) ? totalPages : 5;
+                int pageStart = 1;
+                if (page > 3) {
+                    pageEnd = ((page + 2) < totalPages) ? (page + 2) : totalPages;
+                    pageStart = ((pageEnd - 4) < 1) ? 1 : (pageEnd - 4);
+                }
+                model.addAttribute("pageStart", pageStart);
+                model.addAttribute("pageEnd", pageEnd);
+            }
+
+            District district = new District(0L, "Tất cả", new ArrayList<>(), new ArrayList<>());
+            List<District> listDistricts = districtService.getAllDistricts();
+            listDistricts.add(0, district);
+
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", totalPages);
+            model.addAttribute("area", areaId);
+            model.addAttribute("level", level);
+            model.addAttribute("listDistricts", listDistricts);
+            model.addAttribute("totalTeams", teamService.countTotalTeams());
+            model.addAttribute("teams", pages.getContent());
+            return "team/list";
         } catch (Exception e) {
             log.error(e.getMessage());
+            return "error/page_404";
         }
-
-        int sumTeams = teams.size();
-        int sumPages = (int) Math.ceil((double) sumTeams / Define.NUMBER_OF_ROWS_PER_PAGE);
-        int pageEnd = (sumPages < 5) ? sumPages : 5;
-        int pageStart = 1;
-        if (page > 3) {
-            pageEnd = ((page + 2) < sumPages) ? (page + 2) : sumPages;
-            pageStart = ((pageEnd - 4) < 1) ? 1 : (pageEnd - 4);
-        }
-
-        model.addAttribute("currentPage", page);
-        model.addAttribute("sumPages", sumPages);
-        model.addAttribute("pageStart", pageStart);
-        model.addAttribute("pageEnd", pageEnd);
-
-        model.addAttribute("teams", teams);
-        return "team/list";
     }
 }

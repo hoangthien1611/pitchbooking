@@ -16,11 +16,23 @@ public class Pitch {
 
     private String name;
 
-    private String description;
+    private String introduction;
 
     private String address;
 
-    private String picture;
+    private String avatar;
+
+    private String detailDescription;
+
+    private String latitude;
+
+    private String longitude;
+
+    private String phoneNumber;
+
+    private String email;
+
+    private String facebook;
 
     @ManyToOne
     @JoinColumn(name = "yardSurfaceId")

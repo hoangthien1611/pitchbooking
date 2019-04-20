@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head::head"></head>
+<body ng-app="sportApp" class="mobile-app-false ng-scope" data-gr-c-s-loaded="true">
+<div th:replace="fragments/header::header"></div>
+
+<div class="breadcrum ng-scope">
+    <div class="container">
+        <div class="breadcrum-line">
+            <a href="/">Trang chủ</a>
+            <a href="">Danh sách sân</a>
+            <a href=""
+               class="ng-binding ng-hide"></a>
+            <a class="">Thêm mới</a>
+        </div>
+    </div>
+</div>
+<div class="content-wrap stadium-managment-page ng-scope">
+    <!-- ngIf: loadingOverlay -->
+    <div class="container">
+        <div class="content-cts">
+            <div class="item-card">
+                <div class="row">
+                    <div class="bs-example bs-example-tabs" data-example-id="togglable-tabs">
+
+                        <ul id="createTab" class="nav nav-tabs" role="tablist">
+                            <li class="active">
+                                <a href="javascript:void(0)" class="ng-binding">
+                                    <i class="glyphicon glyphicon-info-sign"></i>
+                                    &nbsp;&nbsp;Thêm sân bóng mới
+                                </a>
+                            </li>
+                        </ul>
+                        <div id="createUpdateStadiumTabContent1" class="tab-content">
+                            <div class="tab-pane fade active in" id="detailManager">
+
+                                <form name="frmStadiumInfo"
+                                      class="ng-pristine ng-valid-email ng-invalid ng-invalid-required">
+                                    <div class="col-md-12">
+
+                                        <div class="form-group row">
+                                            <label class="col-md-3 control-label"><strong>Thông tin cơ
+                                                bản</strong></label>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-3 col-form-label">Tên sân</label>
+                                            <div class="col-md-9">
+                                                <input type="text" name="name" style="font-weight:bold"
+                                                       placeholder="Nhập tên sân" required class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-md-3 col-form-label">Giới thiệu ngắn</label>
+                                            <div class="col-md-9">
+                                                <textarea class="form-control" name="instruction" placeholder="Giới thiệu ngắn" rows="3" required></textarea>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-md-3 col-form-label">Mô tả cụ thể</label>
+                                            <div class="col-md-9">
+                                                <textarea class="form-control" name="detailDescription" id="content" rows="10"></textarea>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="form-group row" style="display:none">
+                                            <label class="col-md-3 col-form-label">Loại</label>
+                                            <div class="col-md-5">
+                                                <select id="ddlType" ng-model="form.selectedType"
+                                                        class="form-control ng-pristine ng-untouched ng-valid ng-not-empty"
+                                                        ng-options="item.name for item in typeList track by item.id"
+                                                        style="">
+                                                    <option label="Bóng đá" value="1" selected="selected">Bóng đá
+                                                    </option>
+                                                    <option label="Tennis" value="2">Tennis</option>
+                                                    <option label="Bóng chuyền" value="3">Bóng chuyền</option>
+                                                    <option label="Bóng bàn" value="4">Bóng bàn</option>
+                                                    <option label="Cầu Lông" value="5">Cầu Lông</option>
+                                                    <option label="Bơi lội" value="6">Bơi lội</option>
+                                                </select>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-md-3 col-form-label">Mặt sân</label>
+                                            <div class="col-md-5">
+                                                <select class="form-control">
+                                                    <select class="form-control" name="districtId">
+                                                        <th:block th:if="${#lists.isEmpty(listSurfaces)}">
+                                                            <option value="?">Không có dữ liệu!</option>
+                                                        </th:block>
+                                                        <th:block th:unless="${#lists.isEmpty(listSurfaces)}">
+                                                            <option th:each="surface,iterStat:${listSurfaces}"
+                                                                    th:text="${surface.name}"
+                                                                    th:value="${surface.id}"></option>
+                                                        </th:block>
+                                                    </select>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="clear-bordered"></div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-md-3 control-label"><strong>Địa chỉ</strong></label>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-md-3 control-label">Quận / huyện</label>
+                                            <div class="col-md-5">
+                                                <select class="form-control" name="districtId">
+                                                    <th:block th:if="${#lists.isEmpty(listDistricts)}">
+                                                        <option value="?">Không có dữ liệu!</option>
+                                                    </th:block>
+                                                    <th:block th:unless="${#lists.isEmpty(listDistricts)}">
+                                                        <option th:each="district,iterStat:${listDistricts}"
+                                                                th:text="${district.name}"
+                                                                th:value="${district.id}"></option>
+                                                    </th:block>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-md-3 control-label">Số nhà / ngõ / tên đường</label>
+                                            <div class="col-md-5">
+                                                <input required placeholder="Địa chỉ sân"
+                                                       class="form-control" name="address">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-md-3 control-label">Bản đồ</label>
+                                            <div class="col-md-5">
+                                                <label class="control-label">Vị trí trên bản đồ <img
+                                                        class="google-map-icon" height="20"
+                                                        th:src="@{/images/gg-map-icon.png}"
+                                                        data-toggle="modal" data-target="#mapModal"></label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-3 control-label">Latitude</label>
+                                            <div class="col-md-5">
+                                                <input name="latitude" id="latitude"
+                                                       class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-md-3 control-label">Longitude</label>
+                                            <div class="col-md-5">
+                                                <input name="longitude" id="longitude"
+                                                       class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="clear-bordered"></div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-md-3 control-label"><strong>Thông tin liên
+                                                hệ</strong></label>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-3 control-label">Điện thoại</label>
+                                            <div class="col-md-5">
+                                                <input placeholder="Điện thoại liên hệ đặt sân" name="phoneNumber"
+                                                       class="form-control" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-md-3 control-label">Địa chỉ email</label>
+                                            <div class="col-md-5">
+                                                <input class="form-control" name="email"
+                                                       placeholder="Địa chỉ email">
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-md-3 control-label">Facebook</label>
+                                            <div class="col-md-5">
+                                                <input placeholder="Địa chỉ facebook" name="facebook"
+                                                       class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="clear-bordered"></div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-md-3 control-label"><strong>Hình ảnh sân</strong></label>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-3 control-label">Ảnh đại diện</label>
+                                            <div class="col-md-5">
+                                                <!-- ngIf: form.PicturePath -->
+                                                <input id="previewImagePath" type="file" file-model="imageLogo">
+                                                <input ng-model="form.PicturePath" value="" type="hidden"
+                                                       class="form-control ng-pristine ng-untouched ng-valid ng-empty"
+                                                       id="inpLogoFilePath" placeholder="">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="clear-bordered"></div>
+                                        </div>
+
+                                        <div class="form-group row" style="margin-top:30px">
+                                            <div class="col-md-3">
+                                            </div>
+                                            <div class="col-md-9 text-right">
+
+                                                <a class="btn btn-default" ng-href="/stadium/management"
+                                                   href="https://www.timdoinhanh.com/stadium/management">Quay lại</a>
+                                                &nbsp;
+                                                <button type="submit" id="btnCreateStadium"
+                                                        data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý..."
+                                                        class="btn btn-primary btn-primary-extra ng-scope"
+                                                        ng-if="isCreate"
+                                                        ng-click="frmStadiumInfo.$valid &amp;&amp; saveChange($event)">
+                                                    <i class="fa fa-save"></i>
+                                                    Tạo mới
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="mapModal" class="modal modal-styled fade">
+                <div class="modal-dialog modal-lg">
+
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h3 class="modal-title">Chọn vị trí bản đồ</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div class="col-sm-12">
+                                <div class="form-group col-md-12">
+                                    <!--<input id="pac-input" class="controls" type="text" placeholder="Search Box">-->
+                                    <div id="map" style="height: 500px"></div>
+                                </div>
+                            </div>
+                        </div> <!-- /.modal-body -->
+                        <div class="modal-footer">
+                            <span style="margin-left:30px;" class="pull-left"><b>Lat:</b><span
+                                    class="lat">21.026939</span></span>
+                            <span style="margin-left:15px;" class="pull-left"><b>Long:</b><span
+                                    class="long">105.833358</span></span>
+                            <button type="button" class="btn btn-primary btn-choose-map" data-dismiss="modal">Chọn</button>
+                            <button type="button" class="btn btn-default close" data-dismiss="modal">Thoát</button>
+                        </div> <!-- /.modal-footer -->
+                    </div> <!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+
+            </div>
+        </div> <!-- /.tab-pane -->
+
+        <div class="tab-pane fade" id="stadiumCalendar">
+
+        </div> <!-- /.tab-pane -->
+    </div>
+</div>
+<footer th:replace="fragments/footer::footer"></footer>
+<div th:replace="fragments/modals::modals"></div>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASntcyyk_Av4IxlJ3IE72AIQPOBld0fKo&sensor=false"></script>
+<!--<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.31&key=AIzaSyASntcyyk_Av4IxlJ3IE72AIQPOBld0fKo&libraries=places&callback=initAutocomplete"-->
+        <!--async defer></script>-->
+<script th:src="@{/ckeditor/ckeditor.js}"></script>
+<script th:src="@{/ckfinder/ckfinder.js}"></script>
+<script th:src="@{/js/my-custom/pitch.js}"></script>
+<script th:src="@{/js/my-custom/ckeditor.js}"></script>
+</body>
+</html>

@@ -36,6 +36,8 @@
 
     <link th:href="@{/css/main.css?v=RwDoE9XGqem7Sr734GLhRvhyCWNYEeCfNpMFQ5ZZx_41}" rel="stylesheet"/>
 
+    <link th:href="@{/css/myCustom.css}" rel="stylesheet"/>
+
     <!--Libraries-->
     <script th:src="@{/js/libs.js}"></script>
 
@@ -94,118 +96,10 @@
 
     <script th:src="@{/js/filters.js}"></script>
 
-    <!--Common-->
-
-
-    <!--<script>-->
-    <!--common.config.userId = '';-->
-    <!--common.config.avatar = '';-->
-    <!--common.config.name = '';-->
-    <!--common.config.xAuthToken = '';-->
-    <!--common.config.serviceDomain = '/';-->
-    <!--common.config.webDomain = '/';-->
-    <!--var jsonMyTeams = '';-->
-    <!--if (jsonMyTeams != '') {-->
-    <!--common.config.myTeams = jQuery.parseJSON(jsonMyTeams);-->
-    <!--} else {-->
-    <!--common.config.myTeams = [];-->
-    <!--}-->
-
-    <!--</script>-->
-
-    <!--<script>-->
-    <!--// Initialize Firebase-->
-    <!--// Initialize Firebase-->
-    <!--var config = {-->
-    <!--apiKey: "AIzaSyAF-FW6r0uAuQ6kUdPTRT_RrpQUZn8lFFE",-->
-    <!--authDomain: "timdoinhanh-4538b.firebaseapp.com",-->
-    <!--databaseURL: "https://timdoinhanh-4538b.firebaseio.com",-->
-    <!--projectId: "timdoinhanh-4538b",-->
-    <!--storageBucket: "timdoinhanh-4538b.appspot.com",-->
-    <!--messagingSenderId: "986749593380"-->
-    <!--};-->
-    <!--firebase.initializeApp(config);-->
-
-    <!--// Initialize Firebase messaging object-->
-    <!--var firebaseMessaging = firebase.messaging();-->
-
-    <!--// [START refresh_token]-->
-    <!--// Callback fired if Instance ID token is updated.-->
-    <!--firebaseMessaging.onTokenRefresh(function () {-->
-    <!--firebaseMessaging.getToken()-->
-    <!--.then(function (refreshedToken) {-->
-    <!--onFirebabseMessagingTokenRefresh();-->
-    <!--})-->
-    <!--.catch(function (err) {-->
-    <!--console.log('Unable to retrieve refreshed token ', err);-->
-    <!--});-->
-    <!--});-->
-    <!--// [END refresh_token]-->
-
-    <!--// [START receive_message]-->
-    <!--// Handle incoming messages. Called when:-->
-    <!--// - a message is received while the app has focus-->
-    <!--// - the user clicks on an app notification created by a sevice worker-->
-    <!--//   `messaging.setBackgroundMessageHandler` handler.-->
-    <!--firebaseMessaging.onMessage(function (payload) {-->
-    <!--onFirebaseMessagingMessage();-->
-    <!--});-->
-    <!--// [END receive_message]-->
-
-    <!--initializeFirebaseMessaging();-->
-    <!--</script>-->
-
-    <!-- end notifications -->
-
     <script th:src="@{/js/countUp.js}"></script>
-    <script>
-        (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
-            i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date();
-            a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-        ga('create', 'UA-92981242-1', 'auto');
-        ga('send', 'pageview');
-
-    </script>
 
     <script th:src="@{/js/jquery.min.js}"></script>
-
-    <!-- Facebook Pixel Code -->
-    <!--<script>-->
-    <!--!function (f, b, e, v, n, t, s) {-->
-    <!--if (f.fbq) return;-->
-    <!--n = f.fbq = function () {-->
-    <!--n.callMethod ?-->
-    <!--n.callMethod.apply(n, arguments) : n.queue.push(arguments)-->
-    <!--};-->
-    <!--if (!f._fbq) f._fbq = n;-->
-    <!--n.push = n;-->
-    <!--n.loaded = !0;-->
-    <!--n.version = '2.0';-->
-    <!--n.queue = [];-->
-    <!--t = b.createElement(e);-->
-    <!--t.async = !0;-->
-    <!--t.src = v;-->
-    <!--s = b.getElementsByTagName(e)[0];-->
-    <!--s.parentNode.insertBefore(t, s)-->
-    <!--}(window, document, 'script',-->
-    <!--'https://connect.facebook.net/en_US/fbevents.js');-->
-    <!--fbq('init', '2191128120920718');-->
-    <!--fbq('track', 'PageView');-->
-    <!--</script>-->
-    <!--<noscript>-->
-    <!--<img height="1" width="1" style="display:none"-->
-    <!--src="https://www.facebook.com/tr?id=2191128120920718&amp;ev=PageView&noscript=1"/>-->
-    <!--</noscript>-->
-    <!-- End Facebook Pixel Code -->
 </head>
 <body>
 

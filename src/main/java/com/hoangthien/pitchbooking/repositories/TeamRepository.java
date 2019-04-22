@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface TeamRepository extends JpaRepository<Team, Long> {
+
     boolean existsByPath(String path);
 
     Optional<Team> findByPath(String path);

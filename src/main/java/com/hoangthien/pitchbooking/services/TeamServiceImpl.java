@@ -53,7 +53,7 @@ public class TeamServiceImpl implements TeamService {
 
         District area = districtRepository
                 .findById(teamDTO.getAreaId())
-                .orElseThrow(() -> new PitchBookingException("Khu vực không hợp lệ!"));
+                .orElseThrow(() -> new PitchBookingException("Khu vực không tìm thấy!"));
 
         // Update later
         User captain = userRepository

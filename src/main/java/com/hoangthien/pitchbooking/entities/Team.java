@@ -21,6 +21,7 @@ public class Team {
 
     private String path;
 
+    @Column(length = 2048)
     private String description;
 
     private String picture;

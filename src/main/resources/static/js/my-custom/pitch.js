@@ -33,6 +33,20 @@ $(document).ready(function() {
         $("#longitude").val(long);
         $("#latitude").val(lat);
     });
+
+    $("#fileAvatar").change(function() {
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                $("#avatarImg").attr('src', e.target.result);
+                $("#avatarImg").attr('height', 200);
+                $("#avatarImg").attr('width', 250);
+            }
+
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
 });
 
 // This example adds a search box to a map, using the Google Place Autocomplete

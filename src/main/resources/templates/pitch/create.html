@@ -4,19 +4,16 @@
 <body ng-app="sportApp" class="mobile-app-false ng-scope" data-gr-c-s-loaded="true">
 <div th:replace="fragments/header::header"></div>
 
-<div class="breadcrum ng-scope">
+<div class="breadcrum">
     <div class="container">
         <div class="breadcrum-line">
-            <a href="/">Trang chủ</a>
-            <a href="">Danh sách sân</a>
-            <a href=""
-               class="ng-binding ng-hide"></a>
-            <a class="">Thêm mới</a>
+            <a href="/"><i class="fa fa-home"></i>&nbsp; Trang chủ</a>
+            <a th:href="@{/pitch/management}"><i class="fa fa-angle-right"></i>&nbsp; Danh sách sân</a>
+            <a class=""><i class="fa fa-angle-right"></i>&nbsp; Thêm mới</a>
         </div>
     </div>
 </div>
 <div class="content-wrap stadium-managment-page ng-scope">
-    <!-- ngIf: loadingOverlay -->
     <div class="container">
         <div class="content-cts">
             <div class="item-card">
@@ -26,16 +23,20 @@
                         <ul id="createTab" class="nav nav-tabs" role="tablist">
                             <li class="active">
                                 <a href="javascript:void(0)" class="ng-binding">
-                                    <i class="glyphicon glyphicon-info-sign"></i>
+                                    <i class="fa fa-info-circle"></i>
                                     &nbsp;&nbsp;Thêm sân bóng mới
                                 </a>
                             </li>
                         </ul>
                         <div id="createUpdateStadiumTabContent1" class="tab-content">
                             <div class="tab-pane fade active in" id="detailManager">
-
+                                <th:block th:if="${msg != null}" th:with="type=${msg.type == 1 ? 'success' : 'danger'}">
+                                    <div th:class="${'alert msg-noti alert-' + type}" style="text-align: center">
+                                        <strong th:text="${msg.message}"></strong>
+                                    </div>
+                                </th:block>
                                 <form name="frmStadiumInfo"
-                                      class="ng-pristine ng-valid-email ng-invalid ng-invalid-required">
+                                      th:action="@{/pitch/management/create}" method="post" enctype="multipart/form-data">
                                     <div class="col-md-12">
 
                                         <div class="form-group row">
@@ -53,7 +54,7 @@
                                         <div class="form-group row">
                                             <label class="col-md-3 col-form-label">Giới thiệu ngắn</label>
                                             <div class="col-md-9">
-                                                <textarea class="form-control" name="instruction" placeholder="Giới thiệu ngắn" rows="3" required></textarea>
+                                                <textarea class="form-control" name="introduction" placeholder="Giới thiệu ngắn" rows="3" required></textarea>
                                             </div>
 
                                         </div>
@@ -88,17 +89,15 @@
                                         <div class="form-group row">
                                             <label class="col-md-3 col-form-label">Mặt sân</label>
                                             <div class="col-md-5">
-                                                <select class="form-control">
-                                                    <select class="form-control" name="districtId">
-                                                        <th:block th:if="${#lists.isEmpty(listSurfaces)}">
-                                                            <option value="?">Không có dữ liệu!</option>
-                                                        </th:block>
-                                                        <th:block th:unless="${#lists.isEmpty(listSurfaces)}">
-                                                            <option th:each="surface,iterStat:${listSurfaces}"
-                                                                    th:text="${surface.name}"
-                                                                    th:value="${surface.id}"></option>
-                                                        </th:block>
-                                                    </select>
+                                                <select class="form-control" name="yardSurfaceId">
+                                                    <th:block th:if="${#lists.isEmpty(listSurfaces)}">
+                                                        <option value="?">Không có dữ liệu!</option>
+                                                    </th:block>
+                                                    <th:block th:unless="${#lists.isEmpty(listSurfaces)}">
+                                                        <option th:each="surface,iterStat:${listSurfaces}"
+                                                                th:text="${surface.name}"
+                                                                th:value="${surface.id}"></option>
+                                                    </th:block>
                                                 </select>
                                             </div>
                                         </div>
@@ -138,8 +137,8 @@
                                         <div class="form-group row">
                                             <label class="col-md-3 control-label">Bản đồ</label>
                                             <div class="col-md-5">
-                                                <label class="control-label">Vị trí trên bản đồ <img
-                                                        class="google-map-icon" height="20"
+                                                <label class="control-label">Vị trí trên bản đồ
+                                                    <img class="google-map-icon" height="20"
                                                         th:src="@{/images/gg-map-icon.png}"
                                                         data-toggle="modal" data-target="#mapModal"></label>
                                             </div>
@@ -203,11 +202,8 @@
                                         <div class="form-group row">
                                             <label class="col-md-3 control-label">Ảnh đại diện</label>
                                             <div class="col-md-5">
-                                                <!-- ngIf: form.PicturePath -->
-                                                <input id="previewImagePath" type="file" file-model="imageLogo">
-                                                <input ng-model="form.PicturePath" value="" type="hidden"
-                                                       class="form-control ng-pristine ng-untouched ng-valid ng-empty"
-                                                       id="inpLogoFilePath" placeholder="">
+                                                <img id="avatarImg" />
+                                                <input id="fileAvatar" type="file" name="imgAvatar">
                                             </div>
                                         </div>
 

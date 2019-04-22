@@ -4,24 +4,27 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "pitch")
 @Data
 @NoArgsConstructor
-public class Pitch {
+public class Pitch implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
+    @Column(length = 1024)
     private String introduction;
 
     private String address;
 
     private String avatar;
 
+    @Lob
     private String detailDescription;
 
     private String latitude;

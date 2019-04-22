@@ -79,3 +79,6 @@ html, body {
 #target {
     width: 345px;
 }
+.google-map-icon:hover {
+    cursor: pointer;
+}

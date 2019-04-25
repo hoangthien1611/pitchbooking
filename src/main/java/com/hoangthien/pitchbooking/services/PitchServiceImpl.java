@@ -72,9 +72,13 @@ public class PitchServiceImpl implements PitchService {
 
     @Override
     public Pitch updatePitch(PitchDTO pitchDTO) {
+        Pitch pitch = pitchRepository
+                .findById(pitchDTO.getId())
+                .orElseThrow(() -> new PitchBookingException("Pitch không tìm thấy!"));
+
         YardSurface yardSurface = yardSurfaceRepository
                 .findById(pitchDTO.getYardSurfaceId())
-                .orElseThrow(() -> new PitchBookingException("Loại Mặt sân không tìm thấy!"));
+                .orElseThrow(() -> new PitchBookingException("Loại Mặt sân mới không tìm thấy!"));
 
         District district = districtRepository
                 .findById(pitchDTO.getDistrictId())
@@ -84,10 +88,6 @@ public class PitchServiceImpl implements PitchService {
         User owner = userRepository
                 .findById(1L)
                 .orElseThrow(() -> new PitchBookingException("Không tìm thấy chủ sân!"));
-
-        Pitch pitch = pitchRepository
-                .findById(pitchDTO.getId())
-                .orElseThrow(() -> new PitchBookingException("Pitch không tìm thấy!"));
 
         pitch.setName(pitchDTO.getName());
         pitch.setIntroduction(pitchDTO.getIntroduction());

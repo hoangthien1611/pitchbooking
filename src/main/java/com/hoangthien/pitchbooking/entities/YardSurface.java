@@ -1,7 +1,9 @@
 package com.hoangthien.pitchbooking.entities;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,5 +21,6 @@ public class YardSurface {
 
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "yardSurface")
+    @ToString.Exclude
     private List<Pitch> pitches;
 }

@@ -1,7 +1,9 @@
 package com.hoangthien.pitchbooking.entities;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -39,6 +41,7 @@ public class Pitch implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "yardSurfaceId")
+    @ToString.Exclude
     private YardSurface yardSurface;
 
     @ManyToOne

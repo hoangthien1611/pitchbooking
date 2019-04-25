@@ -29,10 +29,10 @@ public class Booking {
     private LocalDateTime timeCreated;
 
     @ManyToOne
-    @JoinColumn(name = "teamId")
-    private Team teamBooking;
-
-    @ManyToOne
     @JoinColumn(name = "userId")
     private User userBooking;
+
+    @ManyToOne
+    @JoinColumn(name = "childPitchId")
+    private ChildPitch childPitch;
 }

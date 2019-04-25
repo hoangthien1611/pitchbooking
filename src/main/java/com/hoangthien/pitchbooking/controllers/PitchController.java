@@ -3,10 +3,9 @@ package com.hoangthien.pitchbooking.controllers;
 import com.hoangthien.pitchbooking.constants.MessageType;
 import com.hoangthien.pitchbooking.dto.Message;
 import com.hoangthien.pitchbooking.dto.PitchDTO;
-import com.hoangthien.pitchbooking.services.DistrictService;
-import com.hoangthien.pitchbooking.services.FileService;
-import com.hoangthien.pitchbooking.services.PitchService;
-import com.hoangthien.pitchbooking.services.YardSurfaceService;
+import com.hoangthien.pitchbooking.entities.GroupSpecificPitches;
+import com.hoangthien.pitchbooking.entities.PitchType;
+import com.hoangthien.pitchbooking.services.*;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(PitchController.BASE_URL)
@@ -36,6 +37,15 @@ public class PitchController {
 
     @Autowired
     private PitchService pitchService;
+
+    @Autowired
+    private GroupDaysService groupDaysService;
+
+    @Autowired
+    private PitchTypeService pitchTypeService;
+
+    @Autowired
+    private GroupSpecificPitchesService groupSpecificPitchesService;
 
     @GetMapping("/management/create")
     public String create(Model model) {
@@ -113,5 +123,33 @@ public class PitchController {
             ra.addFlashAttribute("msg", new Message(MessageType.ERROR, e.getMessage()));
         }
         return "redirect:/pitch/management/pitch-info/" + pitchDTO.getId();
+    }
+
+    @GetMapping("/management/pitch-prices/{pitchId}")
+    public String getPrices(Model model, @PathVariable("pitchId") String pitch) {
+        log.info("GET: " + BASE_URL + "/management/pitch-prices/{pitchId}");
+        try {
+            Long pitchId = Long.valueOf(Integer.parseInt(pitch));
+
+            List<GroupSpecificPitches> groupSpecificPitches = groupSpecificPitchesService.getAllByPitchId(pitchId);
+            List<PitchType> pitchTypes = pitchTypeService.getAll();
+            List<PitchType> pitchTypesAfterFilter = pitchTypes.stream()
+                    .filter(pitchType -> !isPitchTypeExistedInGroupSpecificPitches(pitchType.getId(), groupSpecificPitches))
+                    .collect(Collectors.toList());
+
+            model.addAttribute("specificPitches", groupSpecificPitches);
+            model.addAttribute("pitchId", pitchId);
+            model.addAttribute("groupDaysList", groupDaysService.getAll());
+            model.addAttribute("pitchTypeList", pitchTypesAfterFilter);
+            return "pitch/prices";
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return "error/page_404";
+        }
+    }
+
+    private boolean isPitchTypeExistedInGroupSpecificPitches(Long pitchtypeId, List<GroupSpecificPitches> groupSpecificPitches) {
+        return groupSpecificPitches.stream()
+                .anyMatch(gr -> gr.getPitchType().getId() == pitchtypeId);
     }
 }

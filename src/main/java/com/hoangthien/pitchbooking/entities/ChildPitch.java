@@ -2,26 +2,28 @@ package com.hoangthien.pitchbooking.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "level")
+@Table(name = "child_pitch")
 @Data
 @NoArgsConstructor
-public class Level {
+public class ChildPitch {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
+    @ManyToOne
+    @JoinColumn(name = "groupSpecificPitchesId")
+    private GroupSpecificPitches groupSpecificPitches;
+
     @OneToMany(fetch = FetchType.LAZY,
-            mappedBy = "level",
+            mappedBy = "childPitch",
             orphanRemoval = true,
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @ToString.Exclude
-    private List<Team> teams;
+            cascade = CascadeType.ALL)
+    private List<Booking> bookings;
 }

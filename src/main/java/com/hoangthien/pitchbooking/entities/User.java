@@ -1,10 +1,7 @@
 package com.hoangthien.pitchbooking.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -33,12 +30,14 @@ public class User {
             mappedBy = "owner",
             orphanRemoval = true,
             cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ToString.Exclude
     private List<Pitch> owningPitches;
 
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "captain",
             orphanRemoval = true,
             cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ToString.Exclude
     private List<Team> owningTeams;
 
     @OneToMany(fetch = FetchType.LAZY,
@@ -53,5 +52,6 @@ public class User {
             },
             mappedBy = "members")
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Set<Team> joiningTeams = new HashSet<>();
 }

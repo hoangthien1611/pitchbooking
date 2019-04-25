@@ -19,16 +19,15 @@
                 <div class="bs-example bs-example-tabs" data-example-id="togglable-tabs">
                     <ul id="myTab" class="nav nav-tabs" role="tablist">
                         <li>
-                            <a href="https://www.timdoinhanh.com/stadium/management#/booking">
+                            <a href="">
                                 <i class="fa fa-list"></i>
                                 Yêu cầu đặt sân
-                                <b class="badge badge-primary ng-binding"
-                                                   style="background-color:red">0</b>
+                                <b class="badge badge-primary" style="background-color:red">0</b>
                             </a>
                         </li>
 
                         <li class="active">
-                            <a href="https://www.timdoinhanh.com/stadium/management#/stadium">
+                            <a th:href="@{/pitch/manage}">
                                 <i class="fa fa-list"></i>
                                 Danh sách sân
                             </a>
@@ -43,92 +42,90 @@
                             <div id="listStadium" style="min-height:250px; position:relative">
                                 <div class="pull-right" style="margin-bottom:30px;">
                                     <div class="dropdown">
-                                        <a class="btn btn-primary btn-primary-extra" th:href="@{/pitch/management/create}">
+                                        <a class="btn btn-primary btn-primary-extra"
+                                           th:href="@{/pitch/management/create}">
                                             <i class="fa fa-plus-square" aria-hidden="true"></i> &nbsp;&nbsp;Tạo sân mới
                                         </a>
                                     </div>
                                 </div>
-                                <table class="table table-striped table-responsive table-stadium-list ng-scope">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th width="80">Loại</th>
-                                        <th>Thông tin sân</th>
-                                        <th>Ảnh đại diện</th>
-                                        <th align="right" style="text-align:right">Tác vụ</th>
-                                    </tr>
-                                    </thead>
+                                <th:block th:unless="${#lists.isEmpty(pitches)}">
+                                    <table class="table table-striped table-responsive table-stadium-list ng-scope">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th width="80">Loại</th>
+                                            <th>Thông tin sân</th>
+                                            <th>Ảnh đại diện</th>
+                                            <th align="right" style="text-align:right">Tác vụ</th>
+                                        </tr>
+                                        </thead>
 
-                                    <tbody>
-                                    <tr ng-repeat="stadium in stadiums" class="ng-scope">
-                                        <td class="ng-binding">1</td>
-                                        <td>
-                                            <span class="ng-scope">Bóng đá</span>
-                                        </td>
-                                        <td>
-                                            <a href="https://www.timdoinhanh.com/stadium/management#/stadium-info/1318">
-                                                <strong>Viktor</strong>
-                                            </a>
-                                            <div class="ng-binding">
-                                                <i class="fa fa-map-o"></i> 08 Hà Văn Tính (Quận Liên Chiểu Đà Nẵng)
-                                            </div>
-                                            <div>
-                                                <i class="fa fa-phone-square"></i> <a> 0123456789</a>
-                                            </div>
-                                            <div>
-                                                <i class="fa fa-facebook-square" aria-hidden="true"></i>
-                                                <a href="https://www.timdoinhanh.com/stadium/fb.com/viktor"
-                                                    target="_blank" class="ng-binding"> fb.com/viktor</a>
-                                            </div>
-                                            <div>
-                                                <i class="fa fa-envelope-o"></i>
-                                                <a>hoangthien@thien.com</a>
-                                            </div>
-
-                                        </td>
-                                        <td>
-                                            <img height="120" ng-src="">
-                                        </td>
-
-                                        <td align="right" style="text-align:right">
-                                            <div class="form-group">
-                                                <a href="https://www.timdoinhanh.com/stadium/management#/bookingManager/1318"
-                                                   class="btn btn-info btn-sm" style="width:130px">
-                                                    <i class="fa fa-calendar" aria-hidden="true"></i> Đặt sân
+                                        <tbody>
+                                        <tr th:each="pitch,iterStat:${pitches}">
+                                            <td th:text="${iterStat.count}">1</td>
+                                            <td>
+                                                <span>Bóng đá</span>
+                                            </td>
+                                            <td>
+                                                <a th:href="@{/pitch/management/pitch-info/__${pitch.id}__}">
+                                                    <strong th:text="${pitch.name}">Viktor</strong>
                                                 </a>
-                                            </div>
-                                            <div class="form-group">
-                                                <a class="btn btn-default btn-sm" ng-href="#/stadium-info/1318"
-                                                   title="Chỉnh sửa" style="width:130px"
-                                                   href="https://www.timdoinhanh.com/stadium/management#/stadium-info/1318">
-                                                    <i class="fa fa-pencil"></i> Sửa thông tin
-                                                </a>
-                                            </div>
-                                            <div class="form-group">
-                                                <!-- ngIf: stadium.Status == 1 --><a
-                                                    class="btn btn-danger btn-sm ng-scope"
-                                                    confirmation-needed="Bạn có chắc chắn muốn ngưng hoạt động Viktor?"
-                                                    ng-if="stadium.Status == 1"
-                                                    ng-click="changeStatus(stadium.Id,2,$event)"
-                                                    title="Ngưng hoạt động">
-                                                <i class="fa fa-ban"></i> Dừng
-                                            </a><!-- end ngIf: stadium.Status == 1 -->
-                                                <!-- ngIf: stadium.Status == 2 -->
+                                                <div>
+                                                    <i class="fa fa-map-o"></i>
+                                                    <th:block th:text="${pitch.address + ', ' + pitch.district.name}"></th:block>
+                                                </div>
+                                                <div>
+                                                    <i class="fa fa-phone-square"></i>
+                                                    <a th:text="${pitch.phoneNumber}"></a>
+                                                </div>
+                                                <div>
+                                                    <i class="fa fa-facebook-square" aria-hidden="true"></i>
+                                                    <a th:text="${pitch.facebook}"> fb.com/viktor</a>
+                                                </div>
+                                                <div>
+                                                    <i class="fa fa-envelope-o"></i>
+                                                    <a th:text="${pitch.email}">hoangthien@thien.com</a>
+                                                </div>
 
-                                                <a class="btn btn-danger btn-sm"
-                                                   confirmation-needed="Bạn có chắc chắn muốn xóa Viktor?"
-                                                   ng-click="changeStatus(stadium.Id,3,$event)" title="Xóa">
-                                                    <i class="fa fa-remove"></i> Xóa
-                                                </a>
-                                            </div>
-                                        </td>
+                                            </td>
+                                            <td>
+                                                <img height="120" th:src="@{/uploads/__${pitch.avatar}__}">
+                                            </td>
 
-                                    </tr><!-- end ngRepeat: stadium in stadiums -->
-                                    </tbody>
-                                </table><!-- end ngIf: stadiums.length>=1 -->
-                                <!-- ngIf: stadiums.length==0 -->
+                                            <td align="right" style="text-align:right">
+                                                <div class="form-group">
+                                                    <a th:href="@{/pitch/management/pitch-booking/__${pitch.id}__}"
+                                                       class="btn btn-info btn-sm" style="width:130px">
+                                                        <i class="fa fa-calendar" aria-hidden="true"></i> Đặt sân
+                                                    </a>
+                                                </div>
+                                                <div class="form-group">
+                                                    <a class="btn btn-default btn-sm" title="Chỉnh sửa"
+                                                       style="width:130px"
+                                                       th:href="@{/pitch/management/pitch-info/__${pitch.id}__}">
+                                                        <i class="fa fa-pencil"></i> Sửa thông tin
+                                                    </a>
+                                                </div>
+                                                <div class="form-group">
+                                                    <a class="btn btn-danger btn-sm ng-scope"
+                                                       confirmation-needed="Bạn có chắc chắn muốn ngưng hoạt động Viktor?"
+                                                       title="Ngưng hoạt động">
+                                                        <i class="fa fa-ban"></i> Dừng
+                                                    </a>
+                                                    <a class="btn btn-danger btn-sm"
+                                                       confirmation-needed="Bạn có chắc chắn muốn xóa Viktor?"
+                                                       title="Xóa">
+                                                        <i class="fa fa-remove"></i> Xóa
+                                                    </a>
+                                                </div>
+                                            </td>
+
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </th:block>
                             </div>
-                        </div> <!-- /.tab-pane -->
+                        </div>
                     </div>
                 </div>
 

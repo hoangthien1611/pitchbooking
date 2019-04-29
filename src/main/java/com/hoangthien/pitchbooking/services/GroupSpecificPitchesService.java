@@ -11,5 +11,7 @@ public interface GroupSpecificPitchesService {
 
     List<GroupSpecificPitches> getAllByPitchId(Long pitchId);
 
-    void delete(Long id);
+    GroupSpecificDTO delete(Long id);
+
+    GroupSpecificDTO changeNumber(Long id, int number);
 }

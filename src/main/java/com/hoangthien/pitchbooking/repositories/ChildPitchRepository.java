@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ChildPitchRepository extends JpaRepository<ChildPitch, Long> {
+    void deleteAllByGroupSpecificPitchesId(Long id);
 }

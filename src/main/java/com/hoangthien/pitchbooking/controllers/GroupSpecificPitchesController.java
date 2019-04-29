@@ -31,14 +31,26 @@ public class GroupSpecificPitchesController {
 
     @DeleteMapping("/{id}")
     @ResponseBody
-    public String delete(@PathVariable("id") Long id) {
+    public GroupSpecificDTO delete(@PathVariable("id") Long id) {
         log.info("DELETE: " + BASE_URL);
         try {
-            groupSpecificPitchesService.delete(id);
-            return "SUCCESS";
+            return groupSpecificPitchesService.delete(id);
         } catch (Exception e) {
-            return e.getMessage();
+            log.error(e.getMessage());
+            return null;
         }
 
+    }
+
+    @PutMapping("/change-number/{id}")
+    @ResponseBody
+    public GroupSpecificDTO changeNumber(@PathVariable("id") Long id, @RequestParam("number") Integer number) {
+        log.info("PUT: " + BASE_URL + "/" + id);
+        try {
+            return groupSpecificPitchesService.changeNumber(id, number);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return null;
+        }
     }
 }

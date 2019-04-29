@@ -8,10 +8,11 @@
     <div class="breadcrum ng-scope">
         <div class="container">
             <div class="breadcrum-line">
-                <a href="https://www.timdoinhanh.com/">Trang chủ</a>
+                <a href="/"><i class="fa fa-home"></i>&nbsp; Trang chủ</a>
                 <a th:href="@{/pitch/management}"><i class="fa fa-angle-right"></i>&nbsp; Danh sách sân</a>
-                <a th:href="@{/pitch/management/pitch-info/1}"><i class="fa fa-angle-right"></i>&nbsp; Viktor</a>
-                <a>Quản lý giá</a>
+                <a th:href="@{/pitch/management/pitch-info/__${pitchId}__}"><i class="fa fa-angle-right"></i>&nbsp;
+                    <th:block th:if="${pitchName != null}" th:text="${pitchName}"></th:block></a></a>
+                <a><i class="fa fa-angle-right"></i>&nbsp; Quản lý giá</a>
             </div>
         </div>
     </div>
@@ -24,20 +25,20 @@
                         <div class="bs-example bs-example-tabs" data-example-id="togglable-tabs">
                             <ul id="myTab" class="nav nav-tabs" role="tablist">
                                 <li>
-                                    <a th:href="@{/pitch/management/pitch-info/1}">
+                                    <a th:href="@{/pitch/management/pitch-info/__${pitchId}__}">
                                         <i class="fa fa-info-circle"></i>
                                         Thông tin sân
                                     </a>
                                 </li>
 
                                 <li class="active">
-                                    <a href="https://www.timdoinhanh.com/stadium/management#/stadium-prices/1318">
+                                    <a>
                                         <i class="fa fa-database" aria-hidden="true"></i>&nbsp;&nbsp;Giá thuê sân
                                     </a>
                                 </li>
 
                                 <li>
-                                    <a href="https://www.timdoinhanh.com/stadium/management#/bookingManager/1318">
+                                    <a href="">
                                         <i class="fa fa-calendar" aria-hidden="true"></i>
                                         Quản lý
                                     </a>
@@ -67,7 +68,7 @@
                                                 </div>
                                                 <div class="col-sm-4 form-inline">
                                                     <div class="form-group">
-                                                        <input type="text" min="1" max="100" id="number"
+                                                        <input type="number" min="1" max="100" id="number"
                                                                class="form-control input-sm" placeholder="Số lượng">
                                                     </div>
                                                     <div class="form-group">
@@ -87,16 +88,17 @@
                                                     <div class="col-md-12 ng-scope">
                                                         <div class="sn-settings-bar">
                                                             <div class="pull-left sn-settings-name">
-                                                            <span style="float: left;margin-top: 3px; margin-right:30px;">
-                                                            <i class="fa fa-check-square" aria-hidden="true"></i>
-                                                            <th:block
-                                                                    th:text="${'Loại sân: ' + pitches.pitchType.name + ' (' + pitches.childPitches.size() + ' sân)'}"></th:block>
-                                                        </span>
+                                                                <span style="float: left;margin-top: 3px; margin-right:30px;" th:id="${'pitches-span-' + pitches.id}">
+                                                                    <i class="fa fa-check-square"></i>
+                                                                    <th:block
+                                                                            th:text="${'Loại sân: ' + pitches.pitchType.name + ' (' + pitches.childPitches.size() + ' sân)'}"></th:block>
+                                                                </span>
                                                                 <div class="btn-group pull-right mobile-float-none" style="margin-top:3px">
-                                                                    <a class="pointer add-price" th:onclick="'javascript:addPrice('+ ${pitches.id} +')'">
+                                                                    <a class="pointer add-price" data-toggle="modal" data-target="#addOrEditPrice" th:onclick="'javascript:addPrice('+ ${pitches.id} +')'">
                                                                         <i class="fa fa-database"></i> &nbsp;Thêm giá</a>
                                                                     &nbsp;
-                                                                    <a class="pointer"><i class="fa fa-pencil"></i> &nbsp;Thay đổi số lượng</a>
+                                                                    <a class="pointer" data-toggle="modal" data-target="#changeNumberModal" th:onclick="'javascript:passPitchesIdToModal('+ ${pitches.id + ',' + pitches.childPitches.size()} +')'">
+                                                                        <i class="fa fa-pencil"></i> &nbsp;Thay đổi số lượng</a>
                                                                     &nbsp;
                                                                     <a class="pointer" th:onclick="'javascript:deletePitches('+ ${pitches.id} +')'"><i class="fa fa-remove"></i> &nbsp;Xóa</a>
                                                                 </div>
@@ -115,47 +117,47 @@
                                                                 Ngày trong tuần
                                                             </th>
                                                             <th>
-                                                                Giá
+                                                                Giá (VND)
                                                             </th>
-                                                            <th>Xóa</th>
+                                                            <th>Hành động</th>
                                                         </tr>
                                                         </thead>
                                                         <tbody>
-                                                        <tr>
+                                                        <tr th:unless="${#lists.isEmpty(pitches.specificPitchesCosts)}" th:each="cost,iterStat:${pitches.specificPitchesCosts}"
+                                                            th:class="${cost.id}" th:id="${'tr-' + cost.id}">
                                                             <td class="sn-price-time-td">
                                                                 <div class="form-inline md-table">
-                                                                    <div class="input-group input-time-sm">
+                                                                    <div class="input-group input-time-sm fromTime">
                                                                     <span class="input-group-addon">
                                                                         <i class="fa fa-clock-o"></i>
                                                                     </span>
-                                                                        <input class="form-control input-sm" placeholder="Bắt đầu">
+                                                                        <input class="form-control input-sm" name="fromTimeView" th:value="${cost.fromTime}" readonly placeholder="Bắt đầu">
                                                                     </div>
-                                                                    <div class="input-group  input-time-sm">
+                                                                    <span>&nbsp; - &nbsp;</span>
+                                                                    <div class="input-group input-time-sm toTime">
                                                                     <span class="input-group-addon">
                                                                         <i class="fa fa-clock-o"></i>
                                                                     </span>
-                                                                        <input class="form-control input-sm" placeholder="Kết thúc">
+                                                                        <input class="form-control input-sm" name="toTimeView" th:value="${cost.toTime}" readonly placeholder="Kết thúc">
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td class="sn-price-day-picker">
-                                                                <label class="checkbox-inline"
-                                                                       th:each="days,iterStat:${groupDaysList}">
-                                                                    <input type="radio" name="groupDaysId"
-                                                                           class="margin-top-2" th:value="${days.id}"
-                                                                           th:text="${' ' + days.name}">
-                                                                </label>
-
-                                                            </td>
+                                                            <td class="sn-price-day-picker" th:text="${cost.groupDays.name}"></td>
                                                             <td class="sn-price-price-td">
-                                                                <input min="0" type="number"
+                                                                <input min="0" type="number" th:value="${cost.cost}" readonly name="costView"
                                                                     class="form-control input-sm">
                                                             </td>
                                                             <td class="sn-price-delete-td">
+                                                                <a class="btn btn-default btn-sm edit-price" data-toggle="modal" data-target="#addOrEditPrice" title="Chỉnh sửa giá">
+                                                                    <i class="fa fa-pencil"></i>
+                                                                </a>
                                                                 <a class="btn btn-default btn-sm del-price" title="Xóa giá">
                                                                     <i class="fa fa-remove"></i>
                                                                 </a>
                                                             </td>
+                                                            <td class="costId hide" th:text="${cost.id}"></td>
+                                                            <td class="pitchesId hide" th:text="${pitches.id}"></td>
+                                                            <td class="daysId hide" th:text="${cost.groupDays.id}"></td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
@@ -163,21 +165,127 @@
                                             </div>
                                         </th:block>
 
-                                        <div class="content-fl text-right">
-                                            <button type="submit" id="btnUpdateStadiumPrices"
-                                                    data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý..."
-                                                    class="btn btn-primary mobile-w-100p"
-                                                    ng-click="vm.updateStadiumPrices($event)">
-                                                <i class="fa fa-save"></i>
-                                                Lưu thay đổi
-                                            </button>
-                                            <!-- ngIf: vm.loadingOverlay -->
+                                        <div class="content-fl text-right bottom-pitches-right">
                                         </div>
-                                    </div><!-- end ngIf: !vm.isInProgress -->
-                                </div> <!-- /.tab-pane -->
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="changeNumberModal" role="dialog">
+                <div class="modal-dialog">
+
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Thay đổi số lượng sân</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="col-md-12">
+                                <div class="form-group row hide">
+                                    <div class="col-md-8">
+                                        <input type="number" id="pitchesIdChange" class="form-control input-sm">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 control-label" style="font-weight: bold; margin-top: 5px;">Số lượng sân</label>
+                                    <div class="col-md-8">
+                                        <input type="number" min="1" max="100" id="numberChange" required
+                                               class="form-control input-sm" placeholder="Số lượng">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-success btn-change-number" data-dismiss="modal">Submit</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal fade" id="addOrEditPrice" role="dialog">
+                <div class="modal-dialog">
+
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title title-price-form">Thêm giá</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="col-md-12">
+                                <div class="form-group row hide">
+                                    <div class="col-md-6">
+                                        <input type="number" name="pitchesId" id="pitchesIdForm" class="form-control input-sm">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="number" name="costId" id="costIdForm" class="form-control input-sm">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 control-label" style="font-weight: bold; margin-top: 5px;">Khung giờ</label>
+                                    <div class="col-md-8 form-inline">
+                                        <div class="input-group input-time-sm">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-clock-o"></i>
+                                            </span>
+                                            <select class="form-control input-sm" name="fromTime" id="select-from-time">
+                                                <th:block th:if="${#lists.isEmpty(listTimeFrame)}">
+                                                    <option value="?">Không có dữ liệu!</option>
+                                                </th:block>
+                                                <th:block th:unless="${#lists.isEmpty(listTimeFrame)}">
+                                                    <option th:each="time,iterStat:${listTimeFrame}"
+                                                            th:text="${time}" th:value="${time}"></option>
+                                                </th:block>
+                                            </select>
+                                        </div>
+                                        <span>&nbsp; - &nbsp;</span>
+                                        <div class="input-group  input-time-sm">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-clock-o"></i>
+                                            </span>
+                                            <select class="form-control input-sm" name="toTime" id="select-to-time">
+                                                <th:block th:if="${#lists.isEmpty(listTimeFrame)}">
+                                                    <option value="?">Không có dữ liệu!</option>
+                                                </th:block>
+                                                <th:block th:unless="${#lists.isEmpty(listTimeFrame)}">
+                                                    <option th:each="time,iterStat:${listTimeFrame}"
+                                                            th:text="${time}" th:value="${time}"></option>
+                                                </th:block>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 control-label" style="font-weight: bold; margin-top: 5px;">Ngày trong tuần</label>
+                                    <div class="col-md-8">
+                                        <label class="checkbox-inline"
+                                               th:each="days,iterStat:${groupDaysList}">
+                                            <input type="radio" name="groupDaysIdForm"
+                                                   class="margin-top-2" th:value="${days.id}"
+                                                   th:text="${' ' + days.name}">
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 control-label" style="font-weight: bold; margin-top: 5px;">Giá (VND)</label>
+                                    <div class="col-md-8">
+                                        <input type="number" min="0" id="priceForm"
+                                               class="form-control input-sm" placeholder="Giá">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-success btn-add-edit-cost" data-dismiss="modal">Submit</button>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 

@@ -40,15 +40,39 @@ $(document).ready(function() {
                 number: number
             },
             success: function (data) {
-                if (data != null) {
+                if (data) {
                     $(`#select-pitch-type option[value='${pitchTypeId}']`).remove();
                     $("#number").val("");
                     if( $('#select-pitch-type').has('option').length == 0 ) {
                         $("#add-group-pitches-area").hide();
                     }
-                    var markup = "<div class=\"snp-settings\" id='area-table-" + data.id + "'></div>"
-                    console.log(data);
-                    $(".pitches-content-page").append(markup);
+                    var markup = "<div class=\"snp-settings\" id='area-table-" + data.id + "'>"
+                        + "<div class=\"sn-settings-top row\">"
+                        + "<div class=\"col-md-12 ng-scope\">"
+                        + "<div class=\"sn-settings-bar\">"
+                        + "<div class=\"pull-left sn-settings-name\">"
+                        + "<span style=\"float: left;margin-top: 3px; margin-right:30px;\" id=\"pitches-span-" + data.id + "\">"
+                        + "<i class=\"fa fa-check-square\"></i>"
+                        + "&nbsp;Loại sân: " + data.pitchTypeName + " (" + data.number + " sân)</span>"
+                        + "<div class=\"btn-group pull-right mobile-float-none\" style=\"margin-top:3px\">"
+                        + "<a class=\"pointer add-price\" data-toggle=\"modal\" data-target=\"#addOrEditPrice\" onclick=\"addPrice(" + data.id +")\">"
+                        + "<i class=\"fa fa-database\"></i> &nbsp;Thêm giá&nbsp;</a>&nbsp;"
+                        + "<a class=\"pointer\" data-toggle=\"modal\" data-target=\"#changeNumberModal\" onclick=\"passPitchesIdToModal(" + data.id + "," + data.number+")\">"
+                        + "&nbsp;<i class=\"fa fa-pencil\"></i> &nbsp;Thay đổi số lượng&nbsp;</a>&nbsp;"
+                        + "<a class=\"pointer\" onclick=\"deletePitches(" + data.id +")\">"
+                        + "&nbsp;<i class=\"fa fa-remove\"></i> &nbsp;Xóa</a>"
+                        + "</div></div></div></div></div>"
+                        + "<div class=\"stadium-number-prices\">"
+                        + "<table class=\"table table-bordered text-left table-responsive stadium-number-price-table\" id=\"table-" +data.id +"\">"
+                        + "<thead><tr>"
+                        + "<th style=\"min-width:222px;\">Khung giờ</th>"
+                        + "<th>Ngày trong tuần</th>"
+                        + "<th>Giá (VND)</th>"
+                        + "<th>Hành động</th>"
+                        + "</tr></thead>"
+                        + "<tbody></tbody></table>"
+                        + "</div></div>"
+                    $(markup).insertBefore(".bottom-pitches-right");
                 } else {
                     alert('Thêm thất bại!');
                 }
@@ -60,31 +84,165 @@ $(document).ready(function() {
     });
 
     $(document).on("click", ".del-price", function () {
-        console.log('del row');
-        $(this).parents("tr").remove();
+        var result = confirm('Bạn có chắc chắn muốn xóa?');
+        if (result) {
+            var costId = $(this).closest('tr').children('td.costId').text();
+            var pitchesId = $(this).closest('tr').children('td.pitchesId').text();
+            url = /specific-pitches-cost/ + costId;
+
+            $.ajax({
+                type: 'delete',
+                url,
+                success: function (data) {
+                    if (data) {
+                        $(`#tr-${costId}`).remove();
+                    } else {
+                        alert("Xóa thất bại!");
+                    }
+                },
+                error: function () {
+                    alert('Error! Có lỗi xảy ra!');
+                }
+            });
+        }
     });
+
+    $(document).on("click", ".btn-change-number", function () {
+        var pitchesId = $("#pitchesIdChange").val();
+        var numberChange = parseInt($("#numberChange").val());
+
+        if (!numberChange && numberChange < 1) {
+            alert('Vui lòng nhập vào số lượng hợp lệ!');
+        } else {
+            $.ajax({
+                type: 'put',
+                url: '/group-specific-pitches/change-number/' + pitchesId,
+                data: {
+                    number: numberChange
+                },
+                success: function (data) {
+                    if (data) {
+                        console.log(data);
+                        var span = "<i class=\"fa fa-check-square\"></i>"
+                            + "&nbsp;Loại sân: " + data.pitchTypeName + " (" + data.number + " sân)";
+                        $(`#pitches-span-${data.id}`).html(span);
+                    } else {
+                        alert("Thay đổi thất bại!");
+                    }
+                },
+                error: function () {
+                    alert('Error! Có lỗi xảy ra!');
+                }
+            });
+        }
+    });
+
+    $(document).on("click", ".btn-add-edit-cost", function () {
+        var pitchesId = $("#pitchesIdForm").val();
+        var costId = $("#costIdForm").val();
+        var fromTime = $("#select-from-time").val();
+        var toTime = $("#select-to-time").val();
+        var price = $("#priceForm").val();
+        var groupDaysId = $("input[name='groupDaysIdForm']:checked").val();
+        var fromTimeInt = parseInt(fromTime.split(":")[0]);
+        var toTimeInt = parseInt(toTime.split(":")[0]);
+
+        var data = {
+            groupSpecificPitchesId: pitchesId,
+            fromTime: fromTime,
+            toTime: toTime,
+            cost: price,
+            groupDaysId: groupDaysId
+        };
+
+        if (toTimeInt <= fromTimeInt) {
+            alert('Vui lòng chọn khung giờ hợp lệ!');
+        } else if (!groupDaysId) {
+            alert('Vui lòng chọn ngày trong tuần!');
+        } else if (costId == 0) {
+            $.ajax({
+                type: 'post',
+                url: '/specific-pitches-cost',
+                data: data,
+                success: function (data) {
+                    if (data) {
+                        tableId = 'table-' + pitchesId;
+                        var markup = generateTableRow(data);
+                        $(`table#${tableId} tbody`).append(markup);
+                    } else {
+                        alert("Thêm giá thất bại!");
+                    }
+                },
+                error: function () {
+                    alert('Error! Có lỗi xảy ra!');
+                }
+            });
+        } else {
+            $.ajax({
+                type: 'put',
+                url: '/specific-pitches-cost/' + costId,
+                data: data,
+                success: function (data) {
+                    if (data) {
+                        var markup = generateTableRow(data);
+                        $(`#tr-${costId}`).replaceWith(markup);
+                    } else {
+                        alert("Chỉnh sửa giá thất bại!");
+                    }
+                },
+                error: function () {
+                    alert('Error! Có lỗi xảy ra!');
+                }
+            });
+        }
+    });
+
+    $(document).on("click", ".edit-price", function () {
+        var pitchesId = $(this).closest('tr').children('td.pitchesId').text();
+        var costId = $(this).closest('tr').children('td.costId').text();
+        var fromTime = $(this).closest('tr').children('td.sn-price-time-td').find("input[name='fromTimeView']").val();
+        var toTime = $(this).closest('tr').children('td.sn-price-time-td').find("input[name='toTimeView']").val();
+        var daysId = $(this).closest('tr').children('td.daysId').text();
+        var cost = $(this).closest('tr').children('td.sn-price-price-td').find("input[name='costView']").val();
+
+        $("#pitchesIdForm").val(pitchesId);
+        $("#costIdForm").val(costId);
+        $("#select-from-time").val(fromTime);
+        $("#select-to-time").val(toTime);
+        $("#priceForm").val(cost);
+        $(`input:radio[name=groupDaysIdForm][value=${daysId}]`).prop('checked', true);
+        $(".title-price-form").html('Chỉnh sửa giá');
+    });
+
+    function generateTableRow(data) {
+        return "<tr class='"+ data.id +"' id='tr-" + data.id + "'>"
+            + "<td class=\"sn-price-time-td\">"
+            + "<div class=\"form-inline md-table\"><div class=\"input-group input-time-sm\">"
+            + "<span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>"
+            + "<input class=\"form-control input-sm\" name=\"fromTimeView\" value='" + data.fromTime +"' readonly></div>"
+            + "<span>&nbsp;&nbsp; - &nbsp;&nbsp;</span>"
+            + "<div class=\"input-group input-time-sm\">"
+            + "<span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>"
+            + "<input class=\"form-control input-sm\" name=\"toTimeView\" value='" + data.toTime +"' readonly></div></div></td>"
+            + "<td class=\"sn-price-day-picker\">" + data.groupDaysName + "</td>"
+            + "<td class=\"sn-price-price-td\">"
+            + "<input min=\"0\" type=\"number\" class=\"form-control input-sm\" name=\"costView\" value='"+data.cost+"' readonly></td>"
+            + "<td class=\"sn-price-delete-td\">"
+            + "<a class=\"btn btn-default btn-sm edit-price\" title=\"Chỉnh sửa giá\" data-toggle=\"modal\" data-target=\"#addOrEditPrice\">"
+            + "<i class=\"fa fa-pencil\"></i></a>"
+            + "&nbsp;<a class=\"btn btn-default btn-sm del-price\" title=\"Xóa giá\"><i class=\"fa fa-remove\"></i></a>"
+            + "</td>"
+            + "<td class=\"costId hide\">"+ data.id +"</td>"
+            + "<td class=\"daysId hide\">"+ data.groupDaysId +"</td>"
+            + "<td class=\"pitchesId hide\">" + data.groupSpecificPitchesId + "</td></tr>";
+    }
 });
 
-function addPrice(tableId) {
-    tableId = 'table-' + tableId;
-    var markup = "<tr><td class=\"sn-price-time-td\">"
-        + "<div class=\"form-inline md-table\"><div class=\"input-group input-time-sm\">"
-        + "<span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>"
-        + "<input class=\"form-control input-sm\" placeholder=\"Bắt đầu\"></div>"
-        + "<div class=\"input-group input-time-sm\">"
-        + "<span class=\"input-group-addon\"><i class=\"fa fa-clock-o\"></i></span>"
-        + "<input class=\"form-control input-sm\" placeholder=\"Kết thúc\"></div></div></td>"
-        + "<td class=\"sn-price-day-picker\">"
-        + "<label class=\"checkbox-inline\"><input type=\"radio\" name=\"groupDaysId\" class=\"margin-top-2\" value='1'> T2 - T6</label>"
-        + "<label class=\"checkbox-inline\"><input type=\"radio\" name=\"groupDaysId\" class=\"margin-top-2\" value='2'> T7</label>"
-        + "<label class=\"checkbox-inline\"><input type=\"radio\" name=\"groupDaysId\" class=\"margin-top-2\" value='3'> CN</label>"
-        + "</td>"
-        + "<td class=\"sn-price-price-td\">"
-        + "<input min=\"0\" type=\"number\" class=\"form-control input-sm\"></td>"
-        + "<td class=\"sn-price-delete-td\">"
-        + "<a class=\"btn btn-default btn-sm del-price\" title=\"Xóa giá\"><i class=\"fa fa-remove\"></i></a>"
-        + "</td></tr>";
-    $(`table#${tableId} tbody`).append(markup);
+function addPrice(pitchesId) {
+    $("#pitchesIdForm").val(pitchesId);
+    $("#costIdForm").val(0);
+    $("#priceForm").val(0);
+    $(".title-price-form").html('Thêm giá');
 }
 
 function deletePitches(pitchesId) {
@@ -96,10 +254,23 @@ function deletePitches(pitchesId) {
             type: 'delete',
             url,
             success: function (data) {
-                if (data == "SUCCESS") {
+                if (data) {
+                    $("#add-group-pitches-area").show();
                     $("#area-table-" + pitchesId).remove();
+                    if( $('#select-pitch-type').has('option').length == 0 ) {
+                        $('#select-pitch-type').prepend($("<option></option>").val(data.pitchTypeId).text(data.pitchTypeName));
+                    } else {
+                        $("#select-pitch-type option").each(function () {
+                            var value = $(this).val();
+                            if (value > data.pitchTypeId) {
+                                $(this).before($("<option></option>").val(data.pitchTypeId).text(data.pitchTypeName));
+                                return false;
+                            }
+                        });
+                    }
+
                 } else {
-                    alert(data);
+                    alert("Xóa thất bại!");
                 }
             },
             error: function () {
@@ -107,4 +278,9 @@ function deletePitches(pitchesId) {
             }
         });
     }
+}
+
+function passPitchesIdToModal(pitchesId, number) {
+    $("#pitchesIdChange").val(pitchesId);
+    $("#numberChange").val(number);
 }

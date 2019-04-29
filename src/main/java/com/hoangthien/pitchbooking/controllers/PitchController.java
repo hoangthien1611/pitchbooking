@@ -1,11 +1,13 @@
 package com.hoangthien.pitchbooking.controllers;
 
+import com.hoangthien.pitchbooking.constants.Defines;
 import com.hoangthien.pitchbooking.constants.MessageType;
 import com.hoangthien.pitchbooking.dto.Message;
 import com.hoangthien.pitchbooking.dto.PitchDTO;
 import com.hoangthien.pitchbooking.entities.GroupSpecificPitches;
 import com.hoangthien.pitchbooking.entities.PitchType;
 import com.hoangthien.pitchbooking.services.*;
+import com.hoangthien.pitchbooking.utils.TimeUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -139,8 +141,10 @@ public class PitchController {
 
             model.addAttribute("specificPitches", groupSpecificPitches);
             model.addAttribute("pitchId", pitchId);
+            model.addAttribute("pitchName", pitchService.getPitchById(pitchId).getName());
             model.addAttribute("groupDaysList", groupDaysService.getAll());
             model.addAttribute("pitchTypeList", pitchTypesAfterFilter);
+            model.addAttribute("listTimeFrame", TimeUtils.getTimeFramesFromStartToEnd(Defines.TIME_START, Defines.TIME_END));
             return "pitch/prices";
         } catch (Exception e) {
             log.error(e.getMessage());

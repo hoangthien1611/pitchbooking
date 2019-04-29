@@ -65,12 +65,38 @@ public class GroupSpecificPitchesServiceImpl implements GroupSpecificPitchesServ
     }
 
     @Override
-    public void delete(Long id) {
+    public GroupSpecificDTO delete(Long id) {
         GroupSpecificPitches groupSpecificPitches = groupSpecificPitchesRepository
                 .findById(id)
                 .orElseThrow(() -> new PitchBookingException("Không tìm thấy dữ liệu cần xóa!"));
 
         groupSpecificPitchesRepository.deleteById(id);
+
+        GroupSpecificDTO groupSpecificDTO = new GroupSpecificDTO();
+        groupSpecificDTO.setPitchTypeName(groupSpecificPitches.getPitchType().getName());
+        groupSpecificDTO.setPitchTypeId(groupSpecificPitches.getPitchType().getId());
+        return groupSpecificDTO;
+    }
+
+    @Override
+    public GroupSpecificDTO changeNumber(Long id, int number) {
+        GroupSpecificPitches groupSpecificPitches = groupSpecificPitchesRepository
+                .findById(id)
+                .orElseThrow(() -> new PitchBookingException("Không tìm thấy dữ liệu cần thay đổi!"));
+
+        List<ChildPitch> childPitches = generateChildPitch(groupSpecificPitches.getPitchType().getName(), number);
+        childPitches.forEach(childPitch -> childPitch.setGroupSpecificPitches(groupSpecificPitches));
+
+        groupSpecificPitches.getChildPitches().clear();
+        groupSpecificPitches.getChildPitches().addAll(childPitches);
+        GroupSpecificPitches updatedGroupSpecificPitches = groupSpecificPitchesRepository
+                .save(groupSpecificPitches);
+
+        GroupSpecificDTO groupSpecificDTO = new GroupSpecificDTO();
+        groupSpecificDTO.setPitchTypeName(updatedGroupSpecificPitches.getPitchType().getName());
+        groupSpecificDTO.setId(updatedGroupSpecificPitches.getId());
+        groupSpecificDTO.setNumber(updatedGroupSpecificPitches.getChildPitches().size());
+        return groupSpecificDTO;
     }
 
     private List<ChildPitch> generateChildPitch(String pitchType, int number) {

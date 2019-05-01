@@ -11,7 +11,7 @@
                 <a href="/"><i class="fa fa-home"></i>&nbsp; Trang chủ</a>
                 <a th:href="@{/pitch/management}"><i class="fa fa-angle-right"></i>&nbsp; Danh sách sân</a>
                 <a th:href="@{/pitch/management/pitch-info/__${pitchId}__}"><i class="fa fa-angle-right"></i>&nbsp;
-                    <th:block th:if="${pitchName != null}" th:text="${pitchName}"></th:block></a></a>
+                    <th:block th:if="${pitchName != null}" th:text="${pitchName}"></th:block></a>
                 <a><i class="fa fa-angle-right"></i>&nbsp; Quản lý giá</a>
             </div>
         </div>
@@ -38,7 +38,7 @@
                                 </li>
 
                                 <li>
-                                    <a href="">
+                                    <a th:href="@{/pitch/management/pitch-bookings/__${pitchId}__}">
                                         <i class="fa fa-calendar" aria-hidden="true"></i>
                                         Quản lý
                                     </a>

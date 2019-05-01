@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head::head"></head>
+<body ng-app="sportApp" class="mobile-app-false ng-scope" data-gr-c-s-loaded="true">
+<div th:replace="fragments/header::header"></div>
+<div ng-view="" class="ng-scope">
+    <div class="breadcrum ng-scope">
+        <div class="container">
+            <div class="breadcrum-line">
+                <a href="/"><i class="fa fa-home"></i>&nbsp; Trang chủ</a>
+                <a th:href="@{/pitch/management}"><i class="fa fa-angle-right"></i>&nbsp; Danh sách sân</a>
+                <a th:href="@{/pitch/management/pitch-info/__${pitchId}__}"><i class="fa fa-angle-right"></i>&nbsp;
+                    <th:block th:if="${pitchName != null}" th:text="${pitchName}"></th:block>
+                </a>
+                <a class=""><i class="fa fa-angle-right"></i>&nbsp; Quản lý đặt sân</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-wrap stadium-managment-page ng-scope">
+        <div class="container">
+            <div class="content-cts">
+                <div class="item-card">
+                    <div class="row">
+                        <div class="bs-example bs-example-tabs" data-example-id="togglable-tabs">
+                            <ul id="myTab" class="nav nav-tabs" role="tablist">
+                                <li>
+                                    <a th:href="@{/pitch/management/pitch-info/__${pitchId}__}">
+                                        <i class="fa fa-info-circle"></i>
+                                        Thông tin sân
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a th:href="@{/pitch/management/pitch-prices/__${pitchId}__}">
+                                        <i class="fa fa-database" aria-hidden="true"></i>&nbsp;&nbsp;Giá thuê sân
+                                    </a>
+                                </li>
+
+                                <li class="active">
+                                    <a>
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                        Quản lý
+                                    </a>
+                                </li>
+                            </ul>
+                            <div id="bookingManagerTabContent" class="tab-content stadium-booking-manager">
+                                <div class="tab-pane fade active in" id="#/calendar" style="padding:5px;">
+                                    <div class="row">
+                                        <div class="col-md-12 date-picker-bar">
+                                            <div class="pull-left">
+                                                <div class="col-sm-9 form-group">
+                                                    <label>Chọn ngày: </label>
+                                                    <input type="date" id="select-date-booking" name="dateBooking"
+                                                           th:value="${date}" style="padding: 2px">
+                                                </div>
+                                                <div class="col-sm-3 form-inline">
+                                                    <div class="form-group">
+                                                        <button class="btn btn-info btn-sm btn-show-date"
+                                                                type="button" title="Xem">
+                                                            Xem
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="pull-left" style="margin-left: 20%; color:blue">
+                                                <h4 id="date-show">Hello</h4>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 ng-scope" id="stadiumBookingTable">
+                                            <div class="stadiumBookingTableContainer">
+                                                <div class="scroll-bar-x">
+                                                    <th:block th:unless="${#lists.isEmpty(timeFrameBookings)}">
+                                                        <table class="table table-bordered table-responsive stadium-booking-table">
+                                                            <thead>
+                                                            <tr>
+                                                                <th style="width:125px">Khung giờ</th>
+                                                                <th width="235px"
+                                                                    th:each="childPitch,iterStat:${timeFrameBookings[0].childPitches}"
+                                                                    th:text="${childPitch.name}"></th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr th:each="timeFrameBooking,itemStat:${timeFrameBookings}">
+                                                                <td class="time-frame-td">
+                                                                    <span class="time-frame-text"
+                                                                          th:text="${timeFrameBooking.timeFrame.fromTime + ' - ' + timeFrameBooking.timeFrame.toTime}"></span>
+                                                                    <a class="pull-right mobile-only">
+                                                                        <i class="fa fa-minus"></i>
+                                                                    </a>
+                                                                </td>
+                                                                <td class="td-booking td-booking-available" valign="middle"
+                                                                    th:each="childPitch:${timeFrameBooking.childPitches}">
+                                                                    <div class="stadium-number-name mobile-only">
+                                                                        <strong th:text="${childPitch.name}"></strong></div>
+
+                                                                    <div class="booking-price-info hover-bg">
+                                                                        <i class="fa fa-database"
+                                                                           aria-hidden="true"></i>
+                                                                        <span class="red ng-binding" th:text="${childPitch.cost}">3000</span>
+                                                                        &nbsp;
+                                                                        <a title="Cập nhật giá" th:href="@{/pitch/management/pitch-prices/__${pitchId}__}">
+                                                                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                                        </a>
+                                                                    </div>
+
+                                                                    <form class="stadium-booking-form" th:id="${'form-'+ itemStat.index + '-' + childPitch.id}" style="display: none">
+                                                                        <div class="form-group">
+                                                                            <input type="text"
+                                                                                   class="form-control input-sm"
+                                                                                   placeholder="Tên Người đặt / Đội bóng">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <input type="text"
+                                                                                   class="form-control input-sm"
+                                                                                   placeholder="Điện thoại liên hệ">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <input type="text"
+                                                                                   class="form-control input-sm"
+                                                                                   placeholder="Ghi chú">
+                                                                        </div>
+                                                                        <div class="form-group text-left">
+                                                                            <label>
+                                                                                <input type="checkbox">
+                                                                                Lịch cố định
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="form-group text-right">
+                                                                            <button class="btn btn-success btn-sm">
+                                                                                Lưu
+                                                                            </button>
+                                                                            <button class="btn btn-danger btn-sm" th:if="${childPitch.booking != null}">
+                                                                                Xóa
+                                                                            </button>
+                                                                            <button type="button" class="btn btn-default btn-sm"
+                                                                                    th:onclick="'javascript:closeForm('+ ${itemStat.index + ',' + childPitch.id} +')'">Đóng</button>
+                                                                        </div>
+
+                                                                    </form>
+                                                                    <div class="cl" th:id="${'text-info-'+ itemStat.index + '-' + childPitch.id}"
+                                                                         th:onclick="'javascript:openForm('+ ${itemStat.index + ',' + childPitch.id} +')'">
+                                                                        <div th:if="${childPitch.booking == null}">
+                                                                            Đang trống, click để cập nhật
+                                                                        </div>
+                                                                        <div th:if="${childPitch.booking != null}" style="color: red">
+                                                                            Đã có người đặt, click để xem
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+
+                                                            </tbody>
+                                                        </table>
+                                                    </th:block>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Modals-->
+    <div id="modalMatchFindingCreation" class="modal modal-styled fade ng-scope" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Đăng tìm đối</h4>
+                </div>
+                <form class="form-horizontal ng-pristine ng-invalid ng-invalid-required" name="matchPostForm">
+                    <br>
+                    <div class="col-md-12 bg-white">
+                        <div class="form-group">
+                            <label class="col-sm-3 text-right">Sân bóng:</label>
+                            <div class="col-sm-9">
+                                <strong class="ng-binding"></strong>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 text-right">Thời gian:</label>
+                            <div class="col-sm-9 ng-binding"
+                                 ng-bind-html="onCreatingMatchRecord.timeInfo | to_trusted"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 text-right">Đội bóng:</label>
+                            <div class="col-sm-9 ng-binding">
+
+                            </div>
+                        </div>
+
+                        <div class="form-group form-group-sm">
+                            <label class="control-label col-sm-3">Trình độ <span class="required">*</span>:</label>
+                            <div class="col-sm-9 mfr-tags-holder">
+                                <select class="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required"
+                                        ng-model="onCreatingMatchRecord.levelId" required="" aria-required="true">
+                                    <option value="? undefined:undefined ?"></option>
+                                    <option value="1">Mới chơi</option>
+                                    <option value="5">Trung bình yếu</option>
+                                    <option value="2">Trung bình</option>
+                                    <option value="3">Trung bình khá</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">Lời mời <span class="required">*</span></label>
+                            <div class="col-sm-9">
+                                <textarea required="" ng-model="onCreatingMatchRecord.message" rows="3" cols="5"
+                                          class="form-control input-sm width-100p ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required"
+                                          placeholder="Lời mời giao lưu"></textarea>
+                            </div> <!-- /.col -->
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-12 text-right">
+                            <span>
+                                <span class="required">* </span> Thông tin bắt buộc
+                            </span>
+                            </div>
+                        </div>
+                        <div class="alert alert-danger ng-hide" ng-show="vm.errorMessage">
+                            <strong>Lỗi!</strong>
+                            <div ng-bind-html="vm.errorMessage | to_trusted" class="ng-binding"></div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12 text-right">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                                <button class="btn btn-primary btn-primary-extra" type="button"
+                                        ng-disabled="!matchPostForm.$valid"
+                                        data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý..."
+                                        ng-click="createMatch($event, matchPostForm)" disabled="disabled">
+                                    <i class="fa fa-send"></i>
+                                    Đăng
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalBookingPriceSetting" class="modal modal-styled fade ng-scope" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Cập nhật giá</h4>
+                </div>
+                <form method="post" class="ng-pristine ng-valid">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <strong class="ng-binding"> - Thứ Hai ngày 29/04/2019</strong>
+                        </div>
+                        <div class="form-group">
+                            <label>Thời gian: </label>
+                            <input type="text" class="form-control ng-pristine ng-untouched ng-valid ng-empty"
+                                   readonly="" ng-model="onChangingPriceBookingRecord.formattedStartTime">
+                        </div>
+                        <div class="form-group">
+                            <label>Giá hiện tại:</label>
+                            <strong class="ng-binding"></strong>
+                        </div>
+                        <div class="form-group">
+                            <label class=" control-label">Giá mới: (<span class="red">*</span>)</label>
+                            <input type="text" onkeydown="return isNumberKey(event)" ui-number-mask="0"
+                                   class="form-control ng-pristine ng-untouched ng-valid ng-empty"
+                                   ng-model="onChangingPriceBookingRecord.newPrice">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            Thoát
+                        </button>
+                        <button type="submit" class="btn btn-primary"
+                                data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý..."
+                                ng-click="updatePriceOnBookingRecord($event);">
+                            Cập nhật
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalDeleteRepeatBookingConfirmation" class="modal modal-styled fade ng-scope" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Xác nhận hủy đặt sân</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label class="control-label col-sm-12"><input
+                                ng-model="onDeleteBookingRecord.isCancelRepeatDate" type="radio" value="1"
+                                class="ng-pristine ng-untouched ng-valid ng-empty" name="10"> Hủy lịch đặt ngày <b
+                                class="ng-binding"></b></label>
+                        <label class="control-label col-sm-12"><input
+                                ng-model="onDeleteBookingRecord.isCancelRepeatDate" type="radio" value="0"
+                                class="ng-pristine ng-untouched ng-valid ng-empty" name="11"> Hủy toàn bộ lịch cố
+                            định</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Thoát
+                    </button>
+                    <!-- ngIf: onDeleteBookingRecord.bookingId>0 -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="fragments/footer::footer"></footer>
+<div th:replace="fragments/modals::modals"></div>
+<script th:src="@{/js/my-custom/bookings.js}"></script>
+</body>
+</html>

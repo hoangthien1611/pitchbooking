@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TimeFrame {
 
-    private String timeString;
+    private String fromTime;
 
-    private int timeValue;
+    private String toTime;
 }

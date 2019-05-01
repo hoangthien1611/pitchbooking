@@ -1,21 +1,23 @@
 package com.hoangthien.pitchbooking.services;
 
+import com.hoangthien.pitchbooking.constants.Defines;
+import com.hoangthien.pitchbooking.dto.ChildPitchDTO;
 import com.hoangthien.pitchbooking.dto.PitchDTO;
-import com.hoangthien.pitchbooking.entities.District;
-import com.hoangthien.pitchbooking.entities.Pitch;
-import com.hoangthien.pitchbooking.entities.User;
-import com.hoangthien.pitchbooking.entities.YardSurface;
+import com.hoangthien.pitchbooking.dto.TimeFrame;
+import com.hoangthien.pitchbooking.dto.TimeFrameBooking;
+import com.hoangthien.pitchbooking.entities.*;
 import com.hoangthien.pitchbooking.exception.PitchBookingException;
 import com.hoangthien.pitchbooking.mapper.PitchMapper;
-import com.hoangthien.pitchbooking.repositories.DistrictRepository;
-import com.hoangthien.pitchbooking.repositories.PitchRepository;
-import com.hoangthien.pitchbooking.repositories.UserRepository;
-import com.hoangthien.pitchbooking.repositories.YardSurfaceRepository;
+import com.hoangthien.pitchbooking.repositories.*;
+import com.hoangthien.pitchbooking.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PitchServiceImpl implements PitchService {
@@ -31,6 +33,9 @@ public class PitchServiceImpl implements PitchService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ChildPitchRepository childPitchRepository;
 
     @Autowired
     private PitchMapper pitchMapper;
@@ -105,5 +110,88 @@ public class PitchServiceImpl implements PitchService {
         }
 
         return pitchRepository.save(pitch);
+    }
+
+    @Override
+    public List<TimeFrameBooking> getTimeFrameBookingsByDate(Long pitchId, LocalDate dateBooking) {
+        List<ChildPitch> childPitches = childPitchRepository.findAllByPitchId(pitchId);
+        List<TimeFrame> timeFrames = TimeUtils.generateTimeFrameList(Defines.TIME_START, Defines.TIME_END);
+        List<TimeFrameBooking> timeFrameBookings = timeFrames.stream()
+                .map(timeFrame -> {
+                    TimeFrameBooking timeFrameBooking = new TimeFrameBooking();
+                    timeFrameBooking.setTimeFrame(timeFrame);
+
+                    List<ChildPitchDTO> childPitchDTOS = childPitches.stream()
+                            .map(childPitch -> {
+                                ChildPitchDTO childPitchDTO = new ChildPitchDTO();
+                                childPitchDTO.setId(childPitch.getId());
+                                childPitchDTO.setName(childPitch.getName());
+
+                                Optional<SpecificPitchesCost> optional = childPitch.getGroupSpecificPitches()
+                                        .getSpecificPitchesCosts()
+                                        .stream()
+                                        .filter(spCost ->
+                                                isTimeFrameInTimeRange(timeFrame, spCost.getFromTime(), spCost.getToTime()))
+                                        .filter(spCost ->
+                                                getGroupDaysIdFromLocalDate(dateBooking) == spCost.getGroupDays().getId())
+                                        .findFirst();
+                                if (optional.isPresent()) {
+                                    childPitchDTO.setCost(optional.get().getCost());
+                                }
+
+                                Optional<Booking> optionalBooking = childPitch.getBookings()
+                                        .stream()
+                                        .filter(bk ->
+                                                bk.getFromTime().equals(timeFrame.getFromTime()) && bk.getToTime().equals(timeFrame.getToTime()))
+                                        .findFirst();
+
+                                if (optionalBooking.isPresent()) {
+                                    childPitchDTO.setBooking(optionalBooking.get());
+                                }
+
+                                return childPitchDTO;
+                            })
+                            .collect(Collectors.toList());
+
+                    timeFrameBooking.setChildPitches(childPitchDTOS);
+                    return timeFrameBooking;
+                })
+                .collect(Collectors.toList());
+        return timeFrameBookings;
+    }
+
+    private boolean isTimeFrameInTimeRange(TimeFrame timeFrame, String timeStart, String timeEnd) {
+        try {
+            int timeStartInt = Integer.parseInt(timeStart.split(":")[0]);
+            int timeEndInt = Integer.parseInt(timeEnd.split(":")[0]);
+            int fromTimeInt = Integer.parseInt(timeFrame.getFromTime().split(":")[0]);
+            int toTimeInt = Integer.parseInt(timeFrame.getToTime().split(":")[0]);
+
+            return fromTimeInt >= timeStartInt && toTimeInt <= timeEndInt;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private int getGroupDaysIdFromLocalDate(LocalDate localDate) {
+        String dayOfWeek = localDate.getDayOfWeek().name();
+        int result = 0;
+
+        switch (dayOfWeek) {
+            case "MONDAY":
+            case "TUESDAY":
+            case "WEDNESDAY":
+            case "THURSDAY":
+            case "FRIDAY":
+                result = 1;
+                break;
+            case "SATURDAY":
+                result = 2;
+                break;
+            case "SUNDAY":
+                result = 3;
+                break;
+        }
+        return result;
     }
 }

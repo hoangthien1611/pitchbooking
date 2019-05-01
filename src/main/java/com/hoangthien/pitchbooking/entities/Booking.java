@@ -18,6 +18,10 @@ public class Booking {
 
     private String content;
 
+    private String orderName;
+
+    private String orderPhone;
+
     private LocalDate dateBooking;
 
     private String fromTime;

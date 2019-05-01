@@ -105,20 +105,32 @@
                                                                     </div>
 
                                                                     <form class="stadium-booking-form" th:id="${'form-'+ itemStat.index + '-' + childPitch.id}" style="display: none">
-                                                                        <div class="form-group">
-                                                                            <input type="text"
-                                                                                   class="form-control input-sm"
-                                                                                   placeholder="Tên Người đặt / Đội bóng">
+                                                                        <div class="form-group hide">
+                                                                            <input type="text" th:id="${'id-' + itemStat.index + '-' + childPitch.id}"
+                                                                                th:value="${childPitch.booking != null ? childPitch.booking.id : 0}">
+                                                                            <input type="text" th:id="${'dateBooking-' + itemStat.index + '-' + childPitch.id}"
+                                                                                th:value="${date}">
+                                                                            <input type="text" th:id="${'fromTime-' + itemStat.index + '-' + childPitch.id}"
+                                                                                th:value="${timeFrameBooking.timeFrame.fromTime}">
+                                                                            <input type="text" th:id="${'toTime-' + itemStat.index + '-' + childPitch.id}"
+                                                                                th:value="${timeFrameBooking.timeFrame.toTime}">
+                                                                            <input type="text" th:id="${'cost-' + itemStat.index + '-' + childPitch.id}"
+                                                                                   th:value="${childPitch.cost}">
                                                                         </div>
                                                                         <div class="form-group">
-                                                                            <input type="text"
-                                                                                   class="form-control input-sm"
-                                                                                   placeholder="Điện thoại liên hệ">
+                                                                            <input type="text" th:id="${'orderName-' + itemStat.index + '-' + childPitch.id}"
+                                                                                   class="form-control input-sm" placeholder="Tên Người đặt / Đội bóng"
+                                                                                   th:value="${childPitch.booking != null ? childPitch.booking.orderName : ''}">
                                                                         </div>
                                                                         <div class="form-group">
-                                                                            <input type="text"
-                                                                                   class="form-control input-sm"
-                                                                                   placeholder="Ghi chú">
+                                                                            <input type="text" th:id="${'orderPhone-' + itemStat.index + '-' + childPitch.id}"
+                                                                                   class="form-control input-sm" placeholder="Điện thoại liên hệ"
+                                                                                   th:value="${childPitch.booking != null ? childPitch.booking.orderPhone : ''}">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <input type="text" th:id="${'content-' + itemStat.index + '-' + childPitch.id}"
+                                                                                   class="form-control input-sm" placeholder="Ghi chú"
+                                                                                   th:value="${childPitch.booking != null ? childPitch.booking.content : ''}">
                                                                         </div>
                                                                         <div class="form-group text-left">
                                                                             <label>
@@ -127,13 +139,15 @@
                                                                             </label>
                                                                         </div>
                                                                         <div class="form-group text-right">
-                                                                            <button class="btn btn-success btn-sm">
+                                                                            <button type="button" class="btn btn-success btn-sm"
+                                                                                    th:onclick="'javascript:submitForm('+ ${itemStat.index + ',' + childPitch.id} +')'">
                                                                                 Lưu
                                                                             </button>
-                                                                            <button class="btn btn-danger btn-sm" th:if="${childPitch.booking != null}">
+                                                                            <button type="button" class="btn btn-danger btn-sm" th:if="${childPitch.booking != null}"
+                                                                                    th:onclick="'javascript:deleteBooking('+ ${itemStat.index + ',' + childPitch.id + ',' + childPitch.booking.id} + ')'">
                                                                                 Xóa
                                                                             </button>
-                                                                            <button type="button" class="btn btn-default btn-sm"
+                                                                            <button type="button" class="btn btn-default btn-sm" th:id="${'btn-close-form-'+ itemStat.index + '-' + childPitch.id}"
                                                                                     th:onclick="'javascript:closeForm('+ ${itemStat.index + ',' + childPitch.id} +')'">Đóng</button>
                                                                         </div>
 
@@ -166,161 +180,7 @@
         </div>
     </div>
 
-    <!--Modals-->
-    <div id="modalMatchFindingCreation" class="modal modal-styled fade ng-scope" style="display: none;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Đăng tìm đối</h4>
-                </div>
-                <form class="form-horizontal ng-pristine ng-invalid ng-invalid-required" name="matchPostForm">
-                    <br>
-                    <div class="col-md-12 bg-white">
-                        <div class="form-group">
-                            <label class="col-sm-3 text-right">Sân bóng:</label>
-                            <div class="col-sm-9">
-                                <strong class="ng-binding"></strong>
-                            </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label class="col-sm-3 text-right">Thời gian:</label>
-                            <div class="col-sm-9 ng-binding"
-                                 ng-bind-html="onCreatingMatchRecord.timeInfo | to_trusted"></div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-3 text-right">Đội bóng:</label>
-                            <div class="col-sm-9 ng-binding">
-
-                            </div>
-                        </div>
-
-                        <div class="form-group form-group-sm">
-                            <label class="control-label col-sm-3">Trình độ <span class="required">*</span>:</label>
-                            <div class="col-sm-9 mfr-tags-holder">
-                                <select class="form-control ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required"
-                                        ng-model="onCreatingMatchRecord.levelId" required="" aria-required="true">
-                                    <option value="? undefined:undefined ?"></option>
-                                    <option value="1">Mới chơi</option>
-                                    <option value="5">Trung bình yếu</option>
-                                    <option value="2">Trung bình</option>
-                                    <option value="3">Trung bình khá</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="control-label col-sm-3">Lời mời <span class="required">*</span></label>
-                            <div class="col-sm-9">
-                                <textarea required="" ng-model="onCreatingMatchRecord.message" rows="3" cols="5"
-                                          class="form-control input-sm width-100p ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required"
-                                          placeholder="Lời mời giao lưu"></textarea>
-                            </div> <!-- /.col -->
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-12 text-right">
-                            <span>
-                                <span class="required">* </span> Thông tin bắt buộc
-                            </span>
-                            </div>
-                        </div>
-                        <div class="alert alert-danger ng-hide" ng-show="vm.errorMessage">
-                            <strong>Lỗi!</strong>
-                            <div ng-bind-html="vm.errorMessage | to_trusted" class="ng-binding"></div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-12 text-right">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-                                <button class="btn btn-primary btn-primary-extra" type="button"
-                                        ng-disabled="!matchPostForm.$valid"
-                                        data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý..."
-                                        ng-click="createMatch($event, matchPostForm)" disabled="disabled">
-                                    <i class="fa fa-send"></i>
-                                    Đăng
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div id="modalBookingPriceSetting" class="modal modal-styled fade ng-scope" style="display: none;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Cập nhật giá</h4>
-                </div>
-                <form method="post" class="ng-pristine ng-valid">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <strong class="ng-binding"> - Thứ Hai ngày 29/04/2019</strong>
-                        </div>
-                        <div class="form-group">
-                            <label>Thời gian: </label>
-                            <input type="text" class="form-control ng-pristine ng-untouched ng-valid ng-empty"
-                                   readonly="" ng-model="onChangingPriceBookingRecord.formattedStartTime">
-                        </div>
-                        <div class="form-group">
-                            <label>Giá hiện tại:</label>
-                            <strong class="ng-binding"></strong>
-                        </div>
-                        <div class="form-group">
-                            <label class=" control-label">Giá mới: (<span class="red">*</span>)</label>
-                            <input type="text" onkeydown="return isNumberKey(event)" ui-number-mask="0"
-                                   class="form-control ng-pristine ng-untouched ng-valid ng-empty"
-                                   ng-model="onChangingPriceBookingRecord.newPrice">
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">
-                            Thoát
-                        </button>
-                        <button type="submit" class="btn btn-primary"
-                                data-loading-text="&lt;i class=&#39;fa fa-spinner fa-spin &#39;&gt;&lt;/i&gt; Đang xử lý..."
-                                ng-click="updatePriceOnBookingRecord($event);">
-                            Cập nhật
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <div id="modalDeleteRepeatBookingConfirmation" class="modal modal-styled fade ng-scope" style="display: none;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Xác nhận hủy đặt sân</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group row">
-                        <label class="control-label col-sm-12"><input
-                                ng-model="onDeleteBookingRecord.isCancelRepeatDate" type="radio" value="1"
-                                class="ng-pristine ng-untouched ng-valid ng-empty" name="10"> Hủy lịch đặt ngày <b
-                                class="ng-binding"></b></label>
-                        <label class="control-label col-sm-12"><input
-                                ng-model="onDeleteBookingRecord.isCancelRepeatDate" type="radio" value="0"
-                                class="ng-pristine ng-untouched ng-valid ng-empty" name="11"> Hủy toàn bộ lịch cố
-                            định</label>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">
-                        Thoát
-                    </button>
-                    <!-- ngIf: onDeleteBookingRecord.bookingId>0 -->
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 <footer th:replace="fragments/footer::footer"></footer>
 <div th:replace="fragments/modals::modals"></div>

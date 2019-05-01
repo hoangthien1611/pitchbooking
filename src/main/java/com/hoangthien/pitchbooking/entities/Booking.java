@@ -28,7 +28,9 @@ public class Booking {
 
     private String toTime;
 
-    private boolean status;
+    private int cost;
+
+    private boolean accepted;
 
     private LocalDateTime timeCreated;
 

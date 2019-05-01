@@ -12,10 +12,6 @@ $(document).ready(function() {
         window.location.href = url + "?date=" + date;
     });
 
-    // $(".btn-close-form").on("click", function () {
-    //     alert('close');
-    //     $(this).parent('div.form-group').closest('form').hide();
-    // });
 });
 
 function showDate() {
@@ -37,10 +33,97 @@ function openForm(index, childPitchId) {
 }
 
 function closeForm(index, childPitchId) {
-    console.log('index:' + index + "-childPitchId:" + childPitchId);
     var formId = "form-" + index + "-" + childPitchId;
     var textId = "text-info-" + index + "-" + childPitchId;
 
     $(`#${formId}`).hide();
     $(`#${textId}`).show();
+}
+
+function submitForm(index, childPitchId) {
+    var formId = "form-" + index + "-" + childPitchId;
+    var textId = "text-info-" + index + "-" + childPitchId;
+    var btnCloseForm = "btn-close-form-" + index + "-" + childPitchId;
+    var id = $(`#id-${index}-${childPitchId}`).val();
+    var dateBookingString = $(`#dateBooking-${index}-${childPitchId}`).val();
+    var fromTime = $(`#fromTime-${index}-${childPitchId}`).val();
+    var toTime = $(`#toTime-${index}-${childPitchId}`).val();
+    var orderName = $(`#orderName-${index}-${childPitchId}`).val();
+    var orderPhone = $(`#orderPhone-${index}-${childPitchId}`).val();
+    var content = $(`#content-${index}-${childPitchId}`).val();
+    var cost = $(`#cost-${index}-${childPitchId}`).val();
+
+    if (!orderName || !orderPhone || !content) {
+        alert("Vui lòng nhập đầy đủ thông tin phù hợp!");
+    } else {
+        var data = {
+            id,
+            dateBookingString,
+            fromTime,
+            toTime,
+            orderName,
+            orderPhone,
+            content,
+            childPitchId,
+            cost
+        }
+
+        $.ajax({
+            type: 'post',
+            url: '/booking/',
+            data: data,
+            success: function (data) {
+                if (data) {
+                    alert('Lưu thành công');
+                    if (id == 0) {
+                        var btnDel = "<button type=\"button\" class=\"btn btn-danger btn-sm\" onclick=\"deleteBooking(" + index + "," + childPitchId + "," + data.id + ")\">"
+                            + "Xóa"
+                            + "</button>";
+                        $(btnDel).insertBefore(`#${btnCloseForm}`);
+                        $(`#id-${index}-${childPitchId}`).val(data.id);
+                    }
+
+                    var textInfo = "<div style=\"color: red\">Đã có người đặt, click để xem</div>";
+
+                    $(`#${textId}`).html(textInfo);
+                    $(`#${formId}`).hide();
+                    $(`#${textId}`).show();
+                } else {
+                    alert("Lưu thất bại!");
+                }
+            },
+            error: function () {
+                alert('Error! Có lỗi xảy ra!');
+            }
+        });
+    }
+}
+
+function deleteBooking(index, childPitchId, bookingId) {
+    $.ajax({
+        type: 'delete',
+        url: '/booking/' + bookingId,
+        success: function (data) {
+            if (data) {
+                alert('Xóa thành công');
+                $(`#id-${index}-${childPitchId}`).val('0');
+                $(`#orderName-${index}-${childPitchId}`).val('');
+                $(`#orderPhone-${index}-${childPitchId}`).val('');
+                $(`#content-${index}-${childPitchId}`).val('');
+                $(this).remove();
+
+                var textInfo = "<div>Đang trống, click để cập nhật</div>";
+                var textId = "text-info-" + index + "-" + childPitchId;
+                $(`#${textId}`).html(textInfo);
+
+                var btnCloseForm = "btn-close-form-" + index + "-" + childPitchId;
+                $(`#${btnCloseForm}`).prev().remove();
+            } else {
+                alert("Xóa thất bại!");
+            }
+        },
+        error: function () {
+            alert('Error! Có lỗi xảy ra!');
+        }
+    });
 }

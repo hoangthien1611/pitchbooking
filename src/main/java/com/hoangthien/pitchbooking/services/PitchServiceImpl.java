@@ -131,9 +131,8 @@ public class PitchServiceImpl implements PitchService {
                                         .getSpecificPitchesCosts()
                                         .stream()
                                         .filter(spCost ->
-                                                isTimeFrameInTimeRange(timeFrame, spCost.getFromTime(), spCost.getToTime()))
-                                        .filter(spCost ->
-                                                getGroupDaysIdFromLocalDate(dateBooking) == spCost.getGroupDays().getId())
+                                                isTimeFrameInTimeRange(timeFrame, spCost.getFromTime(), spCost.getToTime())
+                                                && getGroupDaysIdFromLocalDate(dateBooking) == spCost.getGroupDays().getId())
                                         .findFirst();
                                 if (optional.isPresent()) {
                                     childPitchDTO.setCost(optional.get().getCost());
@@ -142,7 +141,10 @@ public class PitchServiceImpl implements PitchService {
                                 Optional<Booking> optionalBooking = childPitch.getBookings()
                                         .stream()
                                         .filter(bk ->
-                                                bk.getFromTime().equals(timeFrame.getFromTime()) && bk.getToTime().equals(timeFrame.getToTime()))
+                                                bk.getFromTime().equals(timeFrame.getFromTime())
+                                                        && bk.getToTime().equals(timeFrame.getToTime())
+                                                        && bk.isAccepted()
+                                                        && bk.getDateBooking().isEqual(dateBooking))
                                         .findFirst();
 
                                 if (optionalBooking.isPresent()) {

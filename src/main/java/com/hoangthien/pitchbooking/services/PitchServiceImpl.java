@@ -11,6 +11,8 @@ import com.hoangthien.pitchbooking.mapper.PitchMapper;
 import com.hoangthien.pitchbooking.repositories.*;
 import com.hoangthien.pitchbooking.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -160,6 +162,17 @@ public class PitchServiceImpl implements PitchService {
                 })
                 .collect(Collectors.toList());
         return timeFrameBookings;
+    }
+
+    @Override
+    public Page<Pitch> getAllPageable(int offset) {
+        return pitchRepository.findAll(PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    }
+
+    @Transactional
+    @Override
+    public Page<Pitch> getAllByDistrictIdPageable(Long id, int offset) {
+        return pitchRepository.findAllByDistrictId(id, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
     }
 
     private boolean isTimeFrameInTimeRange(TimeFrame timeFrame, String timeStart, String timeEnd) {

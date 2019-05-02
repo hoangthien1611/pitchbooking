@@ -5,12 +5,16 @@ import com.hoangthien.pitchbooking.constants.MessageType;
 import com.hoangthien.pitchbooking.dto.Message;
 import com.hoangthien.pitchbooking.dto.PitchDTO;
 import com.hoangthien.pitchbooking.entities.GroupSpecificPitches;
+import com.hoangthien.pitchbooking.entities.Pitch;
 import com.hoangthien.pitchbooking.entities.PitchType;
+import com.hoangthien.pitchbooking.exception.PitchBookingException;
 import com.hoangthien.pitchbooking.services.*;
+import com.hoangthien.pitchbooking.utils.PitchBookingUtils;
 import com.hoangthien.pitchbooking.utils.TimeUtils;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -170,6 +174,49 @@ public class PitchController {
             log.error(e.getMessage());
             return "error/page_404";
         }
+    }
+
+    @GetMapping("/{path}")
+    public String getAll(Model model, @PathVariable("path") String path, @RequestParam(value = "pg", defaultValue = "1") String pg) {
+        log.info("GET: " + BASE_URL + "/" + path);
+        try {
+            int page = Integer.parseInt(pg);
+            int offset = (page - 1) * Defines.NUMBER_OF_ROWS_PER_PAGE;
+            Page<Pitch> pagePitches;
+
+            Long districtId = PitchBookingUtils.getDistrictIdFromPathString(path);
+            if (districtId == null) {
+                throw new PitchBookingException("Path không hợp lệ!");
+            }
+
+            if (districtId == 0) {
+                pagePitches = pitchService.getAllPageable(offset);
+            } else {
+                pagePitches = pitchService.getAllByDistrictIdPageable(districtId, offset);
+            }
+
+
+            int totalPages = pagePitches.getTotalPages();
+            if (totalPages > 0) {
+                int pageEnd = (totalPages < 5) ? totalPages : 5;
+                int pageStart = 1;
+                if (page > 3) {
+                    pageEnd = ((page + 2) <= totalPages) ? (page + 2) : totalPages;
+                    pageStart = ((pageEnd - 4) < 1) ? 1 : (pageEnd - 4);
+                }
+                model.addAttribute("pageStart", pageStart);
+                model.addAttribute("pageEnd", pageEnd);
+            }
+
+            model.addAttribute("pitches", pagePitches);
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", totalPages);
+            model.addAttribute("path", path);
+            return "pitch/pitches";
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return "error/page_404";
+            }
     }
 
     private boolean isPitchTypeExistedInGroupSpecificPitches(Long pitchtypeId, List<GroupSpecificPitches> groupSpecificPitches) {

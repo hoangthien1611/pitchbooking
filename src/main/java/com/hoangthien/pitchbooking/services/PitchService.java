@@ -3,6 +3,7 @@ package com.hoangthien.pitchbooking.services;
 import com.hoangthien.pitchbooking.dto.PitchDTO;
 import com.hoangthien.pitchbooking.dto.TimeFrameBooking;
 import com.hoangthien.pitchbooking.entities.Pitch;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,4 +19,8 @@ public interface PitchService {
     Pitch updatePitch(PitchDTO pitchDTO);
 
     List<TimeFrameBooking> getTimeFrameBookingsByDate(Long pitchId, LocalDate dateBooking);
+
+    Page<Pitch> getAllPageable(int offset);
+
+    Page<Pitch> getAllByDistrictIdPageable(Long id, int offset);
 }

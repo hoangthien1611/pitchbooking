@@ -101,7 +101,7 @@ public class TeamController {
     public String getTeams(Model model, @RequestParam(value = "area", defaultValue = "0") String area,
                            @RequestParam(value = "level", defaultValue = "0") String level,
                            @RequestParam(value = "page", defaultValue = "1") String pg) {
-        log.info("GET: " + BASE_URL + "/list");
+        log.info("GET: " + BASE_URL + "/search");
 
         try {
             Page<Team> pages;

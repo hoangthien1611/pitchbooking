@@ -27,4 +27,13 @@ public class SpecificPitchesCost {
     @ManyToOne
     @JoinColumn(name = "groupSpecificPitchesId")
     private GroupSpecificPitches groupSpecificPitches;
+
+    public String getCostCommafy() {
+        String regex = "(\\d)(?=(\\d{3})+$)";
+        String costString = "" + cost;
+        if (costString.length() > 4) {
+            costString = costString.replaceAll(regex, "$1,");
+        }
+        return costString;
+    }
 }

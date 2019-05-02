@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping(PitchController.BASE_URL)
 @Log4j2
-public class PitchController {
+public class PitchController extends BaseController {
 
     public static final String BASE_URL = "/pitch";
 
@@ -54,6 +54,9 @@ public class PitchController {
 
     @Autowired
     private GroupSpecificPitchesService groupSpecificPitchesService;
+
+    @Autowired
+    private SpecificPitchesCostService specificPitchesCostService;
 
     @GetMapping("/management/create")
     public String create(Model model) {
@@ -184,15 +187,11 @@ public class PitchController {
             int offset = (page - 1) * Defines.NUMBER_OF_ROWS_PER_PAGE;
             Page<Pitch> pagePitches;
 
-            Long districtId = PitchBookingUtils.getDistrictIdFromPathString(path);
-            if (districtId == null) {
-                throw new PitchBookingException("Path không hợp lệ!");
-            }
-
-            if (districtId == 0) {
+            if (Defines.DISTRICT_PATH_ALL.equals(path)) {
                 pagePitches = pitchService.getAllPageable(offset);
             } else {
-                pagePitches = pitchService.getAllByDistrictIdPageable(districtId, offset);
+                pagePitches = pitchService.getAllByDistrictPathPageable(path, offset);
+                model.addAttribute("districtName", districtService.getDistrictDTOByPath(path).getName());
             }
 
 
@@ -208,10 +207,14 @@ public class PitchController {
                 model.addAttribute("pageEnd", pageEnd);
             }
 
-            model.addAttribute("pitches", pagePitches);
+            model.addAttribute("pitches", pagePitches.getContent());
             model.addAttribute("currentPage", page);
             model.addAttribute("totalPages", totalPages);
             model.addAttribute("path", path);
+            model.addAttribute("pitchTypes", pitchTypeService.getAll());
+            model.addAttribute("yardSurfaces", yardSurfaceService.getAllYardSurfaces());
+            model.addAttribute("totalPitches", pagePitches.getTotalElements());
+            model.addAttribute("costs", specificPitchesCostService.getAllCostsByDistrictPath(path));
             return "pitch/pitches";
         } catch (Exception e) {
             log.error(e.getMessage());

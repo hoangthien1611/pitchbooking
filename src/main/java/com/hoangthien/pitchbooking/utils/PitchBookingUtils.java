@@ -1,36 +1,20 @@
 package com.hoangthien.pitchbooking.utils;
 
-import org.apache.commons.lang3.StringUtils;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class PitchBookingUtils {
 
-    public static Long getDistrictIdFromPathString(String path) {
-        Long result = null;
-        path = path.toLowerCase();
-
-        if (!StringUtils.isEmpty(path)) {
-            switch (path) {
-                case "all":
-                    result = 0L;
-                    break;
-                case "hai-chau":
-                    result = 1L;
-                    break;
-                case "lien-chieu":
-                    result = 2L;
-                    break;
-                case "thanh-khue":
-                    result = 3L;
-                    break;
-                case "ngu-hanh-son":
-                    result = 4L;
-                    break;
-                case "hoa-vang":
-                    result = 5L;
-                    break;
-            }
-        }
-
-        return result;
+    public static List<String> getListCostCommafyFromListCostInt(List<Integer> list) {
+        return list.stream()
+                .map(integer -> {
+                    String regex = "(\\d)(?=(\\d{3})+$)";
+                    String costCommafy = "" + integer;
+                    if (costCommafy.length() > 4) {
+                        return costCommafy.replaceAll(regex, "$1,");
+                    }
+                    return costCommafy;
+                })
+                .collect(Collectors.toList());
     }
 }

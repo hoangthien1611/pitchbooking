@@ -20,6 +20,8 @@ public class District {
 
     private String name;
 
+    private String path;
+
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "area",
             orphanRemoval = true,

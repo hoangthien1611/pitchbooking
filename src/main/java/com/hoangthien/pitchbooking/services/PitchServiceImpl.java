@@ -10,6 +10,7 @@ import com.hoangthien.pitchbooking.exception.PitchBookingException;
 import com.hoangthien.pitchbooking.mapper.PitchMapper;
 import com.hoangthien.pitchbooking.repositories.*;
 import com.hoangthien.pitchbooking.utils.TimeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -171,8 +172,8 @@ public class PitchServiceImpl implements PitchService {
 
     @Transactional
     @Override
-    public Page<Pitch> getAllByDistrictIdPageable(Long id, int offset) {
-        return pitchRepository.findAllByDistrictId(id, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    public Page<Pitch> getAllByDistrictPathPageable(String path, int offset) {
+        return pitchRepository.findAllByDistrictPath(path, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
     }
 
     private boolean isTimeFrameInTimeRange(TimeFrame timeFrame, String timeStart, String timeEnd) {

@@ -6,4 +6,6 @@ public class Defines {
     public static final int TIME_START = 5;
 
     public static final int TIME_END = 22;
+
+    public static final String DISTRICT_PATH_ALL = "all";
 }

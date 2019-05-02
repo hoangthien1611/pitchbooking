@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "pitch")
@@ -51,4 +52,9 @@ public class Pitch implements Serializable {
     @ManyToOne
     @JoinColumn(name = "districtId")
     private District district;
+
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "pitch",
+            cascade = CascadeType.ALL)
+    private List<GroupSpecificPitches> groupSpecificPitches;
 }

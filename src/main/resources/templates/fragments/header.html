@@ -55,46 +55,15 @@
                     </li>
                     <li style="display:none"></li>
                     <li class="navbar-stadium">
-                        <a href="/dat-san-nhanh" title="Sân cỏ nhân tạo tại Hà Nội, sân cỏ nhân tạo tại HCM"><i
+                        <a href="/pitch/all" title="Sân cỏ nhân tạo, Sân 5 người, 7 người..."><i
                                 class="fa fa-futbol-o" aria-hidden="true"></i>Đặt sân nhanh</a>
                         <ul class="navbar-nav-dropdown">
-                            <li>
-                                <a href="/san-bong-tai-ha-noi" title="Sân bóng tại Hà Nội">
+                            <li th:each="district:${districts}">
+                                <a th:href="@{/pitch/__${district.path}__}">
                                     <i class="fa fa-futbol-o" aria-hidden="true"></i>
-                                    Sân bóng tại Hà Nội
+                                    <th:block th:text="${'Sân bóng tại ' + district.name}"></th:block>
                                 </a>
                             </li>
-                            <li>
-                                <a href="/san-bong-tai-ho-chi-minh" title="Sân bóng tại Hồ Chí Minh">
-                                    <i class="fa fa-futbol-o" aria-hidden="true"></i>
-                                    Sân bóng tại HCM
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/san-bong-tai-da-nang" title="Sân bóng tại Đà nẵng">
-                                    <i class="fa fa-futbol-o" aria-hidden="true"></i>
-                                    Sân bóng tại Đà nẵng
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/san-tennis" title="Sân Tennis">
-                                    <i class="fa fa-futbol-o" aria-hidden="true"></i>
-                                    Sân Tennis
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/san-cau-long" title="Sân cầu lông">
-                                    <i class="fa fa-futbol-o" aria-hidden="true"></i>
-                                    Sân cầu lông
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/clb-bong-ban" title="Câu lạc bộ bóng bàn">
-                                    <i class="fa fa-futbol-o" aria-hidden="true"></i>
-                                    Câu lạc bộ bóng bàn
-                                </a>
-                            </li>
-                            <li style="display:none">View more</li>
                         </ul>
                     </li>
 

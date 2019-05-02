@@ -28,7 +28,7 @@ import java.util.List;
 @Controller
 @RequestMapping(TeamController.BASE_URL)
 @Log4j2
-public class TeamController {
+public class TeamController extends BaseController {
 
     public static final String BASE_URL = "/team";
 
@@ -144,7 +144,7 @@ public class TeamController {
                 model.addAttribute("pageEnd", pageEnd);
             }
 
-            District district = new District(0L, "Tất cả", new ArrayList<>(), new ArrayList<>());
+            District district = new District(0L, "Tất cả", "all", new ArrayList<>(), new ArrayList<>());
             List<District> listDistricts = districtService.getAllDistricts();
             listDistricts.add(0, district);
 

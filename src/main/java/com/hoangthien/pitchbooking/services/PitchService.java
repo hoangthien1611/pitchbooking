@@ -22,5 +22,5 @@ public interface PitchService {
 
     Page<Pitch> getAllPageable(int offset);
 
-    Page<Pitch> getAllByDistrictIdPageable(Long id, int offset);
+    Page<Pitch> getAllByDistrictPathPageable(String path, int offset);
 }

@@ -39,14 +39,15 @@
                     <div class="sidebar sidebar-tim-doi ">
                         <ul class="list-left-links list-left-check">
                             <li>
-                                <strong>Gi&#225; thu&#234; / trận</strong>
+                                <strong>Gía thuê / trận</strong>
                                 <ul>
-                                    <li th:each="cost:${costs}" onclick="location.href='';">
+                                    <li th:each="cost:${costs}" th:onclick="'javascript:goToUrl(\''+ 'inputCost-' + ${cost.cost} + '\',\'c\',\'' + ${cost.cost} + '\')'">
                                         <div class="checkbox">
                                             <label>
-                                                <input id="fo" name="fo" type="checkbox" value="true"/>
+                                                <input id="fo" name="fo" type="checkbox" th:id="${'inputCost-' + cost.cost}"
+                                                       th:checked="${cValue.contains('' + cost.cost) ? true : false}"/>
                                                 <input name="fo" type="hidden" value="false"/>
-                                                <th:block th:text="${cost}"></th:block>
+                                                <th:block th:text="${cost.costCommafy}"></th:block>
                                             </label>
                                         </div>
                                     </li>
@@ -105,7 +106,7 @@
                                 <button class="btn btn-primary btn-primary-extra col-md-6" type="submit"><i
                                         class="fa fa-search" aria-hidden="true"></i>Tìm
                                 </button>
-                                <a href="/san-bong-tai-ha-noi" class="btn btn-default col-md-5 pull-right"><i
+                                <a href="/pitch/all" class="btn btn-default col-md-5 pull-right"><i
                                         class="fa fa-refresh" aria-hidden="true"></i>&nbsp;Tất cả</a>
                             </div>
                         </form>
@@ -133,7 +134,7 @@
                                         <th:block th:each="pitches:${pitch.groupSpecificPitches}">
                                         <p><strong th:text="${'Giá thuê sân ' + pitches.pitchType.name}"></strong></p>
                                             <th:block th:each="cost:${pitches.specificPitchesCosts}">
-                                                <p><th:block th:text="${cost.fromTime + ' - ' + cost.toTime}"></th:block>
+                                                <p><th:block th:text="${cost.fromTime + ' - ' + cost.toTime + ', ' + cost.groupDays.name}"></th:block>
                                                     <span class="price-san"><th:block th:text="${cost.getCostCommafy()}"></th:block><sup>vnđ</sup></span></p>
                                             </th:block>
                                         </th:block>
@@ -178,5 +179,6 @@
 
 <footer th:replace="fragments/footer::footer"></footer>
 <div th:replace="fragments/modals::modals"></div>
+<script th:src="@{/js/my-custom/publicPitch.js}"></script>
 </body>
 </html>

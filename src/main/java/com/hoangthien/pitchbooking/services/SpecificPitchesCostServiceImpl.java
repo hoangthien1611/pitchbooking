@@ -1,6 +1,7 @@
 package com.hoangthien.pitchbooking.services;
 
 import com.hoangthien.pitchbooking.constants.Defines;
+import com.hoangthien.pitchbooking.dto.Cost;
 import com.hoangthien.pitchbooking.dto.SpecificPitchesCostDTO;
 import com.hoangthien.pitchbooking.entities.GroupDays;
 import com.hoangthien.pitchbooking.entities.GroupSpecificPitches;
@@ -85,7 +86,7 @@ public class SpecificPitchesCostServiceImpl implements SpecificPitchesCostServic
     }
 
     @Override
-    public List<String> getAllCostsByDistrictPath(String path) {
+    public List<Cost> getAllCostsByDistrictPath(String path) {
         List<Integer> list = new ArrayList<>();
 
         if (Defines.DISTRICT_PATH_ALL.equals(path)) {
@@ -97,6 +98,10 @@ public class SpecificPitchesCostServiceImpl implements SpecificPitchesCostServic
                     .findAllDistinctCostsByDistrictPath(path);
         }
 
-        return PitchBookingUtils.getListCostCommafyFromListCostInt(list);
+        return list.stream()
+                .map(integer -> {
+                    return new Cost(integer, PitchBookingUtils.getCostCommafy(integer));
+                })
+                .collect(Collectors.toList());
     }
 }

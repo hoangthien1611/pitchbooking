@@ -180,7 +180,8 @@ public class PitchController extends BaseController {
     }
 
     @GetMapping("/{path}")
-    public String getAll(Model model, @PathVariable("path") String path, @RequestParam(value = "pg", defaultValue = "1") String pg) {
+    public String search(Model model, @PathVariable("path") String path, @RequestParam(value = "pg", defaultValue = "1") String pg,
+                         @RequestParam(value = "c", defaultValue = "") String cValue) {
         log.info("GET: " + BASE_URL + "/" + path);
         try {
             int page = Integer.parseInt(pg);
@@ -215,6 +216,7 @@ public class PitchController extends BaseController {
             model.addAttribute("yardSurfaces", yardSurfaceService.getAllYardSurfaces());
             model.addAttribute("totalPitches", pagePitches.getTotalElements());
             model.addAttribute("costs", specificPitchesCostService.getAllCostsByDistrictPath(path));
+            model.addAttribute("cValue", cValue);
             return "pitch/pitches";
         } catch (Exception e) {
             log.error(e.getMessage());

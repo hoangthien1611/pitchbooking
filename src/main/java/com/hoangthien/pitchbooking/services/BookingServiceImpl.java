@@ -1,19 +1,28 @@
 package com.hoangthien.pitchbooking.services;
 
+import com.hoangthien.pitchbooking.constants.Defines;
+import com.hoangthien.pitchbooking.dto.BookingCheck;
 import com.hoangthien.pitchbooking.dto.BookingDTO;
+import com.hoangthien.pitchbooking.dto.TimeFrame;
 import com.hoangthien.pitchbooking.entities.Booking;
 import com.hoangthien.pitchbooking.entities.ChildPitch;
+import com.hoangthien.pitchbooking.entities.SpecificPitchesCost;
 import com.hoangthien.pitchbooking.entities.User;
 import com.hoangthien.pitchbooking.exception.PitchBookingException;
 import com.hoangthien.pitchbooking.mapper.BookingMapper;
 import com.hoangthien.pitchbooking.repositories.BookingRepository;
 import com.hoangthien.pitchbooking.repositories.ChildPitchRepository;
+import com.hoangthien.pitchbooking.repositories.SpecificPitchesCostRepository;
 import com.hoangthien.pitchbooking.repositories.UserRepository;
 import com.hoangthien.pitchbooking.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingServiceImpl implements BookingService {
@@ -26,6 +35,9 @@ public class BookingServiceImpl implements BookingService {
 
     @Autowired
     private ChildPitchRepository childPitchRepository;
+
+    @Autowired
+    private SpecificPitchesCostRepository specificPitchesCostRepository;
 
     @Autowired
     private BookingMapper bookingMapper;
@@ -75,5 +87,36 @@ public class BookingServiceImpl implements BookingService {
                 .findById(id)
                 .orElseThrow(() -> new PitchBookingException("Booking not found!"));
         bookingRepository.deleteById(id);
+    }
+
+    @Override
+    public List<BookingCheck> getBookingCheckList(Long pitchesCostId, LocalDate date) {
+
+        List<BookingCheck> bookingChecks = new ArrayList<>();
+
+        SpecificPitchesCost specificPitchesCost = specificPitchesCostRepository
+                .findById(pitchesCostId)
+                .orElseThrow(() -> new PitchBookingException("Không tìm thấy PitchesCost"));
+
+        List<Booking> bookings = bookingRepository.findAllByPitchesCostIdAndDateBooking(pitchesCostId, date);
+
+        int fromTime = TimeUtils.getTimeIntFromString(specificPitchesCost.getFromTime());
+        int toTime = TimeUtils.getTimeIntFromString(specificPitchesCost.getToTime());
+        List<TimeFrame> timeFrames = TimeUtils.generateTimeFrameList(fromTime, toTime);
+
+        return timeFrames.stream()
+                .map(timeFrame -> {
+                    BookingCheck bookingCheck = new BookingCheck();
+                    bookingCheck.setTimeFrame(timeFrame);
+                    bookingCheck.setDateBooking(date);
+
+                    List<Booking> bookedList = bookings.stream()
+                            .filter(booking -> booking.getFromTime().equals(timeFrame.getFromTime())
+                                    && booking.getToTime().equals(timeFrame.getToTime()))
+                            .collect(Collectors.toList());
+                    bookingCheck.setAvailable(bookedList.size() < specificPitchesCost.getGroupSpecificPitches().getChildPitches().size());
+                    return bookingCheck;
+                })
+                .collect(Collectors.toList());
     }
 }

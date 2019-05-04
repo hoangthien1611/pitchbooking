@@ -252,6 +252,7 @@ public class PitchController extends BaseController {
         try {
             Long pitchId = Long.valueOf(Integer.parseInt(pitch));
             model.addAttribute("pitch", pitchService.getPitchById(pitchId));
+            model.addAttribute("today", LocalDate.now().toString());
             return "pitch/detail";
         } catch (Exception e) {
             log.error(e.getMessage());

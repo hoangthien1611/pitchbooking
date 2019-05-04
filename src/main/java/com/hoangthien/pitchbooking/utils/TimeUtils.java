@@ -27,6 +27,19 @@ public class TimeUtils {
                 .toString();
     }
 
+    public static int getTimeIntFromString(String hour) {
+        if (StringUtils.isEmpty(hour)) {
+            return 0;
+        }
+
+        String h = hour.split(":")[0];
+        try {
+            return Integer.parseInt(h);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
     public static List<String> getTimeStringsFromStartToEnd(Integer start, Integer end) {
         List<String> result = new ArrayList<>();
         for (int i = start; i <= end; i++) {

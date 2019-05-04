@@ -1,11 +1,15 @@
 package com.hoangthien.pitchbooking.controllers;
 
+import com.hoangthien.pitchbooking.dto.BookingCheck;
 import com.hoangthien.pitchbooking.dto.BookingDTO;
 import com.hoangthien.pitchbooking.services.BookingService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping(BookingController.BASE_URL)
@@ -41,5 +45,12 @@ public class BookingController {
             log.error(e.getMessage());
             return null;
         }
+    }
+
+    @GetMapping("/get-booking-check")
+    @ResponseBody
+    public List<BookingCheck> getListAvailable(@RequestParam("pitchesCostId") Long pitchesCostId, @RequestParam("date") String date) {
+        log.info("GET: " + BASE_URL + "/get-time-frames-available");
+        return new ArrayList<>();
     }
 }

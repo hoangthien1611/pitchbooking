@@ -60,9 +60,10 @@
                                                                         <div class="col-md-3" style="margin-top: 20px">
                                                                             <div class="row form-group">
                                                                                 <label>Chọn ngày: </label>
-                                                                                <input type="date" id="select-date-booking"
+                                                                                <input type="date" class="select-date-booking" th:id="${'select-date-booking-' + pitchesCost.id}"
                                                                                        name="dateBooking"
-                                                                                       th:value="2019-05-04"
+                                                                                       th:value="${today}"
+                                                                                       th:onchange="'javascript:changeDate('+ ${pitchesCost.id} +')'"
                                                                                        style="padding: 2px">
                                                                             </div>
                                                                             <div class="row form-group">
@@ -80,28 +81,22 @@
                                                                             <div class="ticket-select-time-wrapper">
                                                                                 <div class="row">
                                                                                     <div class="col-xs-6 col-sm-12">
-                                                                                        <h4>Thứ 7, ngày 4 tháng 5 năm 2019</h4>
+                                                                                        <h4 class="show-date" th:id="${'show-date-' + pitchesCost.id}"></h4>
                                                                                         <hr>
                                                                                     </div>
                                                                                     <div class="col-xs-6 col-sm-12">
                                                                                         <div>
                                                                                             <button type="button"
                                                                                                     onclick="sport.stadiumDetail.showPopupBooking(this)"
-                                                                                                    class="btn btn-default btn-sm btn-time-available-true">
-                                                                                                <i class="fa fa-clock-o"
-                                                                                                   aria-hidden="true"></i>17:30-19:00
-                                                                                                <br>
-                                                                                                <i class="note-sm">Còn
-                                                                                                    sân</i>
+                                                                                                    class="btn btn-default btn-sm btn-time-available-true disabled">
+                                                                                                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                                                                                <span>17:30-19:00</span>
                                                                                             </button>
                                                                                             <button type="button"
                                                                                                     onclick="sport.stadiumDetail.showPopupBooking(this)"
                                                                                                     class="btn btn-default btn-sm btn-time-available-true">
-                                                                                                <i class="fa fa-clock-o"
-                                                                                                   aria-hidden="true"></i>19:00-20:30
-                                                                                                <br>
-                                                                                                <i class="note-sm">Còn
-                                                                                                    sân</i>
+                                                                                                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                                                                                <span>19:00-20:30</span>
                                                                                             </button>
                                                                                         </div>
                                                                                     </div>
@@ -153,6 +148,12 @@
                                                      src="https://res.givator.com/pictures/11017/600/2019_01/original/4ccb8afb4162425482594f685f982d88.jpeg"
                                                      align="thumbnail">
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="title-img">Vị trí trên bản đồ</div>
+                                        <div class="form-group col-md-12">
+                                            <div id="map" style="height: 500px"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -380,7 +381,6 @@
         </div>
     </div>
 </div>
-<input type="hidden" id="hasSignin" value="False"/>
 
 <div class="hidden calendar-tpl">
     <div class="item-other-detail">
@@ -441,6 +441,23 @@
 <footer class="footer" th:replace="fragments/footer :: footer"></footer>
 
 <div th:replace="fragments/modals::modals"></div>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASntcyyk_Av4IxlJ3IE72AIQPOBld0fKo&sensor=false"></script>
 <script th:src="@{/js/my-custom/publicPitch.js}"></script>
+<script th:inline="javascript">
+    var lat = /*[[${pitch.latitude}]]*/;
+    var lng = /*[[${pitch.longitude}]]*/;
+    var latlng = new google.maps.LatLng(lat, lng);
+    var map = new google.maps.Map(document.getElementById('map'), {
+        center: latlng,
+        zoom: 15,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+    var marker = new google.maps.Marker({
+        position: latlng,
+        map: map,
+        title: 'Location of the pitch',
+        draggable: true
+    });
+</script>
 </body>
 </html>

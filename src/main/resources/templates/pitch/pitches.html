@@ -46,7 +46,6 @@
                                             <label>
                                                 <input id="fo" name="fo" type="checkbox" th:id="${'inputCost-' + cost.cost}"
                                                        th:checked="${cValue.contains('' + cost.cost) ? true : false}"/>
-                                                <input name="fo" type="hidden" value="false"/>
                                                 <th:block th:text="${cost.costCommafy}"></th:block>
                                             </label>
                                         </div>
@@ -56,11 +55,11 @@
                             <li>
                                 <strong>Số người chơi</strong>
                                 <ul>
-                                    <li th:each="type:${pitchTypes}" onclick="location.href='/san-bong-tai-ha-noi?t=5';">
+                                    <li th:each="type:${pitchTypes}" th:onclick="'javascript:goToUrl(\''+ 'inputType-' + ${type.id} + '\',\'t\',\'' + ${type.id} + '\')'">
                                         <div class="checkbox">
                                             <label>
-                                                <input name="fo" type="checkbox" value="true"/>
-                                                <input name="fo" type="hidden" value="false"/>
+                                                <input name="fo" type="checkbox" th:id="${'inputType-' + type.id}"
+                                                       th:checked="${tValue.contains('' + type.id) ? true : false}"/>
                                                 <th:block th:text="${type.name}"></th:block>
                                             </label>
                                         </div>
@@ -70,11 +69,11 @@
                             <li>
                                 <strong>Mặt sân</strong>
                                 <ul>
-                                    <li th:each="surface:${yardSurfaces}" onclick="location.href='/san-bong-tai-ha-noi?st=1';">
+                                    <li th:each="surface:${yardSurfaces}" th:onclick="'javascript:goToUrl(\''+ 'inputSurface-' + ${surface.id} + '\',\'f\',\'' + ${surface.id} + '\')'">
                                         <div class="checkbox">
                                             <label>
-                                                <input name="fo" type="checkbox" value="true"/>
-                                                <input name="fo" type="hidden" value="false"/>
+                                                <input name="fo" type="checkbox" th:id="${'inputSurface-' + surface.id}"
+                                                       th:checked="${fValue.contains('' + surface.id) ? true : false}"/>
                                                 <th:block th:text="${surface.name}"></th:block>
                                             </label>
                                         </div>
@@ -95,15 +94,15 @@
                         <th:block th:text="${totalPitches + ' SÂN BÓNG ĐƯỢC TÌM THẤY'}"></th:block></h1>
 
                     <div class="list-search-top">
-                        <form method="get" action="/san-bong-tai-ha-noi">
+                        <form method="get" action="javascript:void(0)">
                             <div class="col-md-9 nopaddingleft">
                                 <div class="form-group">
-                                    <input class="form-control" name="keyword"
+                                    <input class="form-control" name="keyword" id="keyword" th:value="${search}"
                                            placeholder="Nhập tên sân hoặc địa chỉ để tìm kiếm..."/>
                                 </div>
                             </div>
                             <div class="col-md-3 nopadding">
-                                <button class="btn btn-primary btn-primary-extra col-md-6" type="submit"><i
+                                <button class="btn btn-primary btn-primary-extra col-md-6 btn-keyword" type="button"><i
                                         class="fa fa-search" aria-hidden="true"></i>Tìm
                                 </button>
                                 <a href="/pitch/all" class="btn btn-default col-md-5 pull-right"><i

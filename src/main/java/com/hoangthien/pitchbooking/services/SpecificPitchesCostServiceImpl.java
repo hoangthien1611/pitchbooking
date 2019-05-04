@@ -1,7 +1,6 @@
 package com.hoangthien.pitchbooking.services;
 
 import com.hoangthien.pitchbooking.constants.Defines;
-import com.hoangthien.pitchbooking.dto.Cost;
 import com.hoangthien.pitchbooking.dto.SpecificPitchesCostDTO;
 import com.hoangthien.pitchbooking.entities.GroupDays;
 import com.hoangthien.pitchbooking.entities.GroupSpecificPitches;
@@ -11,14 +10,12 @@ import com.hoangthien.pitchbooking.mapper.SpecificPitchesCostMapper;
 import com.hoangthien.pitchbooking.repositories.GroupDaysRepository;
 import com.hoangthien.pitchbooking.repositories.GroupSpecificPitchesRepository;
 import com.hoangthien.pitchbooking.repositories.SpecificPitchesCostRepository;
-import com.hoangthien.pitchbooking.utils.PitchBookingUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class SpecificPitchesCostServiceImpl implements SpecificPitchesCostService {
@@ -86,7 +83,7 @@ public class SpecificPitchesCostServiceImpl implements SpecificPitchesCostServic
     }
 
     @Override
-    public List<Cost> getAllCostsByDistrictPath(String path) {
+    public List<Integer> getAllCostsByDistrictPath(String path) {
         List<Integer> list = new ArrayList<>();
 
         if (Defines.DISTRICT_PATH_ALL.equals(path)) {
@@ -98,10 +95,6 @@ public class SpecificPitchesCostServiceImpl implements SpecificPitchesCostServic
                     .findAllDistinctCostsByDistrictPath(path);
         }
 
-        return list.stream()
-                .map(integer -> {
-                    return new Cost(integer, PitchBookingUtils.getCostCommafy(integer));
-                })
-                .collect(Collectors.toList());
+        return list;
     }
 }

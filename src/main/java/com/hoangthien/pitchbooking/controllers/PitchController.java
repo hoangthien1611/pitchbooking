@@ -7,7 +7,7 @@ import com.hoangthien.pitchbooking.dto.PitchDTO;
 import com.hoangthien.pitchbooking.entities.GroupSpecificPitches;
 import com.hoangthien.pitchbooking.entities.Pitch;
 import com.hoangthien.pitchbooking.entities.PitchType;
-import com.hoangthien.pitchbooking.exception.PitchBookingException;
+import com.hoangthien.pitchbooking.entities.YardSurface;
 import com.hoangthien.pitchbooking.services.*;
 import com.hoangthien.pitchbooking.utils.PitchBookingUtils;
 import com.hoangthien.pitchbooking.utils.TimeUtils;
@@ -181,20 +181,39 @@ public class PitchController extends BaseController {
 
     @GetMapping("/{path}")
     public String search(Model model, @PathVariable("path") String path, @RequestParam(value = "pg", defaultValue = "1") String pg,
-                         @RequestParam(value = "c", defaultValue = "") String cValue) {
+                         @RequestParam(value = "c", defaultValue = "") String cValue,
+                         @RequestParam(value = "t", defaultValue = "") String tValue,
+                         @RequestParam(value = "f", defaultValue = "") String fValue,
+                         @RequestParam(value = "s", defaultValue = "") String search) {
         log.info("GET: " + BASE_URL + "/" + path);
         try {
             int page = Integer.parseInt(pg);
             int offset = (page - 1) * Defines.NUMBER_OF_ROWS_PER_PAGE;
+            List<Integer> intCosts = specificPitchesCostService.getAllCostsByDistrictPath(path);
+            List<PitchType> pitchTypes = pitchTypeService.getAll();
+            List<YardSurface> yardSurfaces = yardSurfaceService.getAllYardSurfaces();
+
+            List<Integer> costValues = StringUtils.isEmpty(cValue) ? intCosts : PitchBookingUtils.convertFromStringListToIntList(cValue);
+            List<Long> typeIdValues = StringUtils.isEmpty(tValue) ? getTypeIdsFromTypes(pitchTypes) : PitchBookingUtils.convertFromStringListToLongList(tValue);
+            List<Long> surfaceIdValues = StringUtils.isEmpty(fValue) ? getSurfaceIdsFromSurfaces(yardSurfaces) : PitchBookingUtils.convertFromStringListToLongList(fValue);
             Page<Pitch> pagePitches;
 
             if (Defines.DISTRICT_PATH_ALL.equals(path)) {
-                pagePitches = pitchService.getAllPageable(offset);
+                if (StringUtils.isEmpty(search)) {
+                    pagePitches = pitchService.getAllPageable(costValues, typeIdValues, surfaceIdValues, offset);
+                } else {
+                    pagePitches = pitchService.getAllPageable(costValues, typeIdValues, surfaceIdValues, search, offset);
+                }
             } else {
-                pagePitches = pitchService.getAllByDistrictPathPageable(path, offset);
+                if (StringUtils.isEmpty(search)) {
+                    pagePitches = costValues.size() > 0 ? pitchService.getAllPageable(path, costValues, typeIdValues, surfaceIdValues, offset)
+                            : pitchService.getAllPageable(path, typeIdValues, surfaceIdValues, offset);
+                } else {
+                    pagePitches = costValues.size() > 0 ? pitchService.getAllPageable(path, costValues, typeIdValues, surfaceIdValues, search, offset)
+                            : pitchService.getAllPageable(path, typeIdValues, surfaceIdValues, search, offset);
+                }
                 model.addAttribute("districtName", districtService.getDistrictDTOByPath(path).getName());
             }
-
 
             int totalPages = pagePitches.getTotalPages();
             if (totalPages > 0) {
@@ -212,20 +231,35 @@ public class PitchController extends BaseController {
             model.addAttribute("currentPage", page);
             model.addAttribute("totalPages", totalPages);
             model.addAttribute("path", path);
-            model.addAttribute("pitchTypes", pitchTypeService.getAll());
-            model.addAttribute("yardSurfaces", yardSurfaceService.getAllYardSurfaces());
+            model.addAttribute("pitchTypes", pitchTypes);
+            model.addAttribute("yardSurfaces", yardSurfaces);
             model.addAttribute("totalPitches", pagePitches.getTotalElements());
-            model.addAttribute("costs", specificPitchesCostService.getAllCostsByDistrictPath(path));
+            model.addAttribute("costs", PitchBookingUtils.getCostListFromIntList(intCosts));
             model.addAttribute("cValue", cValue);
+            model.addAttribute("tValue", tValue);
+            model.addAttribute("fValue", fValue);
+            model.addAttribute("search", search);
             return "pitch/pitches";
         } catch (Exception e) {
             log.error(e.getMessage());
             return "error/page_404";
-            }
+        }
     }
 
     private boolean isPitchTypeExistedInGroupSpecificPitches(Long pitchtypeId, List<GroupSpecificPitches> groupSpecificPitches) {
         return groupSpecificPitches.stream()
                 .anyMatch(gr -> gr.getPitchType().getId() == pitchtypeId);
+    }
+
+    private List<Long> getTypeIdsFromTypes(List<PitchType> list) {
+        return list.stream()
+                .map(pitchType -> pitchType.getId())
+                .collect(Collectors.toList());
+    }
+
+    private List<Long> getSurfaceIdsFromSurfaces(List<YardSurface> list) {
+        return list.stream()
+                .map(yardSurface -> yardSurface.getId())
+                .collect(Collectors.toList());
     }
 }

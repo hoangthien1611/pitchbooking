@@ -165,15 +165,35 @@ public class PitchServiceImpl implements PitchService {
         return timeFrameBookings;
     }
 
+
     @Override
-    public Page<Pitch> getAllPageable(int offset) {
-        return pitchRepository.findAll(PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    public Page<Pitch> getAllPageable(String path, List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, int offset) {
+        return pitchRepository.findAllByDistrictPathAndPitchTypeIdInAndSurfaceIdInAndCostIn(path, typeIds, surfaceIds, costs, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
     }
 
-    @Transactional
     @Override
-    public Page<Pitch> getAllByDistrictPathPageable(String path, int offset) {
-        return pitchRepository.findAllByDistrictPath(path, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    public Page<Pitch> getAllPageable(String path, List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, String search, int offset) {
+        return pitchRepository.findAllByDistrictPathAndPitchTypeIdInAndSurfaceIdInAndCostInAndSearch(path, typeIds, surfaceIds, costs, search, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    }
+
+    @Override
+    public Page<Pitch> getAllPageable(String path, List<Long> typeIds, List<Long> surfaceIds, int offset) {
+        return pitchRepository.findAllByDistrictPathAndPitchTypeIdInAndSurfaceIdIn(path, typeIds, surfaceIds, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    }
+
+    @Override
+    public Page<Pitch> getAllPageable(String path, List<Long> typeIds, List<Long> surfaceIds, String search, int offset) {
+        return pitchRepository.findAllByDistrictPathAndPitchTypeIdInAndSurfaceIdInAndSearch(path, typeIds, surfaceIds, search, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    }
+
+    @Override
+    public Page<Pitch> getAllPageable(List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, int offset) {
+        return pitchRepository.findAllByPitchTypeIdInAndSurfaceIdInAndCostIn(typeIds, surfaceIds, costs, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    }
+
+    @Override
+    public Page<Pitch> getAllPageable(List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, String search, int offset) {
+        return pitchRepository.findAllByPitchTypeIdInAndSurfaceIdInAndCostInAndSearch(typeIds, surfaceIds, costs, search, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
     }
 
     private boolean isTimeFrameInTimeRange(TimeFrame timeFrame, String timeStart, String timeEnd) {

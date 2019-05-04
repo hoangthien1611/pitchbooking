@@ -20,7 +20,15 @@ public interface PitchService {
 
     List<TimeFrameBooking> getTimeFrameBookingsByDate(Long pitchId, LocalDate dateBooking);
 
-    Page<Pitch> getAllPageable(int offset);
+    Page<Pitch> getAllPageable(String path, List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, int offset);
 
-    Page<Pitch> getAllByDistrictPathPageable(String path, int offset);
+    Page<Pitch> getAllPageable(String path, List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, String search, int offset);
+
+    Page<Pitch> getAllPageable(String path, List<Long> typeIds, List<Long> surfaceIds, int offset);
+
+    Page<Pitch> getAllPageable(String path, List<Long> typeIds, List<Long> surfaceIds, String search, int offset);
+
+    Page<Pitch> getAllPageable(List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, int offset);
+
+    Page<Pitch> getAllPageable(List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, String search, int offset);
 }

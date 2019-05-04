@@ -25,6 +25,10 @@ $(document).ready(function () {
         window.location.href = baseURL + "?" + newAdditionalURL + search;
     });
 
+    $(".btn-close-booking-area").on("click", function () {
+        $(".stadium-calendar").hide();
+    });
+
 });
 
 function goToUrl(inputId, param, value) {
@@ -65,4 +69,10 @@ function goToUrl(inputId, param, value) {
     var newParam = !willCheck ? "" : (existed ? "" : ( additionalURL? ("&" + param + "=" + value) : (param + "=" + value)));
     var queries = "?" + newAdditionalURL + newParam;
     window.location.href = baseURL + ((queries.length > 1) ? queries : "");
+}
+
+function openBookingArea(pitchesCostId) {
+    $(".stadium-calendar").hide();
+    var bookingAreaId = "booking-area-" + pitchesCostId;
+    $(`#${bookingAreaId}`).show();
 }

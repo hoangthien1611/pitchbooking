@@ -246,6 +246,19 @@ public class PitchController extends BaseController {
         }
     }
 
+    @GetMapping("/detail/{pitchId}")
+    public String detail(Model model, @PathVariable("pitchId") String pitch) {
+        log.info("GET: " + BASE_URL + "/detail/" + pitch);
+        try {
+            Long pitchId = Long.valueOf(Integer.parseInt(pitch));
+            model.addAttribute("pitch", pitchService.getPitchById(pitchId));
+            return "pitch/detail";
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return "error/page_404";
+        }
+    }
+
     private boolean isPitchTypeExistedInGroupSpecificPitches(Long pitchtypeId, List<GroupSpecificPitches> groupSpecificPitches) {
         return groupSpecificPitches.stream()
                 .anyMatch(gr -> gr.getPitchType().getId() == pitchtypeId);

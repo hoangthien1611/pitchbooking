@@ -1,0 +1,446 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"></head>
+<body ng-app="sportApp" class="page-sportstadiumdetails ">
+
+<div th:replace="fragments/header :: header"></div>
+
+<div class="breadcrum">
+    <div class="container">
+        <div class="breadcrum-line">
+            <a href="/"><i class="fa fa-home"></i>&nbsp; Trang chủ</a>
+            <a href="/pitch/all" class="" title="S&#226;n b&#243;ng"><i class="fa fa-angle-right"></i>&nbsp; Sân bóng</a>
+            <a><i class="fa fa-angle-right"></i>&nbsp;
+                <th:block th:text="${pitch.name}"></th:block></a>
+        </div>
+    </div>
+</div>
+
+<div class="content-wrap">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="content-cts">
+                    <div class="item-card">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h1 class="title-sans" th:text="${pitch.name}"></h1>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="des-san">
+                                            <div class="san-address-line">
+                                                <i class="fa fa-map-o" aria-hidden="true"></i>
+                                                <th:block th:text="${pitch.address + ',' + pitch.district.name}"></th:block>
+                                            </div>
+                                            <th:block th:each="pitches:${pitch.groupSpecificPitches}">
+                                                <div>
+                                                    <strong th:text="${'Giá thuê sân ' + pitches.pitchType.name}"></strong>
+                                                </div>
+                                                <div class="san-price-line calendar-row" th:each="pitchesCost:${pitches.specificPitchesCosts}">
+                                                    <th:block th:text="${pitchesCost.fromTime + ' - ' + pitchesCost.toTime}"></th:block>
+                                                    <div>
+                                                        <span class="price-san"><th:block th:text="${pitchesCost.getCostCommafy()}"></th:block><sup>vnđ</sup></span>
+                                                        <button class="check-san" th:onclick="'javascript:openBookingArea('+ ${pitchesCost.id} +')'">
+                                                            <i class="fa fa-calendar-check-o" aria-hidden="true"></i> Đặt
+                                                            sân
+                                                        </button>
+                                                    </div>
+                                                    <div class="stadium-calendar" style="display: none" th:id="${'booking-area-' + pitchesCost.id}">
+                                                        <div class="item-other-detail">
+                                                            <div class="ticket-select-date-time item-other-detail-section">
+                                                                <div class="item-other-detail-section-header">
+                                                                    <strong>ĐẶT SÂN</strong>
+                                                                </div>
+                                                                <div class="row item-other-detail-section-content">
+                                                                    <div class="form-group">
+                                                                        <div class="col-md-3" style="margin-top: 20px">
+                                                                            <div class="row form-group">
+                                                                                <label>Chọn ngày: </label>
+                                                                                <input type="date" id="select-date-booking"
+                                                                                       name="dateBooking"
+                                                                                       th:value="2019-05-04"
+                                                                                       style="padding: 2px">
+                                                                            </div>
+                                                                            <div class="row form-group">
+                                                                                <button class="btn btn-info btn-sm"
+                                                                                        type="button" title="Tìm sân trống">
+                                                                                    Tìm sân trống
+                                                                                </button>
+                                                                                <button class="btn btn-default btn-sm btn-close-booking-area"
+                                                                                        type="button" title="Đóng">
+                                                                                    Đóng
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-9">
+                                                                            <div class="ticket-select-time-wrapper">
+                                                                                <div class="row">
+                                                                                    <div class="col-xs-6 col-sm-12">
+                                                                                        <h4>Thứ 7, ngày 4 tháng 5 năm 2019</h4>
+                                                                                        <hr>
+                                                                                    </div>
+                                                                                    <div class="col-xs-6 col-sm-12">
+                                                                                        <div>
+                                                                                            <button type="button"
+                                                                                                    onclick="sport.stadiumDetail.showPopupBooking(this)"
+                                                                                                    class="btn btn-default btn-sm btn-time-available-true">
+                                                                                                <i class="fa fa-clock-o"
+                                                                                                   aria-hidden="true"></i>17:30-19:00
+                                                                                                <br>
+                                                                                                <i class="note-sm">Còn
+                                                                                                    sân</i>
+                                                                                            </button>
+                                                                                            <button type="button"
+                                                                                                    onclick="sport.stadiumDetail.showPopupBooking(this)"
+                                                                                                    class="btn btn-default btn-sm btn-time-available-true">
+                                                                                                <i class="fa fa-clock-o"
+                                                                                                   aria-hidden="true"></i>19:00-20:30
+                                                                                                <br>
+                                                                                                <i class="note-sm">Còn
+                                                                                                    sân</i>
+                                                                                            </button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </th:block>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="title-img">Liên hệ đặt sân</div>
+                                        <div class="des-san contact-info">
+                                            <div class="phone-numb">
+                                                <i class="fa fa-phone-square" aria-hidden="true"></i>
+                                                <a href="" class="text-highlight" target="_blank">
+                                                    <th:block th:text="${pitch.owner.fullName + ' - ' + pitch.phoneNumber}"></th:block>
+                                                </a>
+                                            </div>
+                                            <div class="des-email">
+                                                <a th:href="${'mailto:' + pitch.email}"><i class="fa fa-envelope" aria-hidden="true"></i>
+                                                    <th:block th:text="${pitch.email}"></th:block></a>
+                                            </div>
+                                            <div class="des-facebook">
+                                                <a th:href="${pitch.facebook}" target="_blank"><i class="fa fa-facebook-square" aria-hidden="true"></i>
+                                                    <th:block th:text="${pitch.facebook}"></th:block></a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="title-img">Giới thiệu về sân</div>
+                                        <div class="des-san-group san-short-summary">
+                                            <th:block th:text="${pitch.introduction}"></th:block>
+                                        </div>
+                                        <div class="content-sans">
+                                            <th:block th:utext="${pitch.detailDescription}"></th:block>
+                                        </div>
+                                        <div class="slider-home-banner slider-chi-san owl-carousel">
+                                            <div>
+                                                <img class="img-responsivex"
+                                                     src="https://res.givator.com/pictures/11017/600/2019_01/original/4ccb8afb4162425482594f685f982d88.jpeg"
+                                                     align="thumbnail">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="fb-comments" data-href="/san-bong-pham-van-dong-3.html" data-numposts="5"></div>
+                </div>
+            </div>
+            <!--STadium list right-->
+            <div class="col-md-4">
+                <div class="ads-banner-right" id="s9adright">
+                </div>
+                <div class="sidebar sidebar-tien-san">
+                    <p class="title-box"><i class="fa fa-map-marker" aria-hidden="true"></i> Sân bóng cùng địa bàn</p>
+                    <div class="list-item-san list-item-san-sidebar">
+                        <div class="slider-near-san owl-carousel owl-theme" style="opacity: 1; display: block;">
+                            <div>
+                                <div class="item-card">
+                                    <div class="row">
+                                        <div class="col-md-12 item-preview-image">
+                                            <a href="/san-bong-hai-dang-26674011.html"
+                                               title="S&#226;n b&#243;ng Hải Đăng">
+                                                <img class="img-responsive"
+                                                     src="https://res.givator.com/pictures/11017/600/2017_02/medium/P1080096.JPG"
+                                                     alt="S&#226;n b&#243;ng Hải Đăng" align="thumbnail">
+                                            </a>
+                                        </div>
+                                        <div class="col-md-12 right-item-san">
+                                            <h2><a href="/san-bong-hai-dang-26674011.html" class="item-name-link">S&#226;n
+                                                b&#243;ng Hải Đăng</a></h2>
+                                            <p>
+                                                <i class="fa fa-map-o" aria-hidden="true"></i> 56 Tố Hữu , Trung Văn
+                                                (Quận Nam Từ Li&#234;m, H&#224; Nội)
+                                                <a href="javascript:showGmapPopup('map_canvas', 20.9943949, 105.7873625, 'S&#226;n b&#243;ng Hải Đăng')"><span
+                                                        class="fa fa-map-marker"></span></a>
+                                            </p>
+                                            <div>
+                                                <p><strong>Gi&#225; thu&#234; s&#226;n 7 người</strong></p>
+                                                <p>06:00 - 16:00 <span class="price-san">300.000<sup>vnđ</sup></span>
+                                                </p>
+                                                <p>16:00 - 17:30 <span class="price-san">600.000<sup>vnđ</sup></span>
+                                                </p>
+                                                <p>17:30 - 20:30 <span class="price-san">800.000<sup>vnđ</sup></span>
+                                                </p>
+                                                <p>20:30 - 22:00 <span class="price-san">400.000<sup>vnđ</sup></span>
+                                                </p>
+                                            </div>
+
+                                            <p class="phone-numb"><i class="fa fa-phone-square" aria-hidden="true"></i>
+                                                0961678071</p>
+
+                                            <a href="/san-bong-hai-dang-26674011.html"
+                                               title="S&#226;n b&#243;ng Hải Đăng" class="btn-chi-tiet"><i
+                                                    class="fa fa-long-arrow-right" aria-hidden="true"></i> Chi tiết</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="item-card">
+                                    <div class="row">
+                                        <div class="col-md-12 item-preview-image">
+                                            <a href="/san-bong-hai-dang.html" title="S&#226;n B&#243;ng Hải Đăng">
+                                                <img class="img-responsive"
+                                                     src="https://res.givator.com/pictures/11017/500/2018_09/original/4077841420828588653642844484330754813198336n.jpg"
+                                                     alt="S&#226;n B&#243;ng Hải Đăng" align="thumbnail">
+                                            </a>
+                                        </div>
+                                        <div class="col-md-12 right-item-san">
+                                            <h2><a href="/san-bong-hai-dang.html" class="item-name-link">S&#226;n B&#243;ng
+                                                Hải Đăng</a></h2>
+                                            <p>
+                                                <i class="fa fa-map-o" aria-hidden="true"></i> 56 Đường Tố Hữu (Quận Nam
+                                                Từ Li&#234;m, H&#224; Nội)
+                                            </p>
+                                            <p>Thông tin giá chưa được cập nhật. Bạn vui lòng gọi điện trực tiếp tới
+                                                quản lý sân để biết thông tin giá </p>
+
+                                            <p class="phone-numb"><i class="fa fa-phone-square" aria-hidden="true"></i>
+                                                0961678071</p>
+
+                                            <a href="/san-bong-hai-dang.html" title="S&#226;n B&#243;ng Hải Đăng"
+                                               class="btn-chi-tiet"><i class="fa fa-long-arrow-right"
+                                                                       aria-hidden="true"></i> Chi tiết</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="item-card">
+                                    <div class="row">
+                                        <div class="col-md-12 item-preview-image">
+                                            <a href="/coma-6-tay-mo-tu-liem.html"
+                                               title="Coma 6 - T&#226;y Mỗ - Từ Li&#234;m">
+                                                <img class="img-responsive"
+                                                     src="https://res.givator.com/pictures/11017/600/2018_06/medium/khu-the-thao-coma6.jpg"
+                                                     alt="Coma 6 - T&#226;y Mỗ - Từ Li&#234;m" align="thumbnail">
+                                            </a>
+                                        </div>
+                                        <div class="col-md-12 right-item-san">
+                                            <h2><a href="/coma-6-tay-mo-tu-liem.html" class="item-name-link">Coma 6 - T&#226;y
+                                                Mỗ - Từ Li&#234;m</a></h2>
+                                            <p>
+                                                <i class="fa fa-map-o" aria-hidden="true"></i> Khu đ&#244; thị Dream
+                                                Town, Đường 70, Phường T&#226;y Mỗ - Quận Nam Từ Li&#234;m - Th&#224;nh
+                                                phố H&#224; Nội (Quận Nam Từ Li&#234;m, H&#224; Nội)
+                                            </p>
+                                            <div>
+                                                <p><strong>Gi&#225; thu&#234; s&#226;n 7 người</strong></p>
+                                                <p>17:30 - 19:00 <span class="price-san">600.000<sup>vnđ</sup></span>
+                                                </p>
+                                                <p>19:00 - 20:30 <span class="price-san">600.000<sup>vnđ</sup></span>
+                                                </p>
+                                                <p>20:30 - 22:00 <span class="price-san">Liên hệ</span></p>
+                                            </div>
+
+                                            <p class="phone-numb"><i class="fa fa-phone-square" aria-hidden="true"></i>
+                                                Phương Ph&#249;ng - 0902298111</p>
+
+                                            <a href="/coma-6-tay-mo-tu-liem.html"
+                                               title="Coma 6 - T&#226;y Mỗ - Từ Li&#234;m" class="btn-chi-tiet"><i
+                                                    class="fa fa-long-arrow-right" aria-hidden="true"></i> Chi tiết</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="item-card">
+                                    <div class="row">
+                                        <div class="col-md-12 item-preview-image">
+                                            <a href="/san-bong-da-son-trang-5.html"
+                                               title="S&#226;n b&#243;ng đ&#225; Sơn Trang 5">
+                                                <img class="img-responsive"
+                                                     src="https://res.givator.com/pictures/11017/600/2017_02/medium/P1080074.JPG"
+                                                     alt="S&#226;n b&#243;ng đ&#225; Sơn Trang 5" align="thumbnail">
+                                            </a>
+                                        </div>
+                                        <div class="col-md-12 right-item-san">
+                                            <h2><a href="/san-bong-da-son-trang-5.html" class="item-name-link">S&#226;n
+                                                b&#243;ng đ&#225; Sơn Trang 5</a></h2>
+                                            <p>
+                                                <i class="fa fa-map-o" aria-hidden="true"></i> 54 Tố Hữu ( L&#234; Văn
+                                                Lương k&#233;o d&#224;i), Trung Văn (Quận Nam Từ Li&#234;m, H&#224; Nội)
+                                                <a href="javascript:showGmapPopup('map_canvas', 20.9946158, 105.7874595, 'S&#226;n b&#243;ng đ&#225; Sơn Trang 5')"><span
+                                                        class="fa fa-map-marker"></span></a>
+                                            </p>
+                                            <div>
+                                                <p><strong>Gi&#225; thu&#234; s&#226;n 7 người</strong></p>
+                                                <p>06:00 - 16:00 <span class="price-san">300.000<sup>vnđ</sup></span>
+                                                </p>
+                                                <p>16:00 - 17:30 <span class="price-san">600.000<sup>vnđ</sup></span>
+                                                </p>
+                                                <p>17:30 - 20:30 <span class="price-san">800.000<sup>vnđ</sup></span>
+                                                </p>
+                                                <p>20:30 - 22:00 <span class="price-san">400.000<sup>vnđ</sup></span>
+                                                </p>
+                                            </div>
+
+                                            <p class="phone-numb"><i class="fa fa-phone-square" aria-hidden="true"></i>
+                                                S&#226;n b&#243;ng Sơn Trang 5 - 0912221518</p>
+
+                                            <a href="/san-bong-da-son-trang-5.html"
+                                               title="S&#226;n b&#243;ng đ&#225; Sơn Trang 5" class="btn-chi-tiet"><i
+                                                    class="fa fa-long-arrow-right" aria-hidden="true"></i> Chi tiết</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="item-card">
+                                    <div class="row">
+                                        <div class="col-md-12 item-preview-image">
+                                            <a href="/san-bong-da-truong-viet-uc-khu-do-thi-my-dinh-1.html"
+                                               title="S&#226;n b&#243;ng đ&#225; trường Việt - &#218;c Khu đ&#244; thị Mỹ đ&#236;nh 1">
+                                                <img class="img-responsive"
+                                                     src="https://res.givator.com/pictures/11017/600/2017_05/medium/san-bong-da-truong-viet-uc.jpg"
+                                                     alt="S&#226;n b&#243;ng đ&#225; trường Việt - &#218;c Khu đ&#244; thị Mỹ đ&#236;nh 1"
+                                                     align="thumbnail">
+                                            </a>
+                                        </div>
+                                        <div class="col-md-12 right-item-san">
+                                            <h2><a href="/san-bong-da-truong-viet-uc-khu-do-thi-my-dinh-1.html"
+                                                   class="item-name-link">S&#226;n b&#243;ng đ&#225; trường Việt -
+                                                &#218;c Khu đ&#244; thị Mỹ đ&#236;nh 1</a></h2>
+                                            <p>
+                                                <i class="fa fa-map-o" aria-hidden="true"></i> Khu đ&#244; thị Mỹ Đ&#236;nh
+                                                I (Quận Nam Từ Li&#234;m, H&#224; Nội)
+                                                <a href="javascript:showGmapPopup('map_canvas', 21.0322961, 105.7600939, 'S&#226;n b&#243;ng đ&#225; trường Việt - &#218;c Khu đ&#244; thị Mỹ đ&#236;nh 1')"><span
+                                                        class="fa fa-map-marker"></span></a>
+                                            </p>
+                                            <div>
+                                                <p><strong>Gi&#225; thu&#234; s&#226;n 7 người</strong></p>
+                                                <p>06:00 - 16:00 <span class="price-san">300.000<sup>vnđ</sup></span>
+                                                </p>
+                                                <p>16:00 - 17:30 <span class="price-san">600.000<sup>vnđ</sup></span>
+                                                </p>
+                                                <p>17:30 - 20:30 <span class="price-san">800.000<sup>vnđ</sup></span>
+                                                </p>
+                                                <p>20:30 - 22:00 <span class="price-san">400.000<sup>vnđ</sup></span>
+                                                </p>
+                                            </div>
+
+                                            <p class="phone-numb"><i class="fa fa-phone-square" aria-hidden="true"></i>
+                                                Hỗ Trợ - 0462872869 / 0462878889</p>
+                                            <p class="phone-numb"><i class="fa fa-phone-square" aria-hidden="true"></i>
+                                                S&#226;n b&#243;ng trường Việt - &#218;c - 0462872869</p>
+                                            <p class="phone-numb"><i class="fa fa-phone-square" aria-hidden="true"></i>
+                                                S&#226;n b&#243;ng trường Việt - &#218;c - 0462878889</p>
+
+                                            <a href="/san-bong-da-truong-viet-uc-khu-do-thi-my-dinh-1.html"
+                                               title="S&#226;n b&#243;ng đ&#225; trường Việt - &#218;c Khu đ&#244; thị Mỹ đ&#236;nh 1"
+                                               class="btn-chi-tiet"><i class="fa fa-long-arrow-right"
+                                                                       aria-hidden="true"></i> Chi tiết</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="hasSignin" value="False"/>
+
+<div class="hidden calendar-tpl">
+    <div class="item-other-detail">
+        <div id="ticket-select-date-time" class="ticket-select-date-time item-other-detail-section">
+            <div class="item-other-detail-section-header">
+                <strong>ĐẶT SÂN</strong>
+            </div>
+            <div class="row item-other-detail-section-content">
+                <div class="form-group">
+                    <div class="col-md-7">
+                        <div id="ticket-select-date" class="ticket-select-date"></div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="ticket-select-time-wrapper">
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-12">
+                                    <div class="ticket-select-time-title">NGÀY ĐẶT</div>
+                                    <div class="ticket-select-day-summary"><span class="currentDay"></span>
+                                        <small class="currentMonth"></small>
+                                    </div>
+                                    <hr>
+                                </div>
+                                <div class="col-xs-6 col-sm-12">
+                                    <input type="hidden" id="stadium-booking-data"/>
+                                    <div id="calendarBookingTime">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="booking-popup" class="modal fade" role="dialog" style="display: none;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 class="modal-title">Đặt sân</h3>
+            </div> <!-- /.modal-header -->
+            <div class="modal-body ">
+
+            </div> <!-- /.modal-body -->
+            <div class="modal-footer">
+                <button onclick="sport.stadiumDetail.createBooking(event);" id="reserveCalendar"
+                        data-loading-text="<i class='fa fa-spinner fa-spin '></i> Đang xử lý..."
+                        class="btn btn-primary btn-primary-extra">
+                    <i class="fa fa-calendar-check-o" aria-hidden="true"></i> Đặt lịch
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+            </div> <!-- /.modal-footer -->
+        </div> <!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<footer class="footer" th:replace="fragments/footer :: footer"></footer>
+
+<div th:replace="fragments/modals::modals"></div>
+<script th:src="@{/js/my-custom/publicPitch.js}"></script>
+</body>
+</html>

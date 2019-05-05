@@ -13,6 +13,7 @@ import com.hoangthien.pitchbooking.repositories.BookingRepository;
 import com.hoangthien.pitchbooking.repositories.ChildPitchRepository;
 import com.hoangthien.pitchbooking.repositories.SpecificPitchesCostRepository;
 import com.hoangthien.pitchbooking.repositories.UserRepository;
+import com.hoangthien.pitchbooking.utils.PitchBookingUtils;
 import com.hoangthien.pitchbooking.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -108,10 +109,15 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingCheck> getBookingCheckList(Long pitchesCostId, LocalDate date) {
-
         SpecificPitchesCost specificPitchesCost = specificPitchesCostRepository
                 .findById(pitchesCostId)
                 .orElseThrow(() -> new PitchBookingException("Không tìm thấy PitchesCost"));
+
+        int groupDaysIdOfDateBooking = PitchBookingUtils.getGroupDaysIdFromLocalDate(date);
+
+        if (specificPitchesCost.getGroupDays().getId() != groupDaysIdOfDateBooking) {
+            throw new PitchBookingException("Ngày này không thuộc trong pitchesCost");
+        }
 
         List<Booking> bookings = bookingRepository.findAllByPitchesCostIdAndDateBooking(pitchesCostId, date);
 
@@ -141,5 +147,45 @@ public class BookingServiceImpl implements BookingService {
                     return bookingCheck;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public BookingDTO saveForUser(BookingDTO bookingDTO) {
+        SpecificPitchesCost specificPitchesCost = specificPitchesCostRepository
+                .findById(bookingDTO.getPitchesCostId())
+                .orElseThrow(() -> new PitchBookingException("PitchesCost not found!"));
+
+        User userBooking = userRepository
+                .findById(bookingDTO.getUserId())
+                .orElseThrow(() -> new PitchBookingException("User not found!"));
+
+        LocalDate dateBooking = TimeUtils.getLocalDateFromDateString(bookingDTO.getDateBookingString());
+
+        List<Booking> bookings = bookingRepository.findAllByPitchesCostIdAndTimeBooking(
+                bookingDTO.getPitchesCostId(), dateBooking, bookingDTO.getFromTime(), bookingDTO.getToTime());
+
+        Optional<ChildPitch> childPitchOptional = getChildPitchAvailable(
+                specificPitchesCost.getGroupSpecificPitches().getChildPitches(), bookings);
+
+        if (!childPitchOptional.isPresent()) {
+            return null;
+        }
+
+        Booking booking = bookingMapper.bookingDTOToBooking(bookingDTO);
+        booking.setDateBooking(dateBooking);
+        booking.setCost(specificPitchesCost.getCost());
+        booking.setAccepted(false);
+        booking.setChildPitch(childPitchOptional.get());
+        booking.setTimeCreated(LocalDateTime.now());
+        booking.setUserBooking(userBooking);
+
+        return bookingMapper.bookingToBookingDTO(bookingRepository.save(booking));
+    }
+
+    private Optional<ChildPitch> getChildPitchAvailable(List<ChildPitch> childPitches, List<Booking> bookings) {
+        return childPitches.stream()
+                .filter(childPitch -> !bookings.stream()
+                        .anyMatch(booking -> booking.getChildPitch().getId() == childPitch.getId()))
+                .findFirst();
     }
 }

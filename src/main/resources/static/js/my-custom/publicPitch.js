@@ -31,6 +31,53 @@ $(document).ready(function () {
         $(".stadium-calendar").hide();
     });
 
+    $(".btn-submit-booking").on("click", function () {
+        var timeFrame = $("#timeBooking").val();
+        var date = $("#dateBooking").val();
+        var pitchesCostId = $("#pitchesCostIdBooking").val();
+        var dates = date.split("/").reverse();
+        date = dates.join("-");
+        var orderName = $("#orderName").val();
+        var orderPhone = $("#orderPhone").val();
+        var content = $("#content").val();
+
+        var data = {
+            dateBookingString: date,
+            fromTime: timeFrame.split("-")[0],
+            toTime: timeFrame.split("-")[1],
+            pitchesCostId,
+            orderName,
+            orderPhone,
+            content
+        }
+
+        if (!orderName || !orderPhone) {
+            alert('Vui lòng nhập đầy đủ thông tin phù hợp!');
+        } else {
+            $.ajax({
+                type: 'post',
+                url: '/booking/for-user',
+                data: data,
+                success: function (data) {
+                    if (data) {
+                      if (data == "SUCCESS") {
+                          alert('Đặt sân thành công!');
+                          location.reload(true);
+                      } else {
+                          alert(data);
+                          location.reload(true);
+                      }
+                    } else {
+                        alert("Không thể đặt sân được!");
+                    }
+                },
+                error: function () {
+                    alert('Error! Có lỗi xảy ra!');
+                }
+            });
+        }
+    });
+
 });
 
 function goToUrl(inputId, param, value) {
@@ -108,18 +155,20 @@ function checkPitches(pitchesCostId) {
         },
         success: function (data) {
             if (data != null) {
-                console.log(data);
-
                 var html = "";
                 if (data.length > 0) {
                     data.forEach(function (item, index) {
-                       html += "<button type=\"button\" class=\"btn btn-sm btn-time-available-true" + (item.available ? " btn-success" : " btn-default disabled") + "\" style=\"margin-top:3px\">"
+                       html += "<button type=\"button\" class=\"btn btn-sm btn-time-available-true" + (item.available ? " btn-success" : " btn-default disabled") + "\" style=\"margin-top:3px\""
+                            + " onclick=\"showBookingModal(" + index + "," + pitchesCostId + ")\" "
+                            + " id=\"btn-timeFrame-"+ index + "-" + pitchesCostId + "\" "
+                            + (item.available? " data-toggle=\"modal\" data-target=\"#pitch-booking\">" : " >")
                             + "<i class=\"fa fa-clock-o\" aria-hidden=\"true\"></i>"
                             + "<span>"+ item.timeFrame.fromTime + "-" + item.timeFrame.toTime +"</span>"
                             + "</button> &nbsp;"
                     });
 
                     $(`#btn-area-${pitchesCostId}`).html(html);
+                    $(`#input-date-booking-${pitchesCostId}`).val(inputDate);
                 } else {
                     html = "<h4 style='color: red;'>Không tìm thấy khung giờ để chọn!</h4>"
                     $(`#btn-area-${pitchesCostId}`).html(html);
@@ -133,4 +182,20 @@ function checkPitches(pitchesCostId) {
             alert('Error! Có lỗi xảy ra!');
         }
     });
+}
+
+function showBookingModal(index, pitchesCostId) {
+    var date = new Date($(`#input-date-booking-${pitchesCostId}`).val());
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+    var cost = $(`#input-cost-booking-${pitchesCostId}`).val();
+    var pitchType = $(`#input-pitch-type-${pitchesCostId}`).val();
+    var timeFrame = $(`#btn-timeFrame-${index}-${pitchesCostId}`).children("span").text();
+
+    $("#timeBooking").val(timeFrame);
+    $("#dateBooking").val(day + "/" + month + "/" + year);
+    $("#pitchType").val(pitchType);
+    $("#cost").val(cost);
+    $("#pitchesCostIdBooking").val(pitchesCostId);
 }

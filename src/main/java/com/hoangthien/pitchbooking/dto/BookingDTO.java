@@ -30,4 +30,6 @@ public class BookingDTO {
     private Long childPitchId;
 
     private Long userId;
+
+    private Long pitchesCostId;
 }

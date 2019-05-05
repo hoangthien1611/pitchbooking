@@ -59,4 +59,20 @@ public class BookingController {
             return null;
         }
     }
+
+    @PostMapping("/for-user")
+    @ResponseBody
+    public String savePublic(@ModelAttribute BookingDTO bookingDTO) {
+        log.info("POST: " + BASE_URL + "/for-user");
+        try {
+            bookingDTO.setUserId(1L);
+            if (bookingService.saveForUser(bookingDTO) != null) {
+                return "SUCCESS";
+            }
+            return "Không còn sân trống cho khoảng thời gian bạn chọn!";
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return null;
+        }
+    }
 }

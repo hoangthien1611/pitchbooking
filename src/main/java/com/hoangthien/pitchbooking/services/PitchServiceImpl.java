@@ -9,6 +9,7 @@ import com.hoangthien.pitchbooking.entities.*;
 import com.hoangthien.pitchbooking.exception.PitchBookingException;
 import com.hoangthien.pitchbooking.mapper.PitchMapper;
 import com.hoangthien.pitchbooking.repositories.*;
+import com.hoangthien.pitchbooking.utils.PitchBookingUtils;
 import com.hoangthien.pitchbooking.utils.TimeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,7 +136,7 @@ public class PitchServiceImpl implements PitchService {
                                         .stream()
                                         .filter(spCost ->
                                                 isTimeFrameInTimeRange(timeFrame, spCost.getFromTime(), spCost.getToTime())
-                                                && getGroupDaysIdFromLocalDate(dateBooking) == spCost.getGroupDays().getId())
+                                                && PitchBookingUtils.getGroupDaysIdFromLocalDate(dateBooking) == spCost.getGroupDays().getId())
                                         .findFirst();
                                 if (optional.isPresent()) {
                                     childPitchDTO.setCost(optional.get().getCost());
@@ -146,12 +147,12 @@ public class PitchServiceImpl implements PitchService {
                                         .filter(bk ->
                                                 bk.getFromTime().equals(timeFrame.getFromTime())
                                                         && bk.getToTime().equals(timeFrame.getToTime())
-                                                        && bk.isAccepted()
                                                         && bk.getDateBooking().isEqual(dateBooking))
                                         .findFirst();
 
                                 if (optionalBooking.isPresent()) {
                                     childPitchDTO.setBooking(optionalBooking.get());
+                                    childPitchDTO.setBookingAccepted(optionalBooking.get().isAccepted());
                                 }
 
                                 return childPitchDTO;
@@ -207,27 +208,5 @@ public class PitchServiceImpl implements PitchService {
         } catch (NumberFormatException e) {
             return false;
         }
-    }
-
-    private int getGroupDaysIdFromLocalDate(LocalDate localDate) {
-        String dayOfWeek = localDate.getDayOfWeek().name();
-        int result = 0;
-
-        switch (dayOfWeek) {
-            case "MONDAY":
-            case "TUESDAY":
-            case "WEDNESDAY":
-            case "THURSDAY":
-            case "FRIDAY":
-                result = 1;
-                break;
-            case "SATURDAY":
-                result = 2;
-                break;
-            case "SUNDAY":
-                result = 3;
-                break;
-        }
-        return result;
     }
 }

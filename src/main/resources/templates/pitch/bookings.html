@@ -157,8 +157,11 @@
                                                                         <div th:if="${childPitch.booking == null}">
                                                                             Đang trống, click để cập nhật
                                                                         </div>
-                                                                        <div th:if="${childPitch.booking != null}" style="color: red">
+                                                                        <div th:if="${childPitch.booking != null && childPitch.bookingAccepted}" style="color: red">
                                                                             Đã có người đặt, click để xem
+                                                                        </div>
+                                                                        <div th:if="${childPitch.booking != null && !childPitch.bookingAccepted}" style="color: blue">
+                                                                            Đang chờ phê duyệt, click để xem
                                                                         </div>
                                                                     </div>
                                                                 </td>

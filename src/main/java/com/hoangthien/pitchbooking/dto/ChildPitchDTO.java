@@ -15,4 +15,6 @@ public class ChildPitchDTO {
     private int cost;
 
     private Booking booking;
+
+    private boolean bookingAccepted;
 }

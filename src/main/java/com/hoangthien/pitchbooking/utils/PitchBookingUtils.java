@@ -3,6 +3,7 @@ package com.hoangthien.pitchbooking.utils;
 import com.hoangthien.pitchbooking.dto.Cost;
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,5 +57,27 @@ public class PitchBookingUtils {
                     return new Cost(integer, getCostCommafy(integer));
                 })
                 .collect(Collectors.toList());
+    }
+
+    public static int getGroupDaysIdFromLocalDate(LocalDate localDate) {
+        String dayOfWeek = localDate.getDayOfWeek().name();
+        int result = 0;
+
+        switch (dayOfWeek) {
+            case "MONDAY":
+            case "TUESDAY":
+            case "WEDNESDAY":
+            case "THURSDAY":
+            case "FRIDAY":
+                result = 1;
+                break;
+            case "SATURDAY":
+                result = 2;
+                break;
+            case "SUNDAY":
+                result = 3;
+                break;
+        }
+        return result;
     }
 }

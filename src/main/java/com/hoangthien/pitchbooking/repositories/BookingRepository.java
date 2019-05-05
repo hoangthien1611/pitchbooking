@@ -14,5 +14,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("select distinct b from Booking b join b.childPitch cp join cp.groupSpecificPitches gsp join gsp.specificPitchesCosts spc where spc.id = ?1 and b.dateBooking = ?2")
     List<Booking> findAllByPitchesCostIdAndDateBooking(Long pitchesCostId, LocalDate date);
 
+    @Query("select distinct b from Booking b join b.childPitch cp join cp.groupSpecificPitches gsp join gsp.specificPitchesCosts spc where spc.id = ?1 and b.dateBooking = ?2 and b.fromTime = ?3 and b.toTime = ?4")
+    List<Booking> findAllByPitchesCostIdAndTimeBooking(Long pitchesCostId, LocalDate date, String fromTime, String toTime);
+
     Optional<Booking> findFirstByDateBookingAndFromTimeAndToTimeAndChildPitchId(LocalDate localDate, String fromTime, String toTime, Long childPitchId);
 }

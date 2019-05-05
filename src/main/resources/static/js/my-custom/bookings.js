@@ -101,30 +101,33 @@ function submitForm(index, childPitchId) {
 }
 
 function deleteBooking(index, childPitchId, bookingId) {
-    $.ajax({
-        type: 'delete',
-        url: '/booking/' + bookingId,
-        success: function (data) {
-            if (data) {
-                alert('Xóa thành công');
-                $(`#id-${index}-${childPitchId}`).val('0');
-                $(`#orderName-${index}-${childPitchId}`).val('');
-                $(`#orderPhone-${index}-${childPitchId}`).val('');
-                $(`#content-${index}-${childPitchId}`).val('');
-                $(this).remove();
+    var result = confirm('Bạn có chắc chắn muốn xóa?');
+    if (result) {
+        $.ajax({
+            type: 'delete',
+            url: '/booking/' + bookingId,
+            success: function (data) {
+                if (data) {
+                    alert('Xóa thành công');
+                    $(`#id-${index}-${childPitchId}`).val('0');
+                    $(`#orderName-${index}-${childPitchId}`).val('');
+                    $(`#orderPhone-${index}-${childPitchId}`).val('');
+                    $(`#content-${index}-${childPitchId}`).val('');
+                    $(this).remove();
 
-                var textInfo = "<div>Đang trống, click để cập nhật</div>";
-                var textId = "text-info-" + index + "-" + childPitchId;
-                $(`#${textId}`).html(textInfo);
+                    var textInfo = "<div>Đang trống, click để cập nhật</div>";
+                    var textId = "text-info-" + index + "-" + childPitchId;
+                    $(`#${textId}`).html(textInfo);
 
-                var btnCloseForm = "btn-close-form-" + index + "-" + childPitchId;
-                $(`#${btnCloseForm}`).prev().remove();
-            } else {
-                alert("Xóa thất bại!");
+                    var btnCloseForm = "btn-close-form-" + index + "-" + childPitchId;
+                    $(`#${btnCloseForm}`).prev().remove();
+                } else {
+                    alert("Xóa thất bại!");
+                }
+            },
+            error: function () {
+                alert('Error! Có lỗi xảy ra!');
             }
-        },
-        error: function () {
-            alert('Error! Có lỗi xảy ra!');
-        }
-    });
+        });
+    }
 }

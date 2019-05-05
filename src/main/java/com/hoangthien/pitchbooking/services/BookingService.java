@@ -13,4 +13,6 @@ public interface BookingService {
     void delete(Long id);
 
     List<BookingCheck> getBookingCheckList(Long pitchesCostId, LocalDate date);
+
+    BookingDTO saveForUser(BookingDTO bookingDTO);
 }

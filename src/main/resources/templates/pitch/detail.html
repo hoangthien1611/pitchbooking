@@ -41,7 +41,7 @@
                                                     <strong th:text="${'Giá thuê sân ' + pitches.pitchType.name}"></strong>
                                                 </div>
                                                 <div class="san-price-line calendar-row" th:each="pitchesCost:${pitches.specificPitchesCosts}">
-                                                    <th:block th:text="${pitchesCost.fromTime + ' - ' + pitchesCost.toTime}"></th:block>
+                                                    <th:block th:text="${pitchesCost.fromTime + ' - ' + pitchesCost.toTime + ', ' + pitchesCost.groupDays.name}"></th:block>
                                                     <div>
                                                         <span class="price-san"><th:block th:text="${pitchesCost.getCostCommafy()}"></th:block><sup>vnđ</sup></span>
                                                         <button class="check-san" th:onclick="'javascript:openBookingArea('+ ${pitchesCost.id} +')'">
@@ -75,6 +75,11 @@
                                                                                         type="button" title="Đóng">
                                                                                     Đóng
                                                                                 </button>
+                                                                            </div>
+                                                                            <div class="hide row form-group">
+                                                                                <input type="text" th:id="${'input-date-booking-' + pitchesCost.id}">
+                                                                                <input type="text" th:id="${'input-cost-booking-' + pitchesCost.id}" th:value="${pitchesCost.getCostCommafy()}">
+                                                                                <input type="text" th:id="${'input-pitch-type-' + pitchesCost.id}" th:value="${pitches.pitchType.name}">
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-md-9">
@@ -207,36 +212,6 @@
                                 <div class="item-card">
                                     <div class="row">
                                         <div class="col-md-12 item-preview-image">
-                                            <a href="/san-bong-hai-dang.html" title="S&#226;n B&#243;ng Hải Đăng">
-                                                <img class="img-responsive"
-                                                     src="https://res.givator.com/pictures/11017/500/2018_09/original/4077841420828588653642844484330754813198336n.jpg"
-                                                     alt="S&#226;n B&#243;ng Hải Đăng" align="thumbnail">
-                                            </a>
-                                        </div>
-                                        <div class="col-md-12 right-item-san">
-                                            <h2><a href="/san-bong-hai-dang.html" class="item-name-link">S&#226;n B&#243;ng
-                                                Hải Đăng</a></h2>
-                                            <p>
-                                                <i class="fa fa-map-o" aria-hidden="true"></i> 56 Đường Tố Hữu (Quận Nam
-                                                Từ Li&#234;m, H&#224; Nội)
-                                            </p>
-                                            <p>Thông tin giá chưa được cập nhật. Bạn vui lòng gọi điện trực tiếp tới
-                                                quản lý sân để biết thông tin giá </p>
-
-                                            <p class="phone-numb"><i class="fa fa-phone-square" aria-hidden="true"></i>
-                                                0961678071</p>
-
-                                            <a href="/san-bong-hai-dang.html" title="S&#226;n B&#243;ng Hải Đăng"
-                                               class="btn-chi-tiet"><i class="fa fa-long-arrow-right"
-                                                                       aria-hidden="true"></i> Chi tiết</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="item-card">
-                                    <div class="row">
-                                        <div class="col-md-12 item-preview-image">
                                             <a href="/coma-6-tay-mo-tu-liem.html"
                                                title="Coma 6 - T&#226;y Mỗ - Từ Li&#234;m">
                                                 <img class="img-responsive"
@@ -313,55 +288,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div>
-                                <div class="item-card">
-                                    <div class="row">
-                                        <div class="col-md-12 item-preview-image">
-                                            <a href="/san-bong-da-truong-viet-uc-khu-do-thi-my-dinh-1.html"
-                                               title="S&#226;n b&#243;ng đ&#225; trường Việt - &#218;c Khu đ&#244; thị Mỹ đ&#236;nh 1">
-                                                <img class="img-responsive"
-                                                     src="https://res.givator.com/pictures/11017/600/2017_05/medium/san-bong-da-truong-viet-uc.jpg"
-                                                     alt="S&#226;n b&#243;ng đ&#225; trường Việt - &#218;c Khu đ&#244; thị Mỹ đ&#236;nh 1"
-                                                     align="thumbnail">
-                                            </a>
-                                        </div>
-                                        <div class="col-md-12 right-item-san">
-                                            <h2><a href="/san-bong-da-truong-viet-uc-khu-do-thi-my-dinh-1.html"
-                                                   class="item-name-link">S&#226;n b&#243;ng đ&#225; trường Việt -
-                                                &#218;c Khu đ&#244; thị Mỹ đ&#236;nh 1</a></h2>
-                                            <p>
-                                                <i class="fa fa-map-o" aria-hidden="true"></i> Khu đ&#244; thị Mỹ Đ&#236;nh
-                                                I (Quận Nam Từ Li&#234;m, H&#224; Nội)
-                                                <a href="javascript:showGmapPopup('map_canvas', 21.0322961, 105.7600939, 'S&#226;n b&#243;ng đ&#225; trường Việt - &#218;c Khu đ&#244; thị Mỹ đ&#236;nh 1')"><span
-                                                        class="fa fa-map-marker"></span></a>
-                                            </p>
-                                            <div>
-                                                <p><strong>Gi&#225; thu&#234; s&#226;n 7 người</strong></p>
-                                                <p>06:00 - 16:00 <span class="price-san">300.000<sup>vnđ</sup></span>
-                                                </p>
-                                                <p>16:00 - 17:30 <span class="price-san">600.000<sup>vnđ</sup></span>
-                                                </p>
-                                                <p>17:30 - 20:30 <span class="price-san">800.000<sup>vnđ</sup></span>
-                                                </p>
-                                                <p>20:30 - 22:00 <span class="price-san">400.000<sup>vnđ</sup></span>
-                                                </p>
-                                            </div>
-
-                                            <p class="phone-numb"><i class="fa fa-phone-square" aria-hidden="true"></i>
-                                                Hỗ Trợ - 0462872869 / 0462878889</p>
-                                            <p class="phone-numb"><i class="fa fa-phone-square" aria-hidden="true"></i>
-                                                S&#226;n b&#243;ng trường Việt - &#218;c - 0462872869</p>
-                                            <p class="phone-numb"><i class="fa fa-phone-square" aria-hidden="true"></i>
-                                                S&#226;n b&#243;ng trường Việt - &#218;c - 0462878889</p>
-
-                                            <a href="/san-bong-da-truong-viet-uc-khu-do-thi-my-dinh-1.html"
-                                               title="S&#226;n b&#243;ng đ&#225; trường Việt - &#218;c Khu đ&#244; thị Mỹ đ&#236;nh 1"
-                                               class="btn-chi-tiet"><i class="fa fa-long-arrow-right"
-                                                                       aria-hidden="true"></i> Chi tiết</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="clearfix"></div>
@@ -371,62 +297,74 @@
     </div>
 </div>
 
-<div class="hidden calendar-tpl">
-    <div class="item-other-detail">
-        <div id="ticket-select-date-time" class="ticket-select-date-time item-other-detail-section">
-            <div class="item-other-detail-section-header">
-                <strong>ĐẶT SÂN</strong>
+<div class="modal fade" id="pitch-booking" role="dialog">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Đặt sân</h4>
             </div>
-            <div class="row item-other-detail-section-content">
-                <div class="form-group">
-                    <div class="col-md-7">
-                        <div id="ticket-select-date" class="ticket-select-date"></div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div class="form-group row hide">
+                        <input type="text" id="pitchesCostIdBooking" readonly
+                               class="form-control input-sm">
                     </div>
-                    <div class="col-md-5">
-                        <div class="ticket-select-time-wrapper">
-                            <div class="row">
-                                <div class="col-xs-6 col-sm-12">
-                                    <div class="ticket-select-time-title">NGÀY ĐẶT</div>
-                                    <div class="ticket-select-day-summary"><span class="currentDay"></span>
-                                        <small class="currentMonth"></small>
-                                    </div>
-                                    <hr>
-                                </div>
-                                <div class="col-xs-6 col-sm-12">
-                                    <input type="hidden" id="stadium-booking-data"/>
-                                    <div id="calendarBookingTime">
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 control-label" style="font-weight: bold; margin-top: 5px;">Thời gian</label>
+                        <div class="col-md-4">
+                            <input type="text" id="timeBooking" readonly
+                                   class="form-control input-sm" placeholder="Thời gian">
+                        </div>
+                        <label class="col-md-2 control-label" style="font-weight: bold; margin-top: 5px;"> &nbsp;Ngày</label>
+                        <div class="col-md-4">
+                            <input type="text" id="dateBooking" readonly
+                                   class="form-control input-sm" placeholder="Ngày">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 control-label" style="font-weight: bold; margin-top: 5px;">Loại sân</label>
+                        <div class="col-md-4">
+                            <input type="text" id="pitchType" readonly
+                                   class="form-control input-sm">
+                        </div>
+                        <label class="col-md-2 control-label" style="font-weight: bold; margin-top: 5px;"> &nbsp;Giá (VND)</label>
+                        <div class="col-md-4">
+                            <input type="text" id="cost" readonly
+                                   class="form-control input-sm">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 control-label" style="font-weight: bold; margin-top: 5px;">Người đặt</label>
+                        <div class="col-md-10">
+                            <input type="text" id="orderName" placeholder="Nhập tên người đặt/ đội bóng"
+                                   class="form-control input-sm">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 control-label" style="font-weight: bold; margin-top: 5px;">Điện thoại</label>
+                        <div class="col-md-10">
+                            <input type="text" id="orderPhone" placeholder="Nhập số điện thoại"
+                                   class="form-control input-sm">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 control-label" style="font-weight: bold; margin-top: 5px;">Ghi chú</label>
+                        <div class="col-md-10">
+                            <textarea class="form-control" id="content" placeholder="Ghi chú" rows="2"></textarea>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-success btn-submit-booking" data-dismiss="modal">Xác nhận</button>
+            </div>
         </div>
+
     </div>
 </div>
-<div id="booking-popup" class="modal fade" role="dialog" style="display: none;">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 class="modal-title">Đặt sân</h3>
-            </div> <!-- /.modal-header -->
-            <div class="modal-body ">
-
-            </div> <!-- /.modal-body -->
-            <div class="modal-footer">
-                <button onclick="sport.stadiumDetail.createBooking(event);" id="reserveCalendar"
-                        data-loading-text="<i class='fa fa-spinner fa-spin '></i> Đang xử lý..."
-                        class="btn btn-primary btn-primary-extra">
-                    <i class="fa fa-calendar-check-o" aria-hidden="true"></i> Đặt lịch
-                </button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
-            </div> <!-- /.modal-footer -->
-        </div> <!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div>
-
 <footer class="footer" th:replace="fragments/footer :: footer"></footer>
 
 <div th:replace="fragments/modals::modals"></div>

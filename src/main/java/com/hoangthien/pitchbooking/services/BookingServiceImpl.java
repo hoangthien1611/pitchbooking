@@ -1,6 +1,5 @@
 package com.hoangthien.pitchbooking.services;
 
-import com.hoangthien.pitchbooking.constants.Defines;
 import com.hoangthien.pitchbooking.dto.BookingCheck;
 import com.hoangthien.pitchbooking.dto.BookingDTO;
 import com.hoangthien.pitchbooking.dto.TimeFrame;
@@ -20,8 +19,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,12 +51,30 @@ public class BookingServiceImpl implements BookingService {
                 .findById(bookingDTO.getChildPitchId())
                 .orElseThrow(() -> new PitchBookingException("Child pitch not found!"));
 
+        LocalDate dateBooking = TimeUtils.getLocalDateFromDateString(bookingDTO.getDateBookingString());
+
         if (bookingDTO.getId() == 0) {
+            // save a new booking
+
+            LocalDateTime now = LocalDateTime.now();
+            if (now.toLocalDate().isAfter(dateBooking) ||
+                    (now.toLocalDate().isEqual(dateBooking) && now.getHour() >= TimeUtils.getTimeIntFromString(bookingDTO.getFromTime()))) {
+                throw new PitchBookingException("Không thể đặt sân vào thời gian ở quá khứ!");
+            }
+
+            Optional<Booking> bookingOptional = bookingRepository
+                    .findFirstByDateBookingAndFromTimeAndToTimeAndChildPitchId(
+                            dateBooking, bookingDTO.getFromTime(), bookingDTO.getToTime(), bookingDTO.getChildPitchId());
+
+            if (bookingOptional.isPresent()) {
+                throw new PitchBookingException("Sân ở thời điểm này đã được đặt!");
+            }
+
             bookingDTO.setId(null);
-            bookingDTO.setTimeCreated(LocalDateTime.now());
+            bookingDTO.setTimeCreated(now);
 
             Booking booking = bookingMapper.bookingDTOToBooking(bookingDTO);
-            booking.setDateBooking(TimeUtils.getLocalDateFromDateString(bookingDTO.getDateBookingString()));
+            booking.setDateBooking(dateBooking);
             booking.setAccepted(true);
             booking.setUserBooking(userBooking);
             booking.setChildPitch(childPitch);
@@ -76,7 +93,7 @@ public class BookingServiceImpl implements BookingService {
         existedBooking.setAccepted(true);
         existedBooking.setUserBooking(userBooking);
         existedBooking.setChildPitch(childPitch);
-        existedBooking.setDateBooking(TimeUtils.getLocalDateFromDateString(bookingDTO.getDateBookingString()));
+        existedBooking.setDateBooking(dateBooking);
 
         return bookingMapper.bookingToBookingDTO(bookingRepository.save(existedBooking));
     }
@@ -92,13 +109,13 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingCheck> getBookingCheckList(Long pitchesCostId, LocalDate date) {
 
-        List<BookingCheck> bookingChecks = new ArrayList<>();
-
         SpecificPitchesCost specificPitchesCost = specificPitchesCostRepository
                 .findById(pitchesCostId)
                 .orElseThrow(() -> new PitchBookingException("Không tìm thấy PitchesCost"));
 
         List<Booking> bookings = bookingRepository.findAllByPitchesCostIdAndDateBooking(pitchesCostId, date);
+
+        LocalDateTime localDateTime = LocalDateTime.now();
 
         int fromTime = TimeUtils.getTimeIntFromString(specificPitchesCost.getFromTime());
         int toTime = TimeUtils.getTimeIntFromString(specificPitchesCost.getToTime());
@@ -110,11 +127,17 @@ public class BookingServiceImpl implements BookingService {
                     bookingCheck.setTimeFrame(timeFrame);
                     bookingCheck.setDateBooking(date);
 
-                    List<Booking> bookedList = bookings.stream()
-                            .filter(booking -> booking.getFromTime().equals(timeFrame.getFromTime())
-                                    && booking.getToTime().equals(timeFrame.getToTime()))
-                            .collect(Collectors.toList());
-                    bookingCheck.setAvailable(bookedList.size() < specificPitchesCost.getGroupSpecificPitches().getChildPitches().size());
+                    if ((localDateTime.toLocalDate().isEqual(date) && localDateTime.getHour() >= TimeUtils.getTimeIntFromString(timeFrame.getFromTime()))
+                            || localDateTime.toLocalDate().isAfter(date)) {
+                        bookingCheck.setAvailable(false);
+                    } else {
+
+                        List<Booking> bookedList = bookings.stream()
+                                .filter(booking -> booking.getFromTime().equals(timeFrame.getFromTime())
+                                        && booking.getToTime().equals(timeFrame.getToTime()))
+                                .collect(Collectors.toList());
+                        bookingCheck.setAvailable(bookedList.size() < specificPitchesCost.getGroupSpecificPitches().getChildPitches().size());
+                    }
                     return bookingCheck;
                 })
                 .collect(Collectors.toList());

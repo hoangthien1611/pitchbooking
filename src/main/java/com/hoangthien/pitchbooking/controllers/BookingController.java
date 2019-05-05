@@ -3,6 +3,7 @@ package com.hoangthien.pitchbooking.controllers;
 import com.hoangthien.pitchbooking.dto.BookingCheck;
 import com.hoangthien.pitchbooking.dto.BookingDTO;
 import com.hoangthien.pitchbooking.services.BookingService;
+import com.hoangthien.pitchbooking.utils.TimeUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,10 +48,15 @@ public class BookingController {
         }
     }
 
-    @GetMapping("/get-booking-check")
+    @GetMapping("/get-booking-check-list")
     @ResponseBody
     public List<BookingCheck> getListAvailable(@RequestParam("pitchesCostId") Long pitchesCostId, @RequestParam("date") String date) {
-        log.info("GET: " + BASE_URL + "/get-time-frames-available");
-        return new ArrayList<>();
+        log.info("GET: " + BASE_URL + "/get-booking-check-list");
+        try {
+            return bookingService.getBookingCheckList(pitchesCostId, TimeUtils.getLocalDateFromDateString(date));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return null;
+        }
     }
 }

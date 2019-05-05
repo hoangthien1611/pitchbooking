@@ -70,7 +70,7 @@ function submitForm(index, childPitchId) {
 
         $.ajax({
             type: 'post',
-            url: '/booking/',
+            url: '/booking',
             data: data,
             success: function (data) {
                 if (data) {
@@ -89,7 +89,8 @@ function submitForm(index, childPitchId) {
                     $(`#${formId}`).hide();
                     $(`#${textId}`).show();
                 } else {
-                    alert("Lưu thất bại!");
+                    alert("Lưu thất bại! Sân đã được đặt hoặc thời gian đặt không hợp lệ!");
+                    location.reload(true);
                 }
             },
             error: function () {

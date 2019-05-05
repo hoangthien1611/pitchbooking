@@ -34,7 +34,7 @@
                                         <div class="des-san">
                                             <div class="san-address-line">
                                                 <i class="fa fa-map-o" aria-hidden="true"></i>
-                                                <th:block th:text="${pitch.address + ',' + pitch.district.name}"></th:block>
+                                                <th:block th:text="${pitch.address + ', ' + pitch.district.name}"></th:block>
                                             </div>
                                             <th:block th:each="pitches:${pitch.groupSpecificPitches}">
                                                 <div>
@@ -67,7 +67,7 @@
                                                                                        style="padding: 2px">
                                                                             </div>
                                                                             <div class="row form-group">
-                                                                                <button class="btn btn-info btn-sm"
+                                                                                <button class="btn btn-info btn-sm" th:onclick="'javascript:checkPitches('+ ${pitchesCost.id} +')'"
                                                                                         type="button" title="Tìm sân trống">
                                                                                     Tìm sân trống
                                                                                 </button>
@@ -85,19 +85,8 @@
                                                                                         <hr>
                                                                                     </div>
                                                                                     <div class="col-xs-6 col-sm-12">
-                                                                                        <div>
-                                                                                            <button type="button"
-                                                                                                    onclick="sport.stadiumDetail.showPopupBooking(this)"
-                                                                                                    class="btn btn-default btn-sm btn-time-available-true disabled">
-                                                                                                <i class="fa fa-clock-o" aria-hidden="true"></i>
-                                                                                                <span>17:30-19:00</span>
-                                                                                            </button>
-                                                                                            <button type="button"
-                                                                                                    onclick="sport.stadiumDetail.showPopupBooking(this)"
-                                                                                                    class="btn btn-default btn-sm btn-time-available-true">
-                                                                                                <i class="fa fa-clock-o" aria-hidden="true"></i>
-                                                                                                <span>19:00-20:30</span>
-                                                                                            </button>
+                                                                                        <div th:id="${'btn-area-' + pitchesCost.id}">
+                                                                                            <h4 style="color: blue">Click tìm sân trống để xem kết quả</h4>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>

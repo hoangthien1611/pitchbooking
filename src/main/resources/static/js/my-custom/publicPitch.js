@@ -95,3 +95,42 @@ function changeDate(pitchesCostId) {
     var destination = "#show-date-" + pitchesCostId;
     showDate(input, destination);
 }
+
+function checkPitches(pitchesCostId) {
+    var inputDate = $(`#select-date-booking-${pitchesCostId}`).val();
+
+    $.ajax({
+        type: 'get',
+        url: '/booking/get-booking-check-list',
+        data: {
+            pitchesCostId,
+            date: inputDate
+        },
+        success: function (data) {
+            if (data != null) {
+                console.log(data);
+
+                var html = "";
+                if (data.length > 0) {
+                    data.forEach(function (item, index) {
+                       html += "<button type=\"button\" class=\"btn btn-sm btn-time-available-true" + (item.available ? " btn-success" : " btn-default disabled") + "\" style=\"margin-top:3px\">"
+                            + "<i class=\"fa fa-clock-o\" aria-hidden=\"true\"></i>"
+                            + "<span>"+ item.timeFrame.fromTime + "-" + item.timeFrame.toTime +"</span>"
+                            + "</button> &nbsp;"
+                    });
+
+                    $(`#btn-area-${pitchesCostId}`).html(html);
+                } else {
+                    html = "<h4 style='color: red;'>Không tìm thấy khung giờ để chọn!</h4>"
+                    $(`#btn-area-${pitchesCostId}`).html(html);
+                }
+
+            } else {
+                alert("Không thể tìm được!");
+            }
+        },
+        error: function () {
+            alert('Error! Có lỗi xảy ra!');
+        }
+    });
+}

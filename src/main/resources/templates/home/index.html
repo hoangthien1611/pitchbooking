@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head::head"></head>
 <body ng-app="sportApp" class="page-frontpage ">
-
 <div th:replace="fragments/header::header"></div>
 
 <div class="top-hero-box">
@@ -40,8 +39,7 @@
                             Giảm thiểu tối đa tình trạng <strong>trống sân, cháy đối</strong>!
                         </li>
                         <li class="view-more">
-                            <a class="btn btn-primary" title="Toàn bộ tính năng của TìmĐốiNhanh.com"
-                               href="/tien-ich.html">
+                            <a class="btn btn-primary" title="Toàn bộ tính năng">
                                 <em class="glyphicon glyphicon-hand-right"></em>
                                 XEM CHI TIẾT
                             </a>
@@ -88,83 +86,34 @@
 
             <div class="col-md-5">
                 <div id="account-creation-form">
-                    <h3>Tạo tài khoản mới</h3>
-                    <form id="frmRegister" method="post" class="form account-form">
+                    <h3>Đăng nhập</h3>
+                    <form id="frmSignIn" class="modal-forms" method="post">
                         <div class="form-group">
-                            <div class="alert alert-danger fade in hidden msg-wraper" role="alert">
-                                <span class="messge"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-xs-6 col-sm-6 col-md-6">
-                                    <input name="FirstName" class="form-control" type="text"
-                                           placeholder="Họ" required id="FirstName"
-                                           oninvalid="sport.account.validateControl(this);"
-                                           oninput="sport.account.validateControl(this);"
-                                           data-msg-require="Họ tên bạn là gì?">
+                            <th:block th:if="${msg != null}" th:with="type=${msg.type == 1 ? 'success' : 'danger'}">
+                                <div th:class="${'alert msg-noti alert-' + type}" style="text-align: center">
+                                    <strong th:text="${msg.message}"></strong>
                                 </div>
-                                <div class="col-xs-6 col-sm-6 col-md-6">
-                                    <input name="LastName" class="form-control" type="text"
-                                           placeholder="Tên" required id="LastName"
-                                           oninvalid="sport.account.validateControl(this);"
-                                           oninput="sport.account.validateControl(this);"
-                                           data-msg-require="Họ tên bạn là gì?">
-                                </div>
-                            </div>
+                            </th:block>
                         </div>
                         <div class="form-group">
-                            <input name="UserName" class="form-control" type="text"
-                                   placeholder="Số di động hoặc email" required id="UserName"
-                                   oninvalid="sport.account.validUserName(this);"
-                                   oninput="sport.account.validUserName(this);"
-                                   data-msg-require="Vui lòng nhập số điện thoại hoặc địa chỉ email!"
-                                   data-msg-username-invalid="Vui lòng nhập 1 số điện thoại hoặc địa chỉ email hợp lệ!">
+                            <input name="userName" class="form-control" type="text"
+                                   placeholder="Tên đăng nhập" required id="userName">
                         </div>
-                        <div class="input-group form-group-password">
-                            <input name="Password" class="form-control" type="Password"
-                                   placeholder="Mật khẩu mới" required id="Password"
-                                   oninvalid="sport.account.validateControl(this);"
-                                   oninput="sport.account.validateControl(this);"
-                                   data-msg-require="Vui lòng điền mật khẩu của bạn?">
-                            <span class="input-group-btn">
-                <button class="btn btn-default btn-showhide-password" type="button"><i
-                        class="glyphicon glyphicon-eye-open"></i></button>
-            </span>
+                        <div class="form-group">
+                            <input name="password" class="form-control" type="password"
+                                   placeholder="Mật khẩu" required id="password">
                         </div>
-                        <div class="btn-form-reg">
-                            <div class="row">
-                                <div class="col-xs-12 col-md-6 col-md-6">
-                                    <button class="btn btn-primary btn-block btn-lg" id="btnRegister" type="submit">Đăng
-                                        ký
-                                    </button>
-                                </div>
-                                <div class="col-xs-12 col-md-6 col-md-6">
-                                    <div class="form-group social-login-group">
-                                        <div class="div-logisn">Hoặc đăng nhập với:</div>
-
-                                        <div class="login-social">
-                                            <a class="logon-facebook" href="javascript:void(0)"><i
-                                                    class="fa fa-facebook-square"></i></a>
-                                            <a class="login-google" ref="javascript:void(0)"><i
-                                                    class="fa fa-google-plus-square"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <a href="/user/forgotpassword">Lấy lại mật khẩu</a>
-                                </div>
-                            </div>
-                            <div class="form-control-note text-justify">
-                                Bằng cách nhấn vào nút "Đăng ký", Bạn đồng ý với
-                                <a href="/dieu-khoan-su-dung.html" target="_blank">điều khoản sử dụng</a> và
-                                <a href="/chinh-sach-bao-mat.html" target="_blank">chính sách bảo mật</a> của chúng tôi.
-                            </div>
+                        <div class="form-group">
+                            <button id="btnSignIn" type="submit">Đăng nhập</button>
+                        </div>
+                        <div class="a-btn-modal">
+                            <p class="footer-group" style="margin-top:15px;">
+                                <a href="/user/forgotpassword" class="forgot-pass">Quên mật khẩu</a>
+                                <a href="/register" class="register-link pull-right" style="margin-left: 120px">Tạo tài khoản mới</a>
+                            </p>
                         </div>
                     </form>
-                </div> <!-- /.account-form -->
+                </div>
 
             </div>
 

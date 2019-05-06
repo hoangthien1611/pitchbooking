@@ -1,6 +1,5 @@
 package com.hoangthien.pitchbooking.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,6 +24,10 @@ public class User {
     private String phoneNumber;
 
     private String avatar;
+
+    private String userName;
+
+    private String password;
 
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "owner",

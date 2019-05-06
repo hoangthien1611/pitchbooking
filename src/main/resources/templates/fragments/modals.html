@@ -40,58 +40,6 @@
         </div>
     </div>
 
-    <!--login-->
-    <div id="loginModal" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title">Đăng nhập</h4>
-                </div>
-                <div class="modal-body">
-
-                    <form id="frmSignIn" class="modal-forms">
-                        <div class="login-error">
-
-
-                        </div>
-                        <input name="UserName" type="text" placeholder="Số điện thoại hoặc email" required id="UserName"
-                               oninvalid="sport.account.validateControl(this);"
-                               oninput="sport.account.validateControl(this);"
-                               data-msg-require="Tài khoản đăng nhập không được để trống">
-                        <input type="password" name="Password" placeholder="Mật khẩu" required id="Password"
-                               oninvalid="sport.account.validateControl(this);"
-                               oninput="sport.account.validateControl(this);"
-                               data-msg-require="Mật khẩu không được để trống">
-
-                        <input type="hidden" id="facebookId" value="930986897045312"/>
-                        <input type="hidden" id="googleClientId"
-                               value="894662634145-oge0jk4ofsq4afq81niurkh4potclkl9.apps.googleusercontent.com"/>
-                        <input type="hidden" id="returnUrl" name="returnUrl" value=""/>
-                        <button id="btnSignIn" type="submit">Đăng nhập</button>
-                    </form>
-                    <div class="a-btn-modal">
-                        <div class="social-login-group">
-                            <p>Hoặc đăng nhập với</p>
-                            <a class="logon-facebook" href="#"><i class="fa fa-facebook-square" aria-hidden="true"></i></a>
-                            <a class="login-google" href="#"><i class="fa fa-google-plus-square" aria-hidden="true"></i></a>
-
-                        </div>
-                        <p class="footer-group" style="margin-top:15px;">
-                            <a href="/user/forgotpassword" class="forgot-pass">Quên mật khẩu</a>
-                            <a href="javascript:location.href='/'" class="register-link pull-right">Tạo tài khoản mới</a>
-                        </p>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-    <!--#login-->
     <div id="modalNotAuthorize" class="modal modal-styled fade" style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -164,13 +112,6 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-
-    <!--<script th:src="Angular/libs/fireChat/fireService.js"></script>-->
-    <input type="hidden" id="matchHNTotalHidden" value="236"/>
-    <input type="hidden" id="matchHCMTotalHidden" value="0"/>
-    <input type="hidden" id="teamAllTotalHidden" value="13441"/>
-    <input type="hidden" id="stadiumHNTotalHidden" value="180"/>
-    <input type="hidden" id="stadiumHCMTotalHidden" value="141"/>
     <div id="isMobileDevice"></div>
 
     <script>

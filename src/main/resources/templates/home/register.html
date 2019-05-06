@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head::head"></head>
+<body ng-app="sportApp" class="page-custompage ">
+<div th:replace="fragments/header::header"></div>
+
+<div class="content-wrap">
+    <div class="col-md-offset-4 col-md-4">
+        <div class="p-content">
+
+            <div class="account-body forgot-password step-1">
+                <h2 class="title-intent title-pages-lg text-center">Tạo tài khoản mới</h2>
+
+                <form id="frmRegister" class="form" method="POST" th:action="@{/register}">
+                    <th:block th:if="${msg != null}" th:with="type=${msg.type == 1 ? 'success' : 'danger'}">
+                        <div th:class="${'alert msg-noti alert-' + type}" style="text-align: center">
+                            <strong th:text="${msg.message}"></strong>
+                        </div>
+                    </th:block>
+                    <div class="form-group">
+                        <input type="text" required class="form-control" name="fullName" id="fullName" placeholder="Họ tên">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" required class="form-inline col-md-9" name="userName" id="userName" placeholder="Tên đăng nhập"
+                               pattern="[^' ']+" title="Username không được có khoảng trắng!" minlength="6" maxlength="30">
+                        <button type="button" class="btn btn-info btn-check-userName" style="margin-left: 5%">Kiểm tra</button>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" required class="form-control" name="password" id="password"
+                               placeholder="Mật khẩu" minlength="6" maxlength="30">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" required class="form-control" name="rePassword" id="rePassword"
+                               placeholder="Xác nhận lại mật khẩu" minlength="6" maxlength="30">
+                    </div>
+                    <div class="form-group">
+                        <input type="email" required class="form-control" name="email" id="email" placeholder="Email">
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" id="btnRegister" class="btn btn-tertiary btn-block btn-lg">
+                            Tạo tài khoản
+                        </button>
+                    </div>
+
+                    <div class="form-group">
+                        <a href="/"><i class="fa fa-angle-double-left"></i> &nbsp;Quay lại đăng nhập</a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<footer class="footer" th:replace="fragments/footer::footer"></footer>
+<div th:replace="fragments/modals::modals"></div>
+<script th:src="@{/js/my-custom/register.js}"></script>
+</body>
+</html>

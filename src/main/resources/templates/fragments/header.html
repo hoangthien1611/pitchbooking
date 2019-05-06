@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -67,12 +67,13 @@
                         </ul>
                     </li>
 
-                    <li>
-                        <a href="javascript:;" id="loginBtn" data-toggle="modal" data-target="#loginModal">
+                    <li sec:authorize="isAnonymous()">
+                        <a href="/" id="loginBtn">
                             Đăng nhập
                         </a>
                     </li>
 
+                    <th:block sec:authorize="isAuthenticated()">
                     <li class="dropdown navbar-notification">
                         <a href="javascript:void();" class="dropdown-toggle" data-toggle="dropdown"
                            ng-click="onShowNotifications();">
@@ -136,7 +137,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="https://www.timdoinhanh.com/User/logout">
+                                <a href="/logout">
                                     <i class="fa fa-sign-out" aria-hidden="true"></i>
                                     Đăng xuất
                                 </a>
@@ -144,6 +145,7 @@
                             <li style="display:none"></li>
                         </ul>
                     </li>
+                    </th:block>
                 </ul>
             </nav>
         </div> <!-- /.container -->

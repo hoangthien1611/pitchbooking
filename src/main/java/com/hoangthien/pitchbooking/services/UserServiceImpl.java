@@ -3,6 +3,7 @@ package com.hoangthien.pitchbooking.services;
 import com.hoangthien.pitchbooking.dto.UserDTO;
 import com.hoangthien.pitchbooking.entities.User;
 import com.hoangthien.pitchbooking.exception.PitchBookingException;
+import com.hoangthien.pitchbooking.exception.PitchBookingNotFoundException;
 import com.hoangthien.pitchbooking.mapper.UserMapper;
 import com.hoangthien.pitchbooking.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userMapper.userDTOToUser(userDTO);
         user.setPassword(encoder.encode(userDTO.getPassword()));
-        user.setAvatar("user-default.png");
+        user.setAvatar("default-user.png");
 
         return userMapper.userToUserDTO(userRepository.save(user));
     }
@@ -61,7 +62,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDTO getUser(Long id) {
+       User user = userRepository.findById(id)
+               .orElseThrow(() -> new PitchBookingNotFoundException("User not found"));
+       return userMapper.userToUserDTO(user);
+    }
+
+    @Override
     public boolean isUserNameExisted(String userName) {
         return userRepository.findByUserName(userName).isPresent();
+    }
+
+    @Override
+    public UserDTO updateProfile(UserDTO userDTO) {
+        User user = userRepository
+                .findById(userDTO.getId())
+                .orElseThrow(() -> new PitchBookingException("Không tìm thấy user cần cập nhật"));
+
+        user.setFullName(userDTO.getFullName());
+        user.setEmail(userDTO.getEmail());
+        user.setPhoneNumber(userDTO.getPhoneNumber());
+
+        return userMapper.userToUserDTO(userRepository.save(user));
     }
 }

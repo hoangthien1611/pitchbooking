@@ -8,5 +8,9 @@ public interface UserService {
 
     UserDTO getUser(String userName);
 
+    UserDTO getUser(Long id);
+
     boolean isUserNameExisted(String userName);
+
+    UserDTO updateProfile(UserDTO userDTO);
 }

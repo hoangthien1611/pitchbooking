@@ -1,6 +1,5 @@
 package com.hoangthien.pitchbooking.controllers;
 
-import com.hoangthien.pitchbooking.constants.Defines;
 import com.hoangthien.pitchbooking.constants.MessageType;
 import com.hoangthien.pitchbooking.dto.Message;
 import com.hoangthien.pitchbooking.dto.UserDTO;
@@ -63,6 +62,7 @@ public class IndexController extends BaseController {
         log.info("POST: /register");
         try {
             userService.save(userDTO);
+            ra.addFlashAttribute("msg", new Message(MessageType.SUCCESS, "Bạn đã đăng ký thành công! Bây giờ có thể đăng nhập tại đây"));
             return "redirect:/";
         } catch (PitchBookingException e) {
             log.error(e.getMessage());

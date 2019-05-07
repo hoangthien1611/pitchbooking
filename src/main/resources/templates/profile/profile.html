@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head::head"></head>
+<body ng-app="sportApp" class="page-sportuserprofileview  ng-scope" data-gr-c-s-loaded="true">
+<div th:replace="fragments/header::header"></div>
+<div class="tabs-chi-tiet-doi">
+    <div class="container">
+
+        <div class="title-doi">
+
+        </div>
+        <div class="wrap-ul-doi">
+            <ul class="list-link-doi tabs">
+                <li class="active" target-id="#profile"><a href="/user/profile#">Thông tin cá
+                    nhân</a></li>
+                <li target-id="#changepass" class=""><a href="/user/profile#">Thay đổi mật
+                    khẩu</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="content-wrap">
+    <!-- Nav Tabs -->
+
+
+    <!-- Tab Content -->
+    <div class="container">
+
+        <!-- PROFILE -->
+        <div id="profile" style="display: block;">
+            <div class="row">
+
+                <div class="col-md-3">
+                    <div class="sidebar sidebar-tien-ich">
+                        <ul class="list-left-links">
+                            <li><a class="red">Đang bắt đối</a></li>
+                            <li><a>Đặt sân</a></li>
+                            <li>
+                                <a>Quản lý đội bóng</a>
+                                <!-- ngIf: myTeams.length>0 -->
+                            </li>
+                            <li><a>Quản lý sân</a></li>
+                            <li><a>Tài khoản</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-9">
+
+                    <ul class="list-item-san">
+                        <li class="item-card">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="img-profile" title="Tải lên một hình ảnh đại diện">
+                                        <img id="profile-avatar" class="media-object" width="100%"
+                                             th:src="@{/uploads/__${user.avatar}__}"
+                                             alt="avatar">
+                                    </div>
+
+
+                                    <!--<span style="display:none">-->
+                                        <!--<input id="btnprofileUpload" onchange="return sport.account.readURL(this);"-->
+                                               <!--name="profileUpload" type="file">-->
+                                    <!--</span>-->
+
+                                </div>
+                                <div class="col-md-9 right-item-san profile-view">
+                                    <th:block th:if="${msg != null}" th:with="type=${msg.type == 1 ? 'success' : 'danger'}">
+                                        <div th:class="${'alert msg-noti alert-' + type}" style="text-align: center">
+                                            <strong th:text="${msg.message}"></strong>
+                                        </div>
+                                    </th:block>
+                                    <div class="form-group col-md-11">
+                                        <p><strong>Họ và Tên:</strong> <th:block th:text="${user.fullName}"></th:block></p>
+                                        <p><strong>Email:</strong> <th:block th:text="${user.email}"></th:block></p>
+                                        <p><strong>Điện thoại:</strong> <th:block th:text="${user.phoneNumber == null ? 'Chưa có' : user.phoneNumber}"></th:block></p>
+                                    </div>
+                                    <div class="form-group col-md-11">
+                                        <a href="javascript:void(0)" id="btnEditProfile"
+                                           class="btn mb20 btn-small btn-primary">Chỉnh sửa</a>
+                                    </div>
+                                </div>
+                                <div class="profile-edit col-md-9 right-item-san" style="display:none">
+                                    <form id="frmEditProfile" method="post" th:action="@{/user/profile/update}">
+
+                                        <div class="row">
+
+                                        </div>
+                                        <div class="row form-group">
+                                            <div class="col-sm-3 col-xs-6">
+                                                <label class="control-label ">Họ tên</label>
+                                            </div>
+                                            <div class="col-sm-6 col-xs-6">
+                                                <input type="text" name="id" th:value="${user.id}" class="hide">
+                                                <input class="form-control" id="fullName" name="fullName" type="text" min="6" max="30" required
+                                                       th:value="${user.email}">
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <div class="col-sm-3 col-xs-6">
+                                                <label class="control-label ">Email</label>
+                                            </div>
+                                            <div class="col-sm-6 col-xs-6">
+                                                <input class="form-control" id="email" name="email" type="email" required
+                                                       th:value="${user.email}">
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <div class="col-sm-3 col-xs-6">
+                                                <label class="control-label">Điện thoại</label>
+                                            </div>
+                                            <div class="col-sm-6 col-xs-6">
+                                                <input class="form-control" id="phoneNumber" name="phoneNumber"
+                                                       type="text" th:value="${user.phoneNumber}">
+                                            </div>
+                                        </div>
+                                        <div class="row form-group">
+                                            <button type="submit" id="btnProfileSave"
+                                               class="btn mb20 btn-small btn-primary">Lưu thay đổi</button>
+                                            <button type="button" id="btnProfileCancel"
+                                               class="btn mb20 btn-small btn-default">Quay lại</button>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </li>
+
+                    </ul>
+
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Jobs -->
+        <div id="changepass" style="display: none;">
+            <form id="frmChangePassword" method="post" class="ng-pristine ng-valid" novalidate="novalidate">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="sidebar sidebar-tien-ich">
+                            <ul class="list-left-links">
+                                <li><a href="https://www.timdoinhanh.com/match/inviting" class="red">Đang bắt đối</a>
+                                </li>
+                                <li><a href="https://www.timdoinhanh.com/stadium/bookinghistory">Đặt sân</a></li>
+                                <li>
+                                    <a href="https://www.timdoinhanh.com/team/management">Quản lý đội bóng</a>
+                                    <!-- ngIf: myTeams.length>0 -->
+                                </li>
+                                <li><a href="https://www.timdoinhanh.com/stadium/management">Quản lý sân</a></li>
+                                <li><a href="https://www.timdoinhanh.com/user/profile">Tài khoản</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="profile-main">
+                            <div class="profile-in">
+                                <div class="media-left">
+
+                                </div>
+                                <div class="media-body">
+                                    <div class="sidebar">
+                                        <div class="sidebar-information">
+                                            <div class="single-category">
+                                                <div class="row">
+
+
+                                                </div>
+                                                <input value="True" data-val="true"
+                                                       data-val-required="The HasPassword field is required."
+                                                       id="HasPassword" name="HasPassword" type="hidden">
+                                                <div class="row form-group">
+                                                    <label class="control-label col-sm-3 col-xs-6">Mật khẩu hiện
+                                                        tại</label>
+
+                                                    <div class="col-sm-6 col-xs-6">
+                                                        <span class="field-validation-valid"
+                                                              data-valmsg-for="UserPassword"
+                                                              data-valmsg-replace="true"></span>
+                                                        <input value="" class="form-control" data-val="true"
+                                                               data-val-required="Mật khẩu không được để trống"
+                                                               id="UserPassword" name="UserPassword" type="password">
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group">
+
+                                                    <label class="control-label col-sm-3 col-xs-6">Mật khẩu mới</label>
+
+                                                    <div class="col-sm-6 col-xs-6">
+                                                        <span class="field-validation-valid"
+                                                              data-valmsg-for="NewUserPassword"
+                                                              data-valmsg-replace="true"></span>
+                                                        <input class="form-control" data-val="true"
+                                                               data-val-required="Mật khẩu mới được để trống"
+                                                               id="NewUserPassword" name="NewUserPassword"
+                                                               type="password">
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group">
+
+                                                    <label class="control-label col-sm-3 col-xs-6">Xác nhận lại mật khẩu
+                                                        mới</label>
+
+                                                    <div class="col-sm-6 col-xs-6">
+                                                        <span class="field-validation-valid"
+                                                              data-valmsg-for="ConfirmNewUserPassword"
+                                                              data-valmsg-replace="true"></span>
+                                                        <input class="form-control" data-val="true"
+                                                               data-val-equalto="Mật khẩu nhập lại không trùng với mật khẩu mới"
+                                                               data-val-equalto-other="*.NewUserPassword"
+                                                               data-val-required="Mật khẩu nhập lại không được để trống"
+                                                               id="ConfirmNewUserPassword" name="ConfirmNewUserPassword"
+                                                               type="password">
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group">
+                                                    <div class="col-sm-6 col-sm-offset-3">
+                                                        <a href="javascript:void(0)" id="btnChangePass"
+                                                           class="btn mb20 btn-small btn-primary">Lưu thay đổi</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+<footer th:replace="fragments/footer::footer"></footer>
+<div th:replace="fragments/modals::modals"></div>
+<script th:src="@{/js/my-custom/user.js}"></script>
+</body>
+</html>

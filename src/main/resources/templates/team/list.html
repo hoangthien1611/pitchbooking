@@ -9,7 +9,7 @@
     <div class="container">
         <div class="breadcrum-line">
             <a href="/"><i class="fa fa-home"></i>&nbsp; Trang chủ</a>
-            <a><i class="fa fa-angle-right"></i>&nbsp; <th:block th:text="${'Đội bóng tại ' + areaName}"></th:block></a>
+            <a><i class="fa fa-angle-right"></i>&nbsp; <th:block th:text="${areaName != null ? 'Đội bóng tại ' + areaName : 'Tất cả'}"></th:block></a>
         </div>
     </div>
 </div>
@@ -22,14 +22,14 @@
                     <div class="m-btn-expand-holder mobile-only">
                         <span class="form-filter-san-span">Lọc kết quả <i class="fa fa-filter" aria-hidden="true"></i></span>
                     </div>
-                    <h2 id="a" class="title-intent title-pages mobile-hidden"><i class="fa fa-filter" aria-hidden="true"></i>Lọc kết quả
+                    <h2 class="title-intent title-pages mobile-hidden"><i class="fa fa-filter" aria-hidden="true"></i>Lọc kết quả
                     </h2>
 
                     <div class="sidebar sidebar-tien-ich sidebar-province">
                         <p class="title-box"><i class="fa fa-map-marker" aria-hidden="true"></i> Quận / Huyện</p>
                         <ul class="list-left-links">
-                            <li th:each="district,iterStat:${listDistricts}" th:class="${district.id == area ? 'active' : ''}">
-                                <a th:href="@{/team/search?area=__${district.id}__}">
+                            <li th:each="district,iterStat:${listDistricts}" th:class="${district.id == aValue ? 'active' : ''}">
+                                <a th:href="@{/team/search?a=__${district.id}__}">
                                     <i class="fa fa-caret-right"></i>&nbsp;
                                     <th:block th:text="${district.name}"></th:block> <span th:text="${district.id==0?totalTeams:district.teams.size()}"></span>
                                 </a>
@@ -42,11 +42,11 @@
                             <li>
                                 <strong><i class="fa fa-caret-right"></i>&nbsp; Trình độ</strong>
                                 <ul>
-                                    <li th:each="level,iterStat:${listLevels}" onclick="location.href='';">
+                                    <li th:each="level,iterStat:${listLevels}" th:onclick="'javascript:goToUrl(\''+ 'inputLevel-' + ${level.id} + '\',\'l\',\'' + ${level.id} + '\')'">
                                         <div class="checkbox">
                                             <label>
-                                                <input id="fo" name="fo" type="checkbox" value="true"/>
-                                                <input name="fo" type="hidden" value="false"/>
+                                                <input id="fo" name="fo" type="checkbox" th:id="${'inputLevel-' + level.id}"
+                                                       th:checked="${lValue.contains('' + level.id) ? true : false}"/>
                                                 <th:block th:text="${level.name}"></th:block>
                                                 <span class="pull-right filter-count" th:text="${level.teams.size()}">14</span>
                                             </label>
@@ -64,80 +64,70 @@
                 <div class="p-content">
                     <h1 id="a" class="title-intent title-pages mobile-marginlr-15">
                         <i class="fa fa-futbol-o" aria-hidden="true"></i>
-                        <th:block th:text="${'ĐỘI BÓNG TẠI ' + areaName.toUpperCase()}"></th:block>
+                        <th:block th:text="${totalTeamsFound + ' ĐỘI BÓNG ĐƯỢC TÌM THẤY'}"></th:block>
                     </h1>
 
                     <div class="form-group row mobile-marginlr-15">
-                        <form method="get" action="/doi-bong-tai-ha-noi">
+                        <form method="get" action="javascript:void(0)">
                             <div class="col-md-9 col-xs-9 margin-b10">
-                                <input type="text" name="keyword" class="form-control"
-                                       placeholder="Ví dụ: 17h30 thứ 6, hoàng minh giám, thành phát"/>
+                                <input type="text" id="inputSearch" name="keyword" class="form-control" th:value="${search}"
+                                       placeholder="Ví dụ: 17h30 thứ 6, Gà FC"/>
                             </div>
                             <div class="col-md-3 col-xs-3 margin-b10">
-                                <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                                <button class="btn btn-primary btn-search-team" type="submit">Tìm kiếm</button>
                             </div>
                         </form>
                     </div>
 
                     <ul class="list-item-san">
-                        <h3 th:if="${#lists.isEmpty(teams)}" style="color: red; margin-bottom: 50px">Không tìm thấy dữ liệu!</h3>
                         <th:block th:unless="${#lists.isEmpty(teams)}">
                         <li class="item-card" th:each="team,iterStat:${teams}">
                             <div class="row">
                                 <div class="col-md-2 item-preview-image">
-                                    <a href="/new-fc-262011-262012.html" title="NEW FC"><img class="img-responsive"
-                                                                                             src="images/team/sport.png"
-                                                                                             alt="NEW FC"
-                                                                                             align="thumbnail"></a>
+                                    <a th:href="@{/team/detail/__${team.path}__}" th:title="${team.name}">
+                                        <img class="img-responsive" th:src="@{/uploads/__${team.logo}__}" th:alt="${team.name}" align="thumbnail"></a>
                                 </div>
                                 <div class="col-md-10 right-item-san right-item-doi">
                                     <div class="header-item-doi">
-                                        <h2><a href="/new-fc-262011-262012.html" title="NEW FC">NEW FC</a></h2>
+                                        <h2><a th:href="@{/team/detail/__${team.path}__}" th:title="${team.name}" th:text="${team.name}">NEW FC</a></h2>
 
                                         <button idd="16507"
-                                                class="btn btn-default mobile-hidden pull-right btn-sm modal-link-angularjs"
-                                                data-modal-tpl="match.invitation" login-required="true"
-                                                data-modal-qs="toTeamId=16507&toUserId=3973&toTeamName=NEW FC">
+                                                class="btn btn-default mobile-hidden pull-right btn-sm modal-link-angularjs">
                                             <i class="fa fa-send"></i>
                                             Mời giao lưu
                                         </button>
                                     </div>
                                     <p class="team-leader-name user-online-status-container" owner-id="3973">
-                                        <a href="/user/profile/3973"><i class="fa fa-user" aria-hidden="true"></i> Pham
-                                            Luc</a>
+                                        <a th:href="@{/user/profile/__${team.captain.id}__}"><i class="fa fa-user" aria-hidden="true"></i>
+                                        <th:block th:text="${team.captain.fullName}"></th:block></a>
                                         <span class="captain-item-status offline hide"></span>
-                                        <span class="chat-nhanh" ng-click="onQuickChat(3973);"><i class="fa fa-comments"
-                                                                                                  aria-hidden="true"></i> Nói chuyện</span>
                                     </p>
-                                    <p class="quost-doi">L&#224; đội b&#243;ng mới th&#224;nh lập, anh em chủ yếu l&#224;
-                                        nh&#226;n vi&#234;n văn ph&#242;ng. cần r&#232;n luyện sức khỏe v&#224; mang t&#237;nh
-                                        giao lưu thể thao hơn l&#224; Thắng -Thua</p>
+                                    <p class="quost-doi" th:text="${team.description}"></p>
                                     <p>
                                         <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
-                                        <strong>Trình độ: </strong> Trung b&#236;nh yếu
+                                        <strong>Trình độ: </strong> <th:block th:text="${team.level.name}"></th:block>
                                     </p>
                                     <p>
-                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
-                                        <strong>Nhóm tuổi: </strong> Dưới 40 tuổi
+                                        <i class="fa fa-users" aria-hidden="true"></i>
+                                        <strong>Nhóm tuổi: </strong> <th:block th:text="${team.youngest != team.oldest ? team.youngest + ' - ' + team.oldest : team.youngest}"></th:block>
                                     </p>
-
                                     <p>
-                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
-                                        <strong> Sân nhà:</strong>17:30 - 19:00 Chủ Nhật hàng tuần - <a href="">Sân
-                                        Bóng Đông Đô 2,</a>
+                                        <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                        <strong>Thời gian đá: </strong> <th:block th:text="${team.time}"></th:block>
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-map-o" aria-hidden="true"></i>
+                                        <strong>Khu vực: </strong> <th:block th:text="${team.area.name}"></th:block>
+                                    </p>
+
+                                    <p th:if="${team.home != null}">
+                                        <i class="fa fa-home" aria-hidden="true"></i>
+                                        <strong> Sân nhà:</strong>
+                                        <a><th:block th:text="${team.home.name}"></th:block></a>
 
                                     </p>
 
 
-                                </div>
-
-                                <div class="btn-doi-bottom mobile-only">
-                                    <button idd="16507" class="btn btn-primary pull-right btn-sm modal-link-angularjs"
-                                            data-modal-tpl="match.invitation" login-required="true"
-                                            data-modal-qs="toTeamId=16507&toUserId=3973&toTeamName=NEW FC">
-                                        <i class="fa fa-send-o"></i>
-                                        Mời giao lưu
-                                    </button>
                                 </div>
 
                             </div>
@@ -148,19 +138,19 @@
                         <div class="pagination_container">
                             <div class="pagination" th:if="${totalPages > 0}">
                                 <th:block th:if="${currentPage > 1}">
-                                    <a th:href="@{/team/search?area=__${area}__&level=__${level}__&page=__${currentPage - 1}__}"
+                                    <a th:href="@{/team/search?a=__${aValue}__&l=__${lValue}__&p=__${currentPage - 1}__&s=__${search}__}"
                                        class="linkPager hnpagenext" title="Trang trước">
                                         <span class="hnotherpage"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
                                     </a>
                                 </th:block>
                                 <th:block th:each="page : ${#numbers.sequence( pageStart, pageEnd)}">
-                                    <a th:href="@{${currentPage == page ? '#' : '/team/search?area=' + area + '&level=' + level + '&page=' + page}}"
+                                    <a th:href="@{${currentPage == page ? '#' : '/team/search?a=' + aValue + '&l=' + lValue + '&p=' + page+'&s='+search}}"
                                        th:title="${page}" th:class="${currentPage == page ? 'noLinkPager hncurrpage' : 'linkPager hnpagelink'}">
                                         <span class="hnotherpage" th:text="${page}"></span>
                                     </a>
                                 </th:block>
                                 <th:block th:if="${currentPage < totalPages}">
-                                    <a th:href="@{/team/search?area=__${area}__&level=__${level}__&page=__${currentPage + 1}__}"
+                                    <a th:href="@{/team/search?a=__${aValue}__&l=__${lValue}__&p=__${currentPage + 1}__&s=__${search}__}"
                                        class="linkPager hnpagenext" title="Trang sau">
                                         <span class="hnotherpage"><i class="fa fa-angle-right" aria-hidden="true"></i></span>
                                     </a>
@@ -186,19 +176,9 @@
         </div>
     </div>
 </div>
-<!--#top hero box-->
-<style type="text/css">
-    .sp-autocomplete img {
-        display: none;
-    }
-</style>
-<script type="text/javascript">
-    function onSearchMatchStadiumSelectedChange(data) {
-        $('#searchMatchStadiumId').val(data.params.data.id);
-    }
-</script>
 
 <footer th:replace="fragments/footer::footer"></footer>
 <div th:replace="fragments/modals::modals"></div>
+<script th:src="@{/js/my-custom/team.js}"></script>
 </body>
 </html>

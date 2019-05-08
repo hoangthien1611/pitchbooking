@@ -174,7 +174,7 @@ public class PitchServiceImpl implements PitchService {
 
     @Override
     public Page<Pitch> getAllPageable(String path, List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, String search, int offset) {
-        return pitchRepository.findAllByDistrictPathAndPitchTypeIdInAndSurfaceIdInAndCostInAndSearch(path, typeIds, surfaceIds, costs, search, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+        return pitchRepository.findAllByDistrictPathAndPitchTypeIdInAndSurfaceIdInAndCostInAndSearch(path, typeIds, surfaceIds, costs, search.toLowerCase(), PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
     }
 
     @Override
@@ -184,7 +184,7 @@ public class PitchServiceImpl implements PitchService {
 
     @Override
     public Page<Pitch> getAllPageable(String path, List<Long> typeIds, List<Long> surfaceIds, String search, int offset) {
-        return pitchRepository.findAllByDistrictPathAndPitchTypeIdInAndSurfaceIdInAndSearch(path, typeIds, surfaceIds, search, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+        return pitchRepository.findAllByDistrictPathAndPitchTypeIdInAndSurfaceIdInAndSearch(path, typeIds, surfaceIds, search.toLowerCase(), PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
     }
 
     @Override
@@ -194,7 +194,7 @@ public class PitchServiceImpl implements PitchService {
 
     @Override
     public Page<Pitch> getAllPageable(List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, String search, int offset) {
-        return pitchRepository.findAllByPitchTypeIdInAndSurfaceIdInAndCostInAndSearch(typeIds, surfaceIds, costs, search, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+        return pitchRepository.findAllByPitchTypeIdInAndSurfaceIdInAndCostInAndSearch(typeIds, surfaceIds, costs, search.toLowerCase(), PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
     }
 
     private boolean isTimeFrameInTimeRange(TimeFrame timeFrame, String timeStart, String timeEnd) {

@@ -13,4 +13,6 @@ public interface UserService {
     boolean isUserNameExisted(String userName);
 
     UserDTO updateProfile(UserDTO userDTO);
+
+    boolean changePassword(Long id, String currentPassword, String newPassword);
 }

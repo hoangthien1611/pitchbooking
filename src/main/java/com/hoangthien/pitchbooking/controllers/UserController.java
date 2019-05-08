@@ -7,7 +7,6 @@ import com.hoangthien.pitchbooking.exception.PitchBookingException;
 import com.hoangthien.pitchbooking.exception.PitchBookingNotFoundException;
 import com.hoangthien.pitchbooking.services.UserService;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,11 +51,29 @@ public class UserController extends BaseController {
         try {
             model.addAttribute("user", userService.updateProfile(userDTO));
             ra.addFlashAttribute("msg", new Message(MessageType.SUCCESS, "Cập nhật thông tin thành công!"));
-            return "profile/profile";
+            return "redirect:/user/profile";
         } catch (PitchBookingException e) {
             model.addAttribute("user", userService.getUser(userDTO.getId()));
             ra.addFlashAttribute("msg", new Message(MessageType.ERROR, "Cập nhật thông tin thất bại!"));
-            return "profile/profile";
+            return "redirect:/user/profile";
+        } catch (PitchBookingNotFoundException e) {
+            log.error(e.getMessage());
+            return "error/page_404";
+        }
+    }
+
+    @PostMapping("/profile/change-password")
+    public String changePassword(@RequestParam("id") Long id, @RequestParam("currentPassword") String currentPass,
+                                 @RequestParam("newPassword") String newPass, RedirectAttributes ra) {
+        log.info("POST: /user/profile/change-password");
+        try {
+            if (userService.changePassword(id, currentPass, newPass)) {
+                ra.addFlashAttribute("msg", new Message(MessageType.SUCCESS, "Đổi mật khẩu thành công"));
+                return "redirect:/user/profile";
+            }
+
+            ra.addFlashAttribute("msg", new Message(MessageType.ERROR, "Đổi mật khẩu thất bại! Mật khẩu hiện tại không đúng!"));
+            return "redirect:/user/profile";
         } catch (PitchBookingNotFoundException e) {
             log.error(e.getMessage());
             return "error/page_404";

@@ -11,9 +11,9 @@
         </div>
         <div class="wrap-ul-doi">
             <ul class="list-link-doi tabs">
-                <li class="active" target-id="#profile"><a href="/user/profile#">Thông tin cá
+                <li class="active" id="show-profile"><a href="javascript:void(0)">Thông tin cá
                     nhân</a></li>
-                <li target-id="#changepass" class=""><a href="/user/profile#">Thay đổi mật
+                <li id="show-change-pass"><a href="javascript:void(0)">Thay đổi mật
                     khẩu</a></li>
             </ul>
         </div>
@@ -39,7 +39,7 @@
                                 <a>Quản lý đội bóng</a>
                                 <!-- ngIf: myTeams.length>0 -->
                             </li>
-                            <li><a>Quản lý sân</a></li>
+                            <li><a href="/pitch/management">Quản lý sân</a></li>
                             <li><a>Tài khoản</a></li>
                         </ul>
                     </div>
@@ -135,20 +135,20 @@
 
         <!-- Jobs -->
         <div id="changepass" style="display: none;">
-            <form id="frmChangePassword" method="post" class="ng-pristine ng-valid" novalidate="novalidate">
+            <form id="frmChangePassword" method="post" th:action="@{/user/profile/change-password}">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="sidebar sidebar-tien-ich">
                             <ul class="list-left-links">
-                                <li><a href="https://www.timdoinhanh.com/match/inviting" class="red">Đang bắt đối</a>
+                                <li><a class="red">Đang bắt đối</a>
                                 </li>
-                                <li><a href="https://www.timdoinhanh.com/stadium/bookinghistory">Đặt sân</a></li>
+                                <li><a >Đặt sân</a></li>
                                 <li>
-                                    <a href="https://www.timdoinhanh.com/team/management">Quản lý đội bóng</a>
+                                    <a>Quản lý đội bóng</a>
                                     <!-- ngIf: myTeams.length>0 -->
                                 </li>
-                                <li><a href="https://www.timdoinhanh.com/stadium/management">Quản lý sân</a></li>
-                                <li><a href="https://www.timdoinhanh.com/user/profile">Tài khoản</a></li>
+                                <li><a href="/pitch/management">Quản lý sân</a></li>
+                                <li><a >Tài khoản</a></li>
                             </ul>
                         </div>
                     </div>
@@ -166,20 +166,14 @@
 
 
                                                 </div>
-                                                <input value="True" data-val="true"
-                                                       data-val-required="The HasPassword field is required."
-                                                       id="HasPassword" name="HasPassword" type="hidden">
+                                                <input type="text" class="hide" th:value="${user.id}" name="id" id="input-user-id">
                                                 <div class="row form-group">
                                                     <label class="control-label col-sm-3 col-xs-6">Mật khẩu hiện
                                                         tại</label>
 
                                                     <div class="col-sm-6 col-xs-6">
-                                                        <span class="field-validation-valid"
-                                                              data-valmsg-for="UserPassword"
-                                                              data-valmsg-replace="true"></span>
-                                                        <input value="" class="form-control" data-val="true"
-                                                               data-val-required="Mật khẩu không được để trống"
-                                                               id="UserPassword" name="UserPassword" type="password">
+                                                        <input value="" class="form-control" required
+                                                               id="currentPassword" name="currentPassword" type="password">
                                                     </div>
                                                 </div>
                                                 <div class="row form-group">
@@ -187,13 +181,8 @@
                                                     <label class="control-label col-sm-3 col-xs-6">Mật khẩu mới</label>
 
                                                     <div class="col-sm-6 col-xs-6">
-                                                        <span class="field-validation-valid"
-                                                              data-valmsg-for="NewUserPassword"
-                                                              data-valmsg-replace="true"></span>
-                                                        <input class="form-control" data-val="true"
-                                                               data-val-required="Mật khẩu mới được để trống"
-                                                               id="NewUserPassword" name="NewUserPassword"
-                                                               type="password">
+                                                        <input class="form-control" required minlength="6"
+                                                               id="newPassword" name="newPassword" type="password">
                                                     </div>
                                                 </div>
                                                 <div class="row form-group">
@@ -202,21 +191,14 @@
                                                         mới</label>
 
                                                     <div class="col-sm-6 col-xs-6">
-                                                        <span class="field-validation-valid"
-                                                              data-valmsg-for="ConfirmNewUserPassword"
-                                                              data-valmsg-replace="true"></span>
-                                                        <input class="form-control" data-val="true"
-                                                               data-val-equalto="Mật khẩu nhập lại không trùng với mật khẩu mới"
-                                                               data-val-equalto-other="*.NewUserPassword"
-                                                               data-val-required="Mật khẩu nhập lại không được để trống"
-                                                               id="ConfirmNewUserPassword" name="ConfirmNewUserPassword"
-                                                               type="password">
+                                                        <input class="form-control" required type="password" minlength="6"
+                                                               id="confirmNewPassword" name="confirmNewPassword">
                                                     </div>
                                                 </div>
                                                 <div class="row form-group">
                                                     <div class="col-sm-6 col-sm-offset-3">
-                                                        <a href="javascript:void(0)" id="btnChangePass"
-                                                           class="btn mb20 btn-small btn-primary">Lưu thay đổi</a>
+                                                        <button type="submit" id="btn-change-pass"
+                                                           class="btn mb20 btn-small btn-primary">Lưu thay đổi</button>
                                                     </div>
                                                 </div>
                                             </div>

@@ -18,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -100,8 +101,33 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    public Page<Team> getAllTeamsPageable(List<Long> levelIds, String search, int offset) {
+        return teamRepository.findAllByLevelIdInAndSearch(levelIds, search.toLowerCase(), PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    }
+
+    @Override
+    public Page<Team> getAllTeamsPageable(List<Long> levelIds, int offset) {
+        return teamRepository.findAllByLevelIdIn(levelIds, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    }
+
+    @Override
+    public Page<Team> getAllTeamsPageable(Long areaId, List<Long> levelIds, String search, int offset) {
+        return teamRepository.findAllByAreaIdAndLevelIdInAndSearch(areaId, levelIds, search.toLowerCase(), PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    }
+
+    @Override
+    public Page<Team> getAllTeamsPageable(Long areaId, List<Long> levelIds, int offset) {
+        return teamRepository.findAllByAreaIdAndLevelIdIn(areaId, levelIds, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    }
+
+    @Override
     public long countTotalTeams() {
         return teamRepository.count();
+    }
+
+    @Override
+    public Page<Team> get5TeamsSameLevel(Long levelId) {
+        return teamRepository.findAllByLevelId(levelId, PageRequest.of(0, Defines.NUMBER_OF_ROWS_PER_PAGE));
     }
 
     private boolean isPathExisted(String path) {

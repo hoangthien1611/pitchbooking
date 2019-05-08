@@ -4,6 +4,8 @@ import com.hoangthien.pitchbooking.dto.TeamDTO;
 import com.hoangthien.pitchbooking.entities.Team;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface TeamService {
 
     Team saveNewTeam(TeamDTO teamDTO);
@@ -18,5 +20,15 @@ public interface TeamService {
 
     Page<Team> getAllTeamsPageable(int offset);
 
+    Page<Team> getAllTeamsPageable(List<Long> levelIds, String search, int offset);
+
+    Page<Team> getAllTeamsPageable(List<Long> levelIds, int offset);
+
+    Page<Team> getAllTeamsPageable(Long areaId, List<Long> levelIds, String search, int offset);
+
+    Page<Team> getAllTeamsPageable(Long areaId, List<Long> levelIds, int offset);
+
     long countTotalTeams();
+
+    Page<Team> get5TeamsSameLevel(Long levelId);
 }

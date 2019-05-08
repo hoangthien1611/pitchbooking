@@ -437,89 +437,24 @@
                     </p>
                     <div class="list-doi-new">
                         <ul class="ul-list-doi-new">
-                            <li>
+                            <li th:each="teamSame:${teamsSameLevel}">
                                 <div class="doi-lis-img">
-                                    <a href="/fc-yen-thanh-3-hn.html"><img class="img-responsive"
-                                                                           src="https://res.givator.com/pictures/11017/600/2019_04/medium/104303666763107391465518737438332643109243n.png"
-                                                                           alt="FC Y&#202;N TH&#192;NH 3 HN"
-                                                                           align="thumbnail"></a>
+                                    <a th:href="@{/team/detail/__${teamSame.path}__}">
+                                        <img class="img-responsive" th:src="@{/uploads/teamSame.avatar}"
+                                             th:alt="${teamSame.name}" align="thumbnail"></a>
                                 </div>
                                 <div class="doi-lis-content">
                                     <h3>
-                                        <a href="/fc-yen-thanh-3-hn.html" title="FC Y&#202;N TH&#192;NH 3 HN">FC Y&#202;N
-                                            TH&#192;NH 3 HN</a>
+                                        <a th:href="@{/team/detail/__${teamSame.path}__}" th:title="${teamSame.name}" th:text="${teamSame.name}"></a>
                                     </h3>
                                     <p>
                                         <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
-                                        Trung b&#236;nh
-                                    </p>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="doi-lis-img">
-                                    <a href="/huyhao"><img class="img-responsive" src="images/team/sport.png" alt="ABC"
-                                                           align="thumbnail"></a>
-                                </div>
-                                <div class="doi-lis-content">
-                                    <h3>
-                                        <a href="/huyhao" title="ABC">ABC</a>
-                                    </h3>
-                                    <p>
-                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
-                                        Trung b&#236;nh
-                                    </p>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="doi-lis-img">
-                                    <a href="/d13h1.html"><img class="img-responsive" src="images/team/sport.png"
-                                                               alt="D13H1" align="thumbnail"></a>
-                                </div>
-                                <div class="doi-lis-content">
-                                    <h3>
-                                        <a href="/d13h1.html" title="D13H1">D13H1</a>
-                                    </h3>
-                                    <p>
-                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
-                                        Trung b&#236;nh
-                                    </p>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="doi-lis-img">
-                                    <a href="/team.kdqt"><img class="img-responsive" src="images/team/sport.png"
-                                                              alt="Đội b&#243;ng Trung t&#226;m Kinh doanh Quốc tế - TCT VTS"
-                                                              align="thumbnail"></a>
-                                </div>
-                                <div class="doi-lis-content">
-                                    <h3>
-                                        <a href="/team.kdqt"
-                                           title="Đội b&#243;ng Trung t&#226;m Kinh doanh Quốc tế - TCT VTS">Đội b&#243;ng
-                                            Trung t&#226;m Kinh doanh Quốc tế - TCT VTS</a>
-                                    </h3>
-                                    <p>
-                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
-                                        Trung b&#236;nh
-                                    </p>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="doi-lis-img">
-                                    <a href="/fc-yen-my.html"><img class="img-responsive" src="images/team/sport.png"
-                                                                   alt="FC Y&#234;n Mỹ" align="thumbnail"></a>
-                                </div>
-                                <div class="doi-lis-content">
-                                    <h3>
-                                        <a href="/fc-yen-my.html" title="FC Y&#234;n Mỹ">FC Y&#234;n Mỹ</a>
-                                    </h3>
-                                    <p>
-                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
-                                        Trung b&#236;nh
+                                        <th:block th:text="${teamSame.level.name}"></th:block>
                                     </p>
                                 </div>
                             </li>
                         </ul>
-                        <a href="/doi-bong?level=2&provinceId=3" class="doi-xem-them"><i class="fa fa-long-arrow-right"
+                        <a th:href="@{/team/search?l=__${team.level.id}__}" class="doi-xem-them"><i class="fa fa-long-arrow-right"
                                                                                          aria-hidden="true"></i> Xem
                             thêm</a>
                     </div>

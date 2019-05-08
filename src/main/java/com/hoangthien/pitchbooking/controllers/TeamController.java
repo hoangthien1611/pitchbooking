@@ -5,13 +5,16 @@ import com.hoangthien.pitchbooking.constants.MessageType;
 import com.hoangthien.pitchbooking.dto.Message;
 import com.hoangthien.pitchbooking.dto.TeamDTO;
 import com.hoangthien.pitchbooking.entities.District;
+import com.hoangthien.pitchbooking.entities.Level;
 import com.hoangthien.pitchbooking.entities.Team;
 import com.hoangthien.pitchbooking.exception.PitchBookingException;
 import com.hoangthien.pitchbooking.services.DistrictService;
 import com.hoangthien.pitchbooking.services.FileService;
 import com.hoangthien.pitchbooking.services.LevelService;
 import com.hoangthien.pitchbooking.services.TeamService;
+import com.hoangthien.pitchbooking.utils.PitchBookingUtils;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -24,6 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(TeamController.BASE_URL)
@@ -88,8 +92,11 @@ public class TeamController extends BaseController {
             if (tab < 1 || tab > 4) {
                 throw new PitchBookingException("Tab không hợp lệ!");
             }
-            model.addAttribute("team", teamService.getTeamByPath(path.trim()));
+            Team team = teamService.getTeamByPath(path.trim());
+
+            model.addAttribute("team", team);
             model.addAttribute("tab", tab);
+            model.addAttribute("teamsSameLevel", teamService.get5TeamsSameLevel(team.getLevel().getId()));
             return "team/detail";
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -98,38 +105,42 @@ public class TeamController extends BaseController {
     }
 
     @GetMapping("/search")
-    public String getTeams(Model model, @RequestParam(value = "area", defaultValue = "0") String area,
-                           @RequestParam(value = "level", defaultValue = "0") String level,
-                           @RequestParam(value = "page", defaultValue = "1") String pg) {
+    public String getTeams(Model model, @RequestParam(value = "a", defaultValue = "0") String area,
+                           @RequestParam(value = "l", defaultValue = "") String level,
+                           @RequestParam(value = "p", defaultValue = "1") String pg,
+                           @RequestParam(value = "s", defaultValue = "") String search) {
         log.info("GET: " + BASE_URL + "/search");
 
         try {
             Page<Team> pages;
             Long areaId = Long.valueOf(Integer.parseInt(area));
-            Long levelId = Long.valueOf(Integer.parseInt(level));
+            List<Long> levelIds = new ArrayList<>();
             int page = Integer.parseInt(pg);
             int offset = (page - 1) * Defines.NUMBER_OF_ROWS_PER_PAGE;
 
-            // All areas
             if (areaId == 0) {
-                // All levels
-                if (levelId == 0) {
-                    pages = teamService.getAllTeamsPageable(offset);
+                List<Level> levelList = levelService.getAllLevels();
+                levelIds = StringUtils.isEmpty(level) ? getListLevelIds(levelList) : PitchBookingUtils.convertFromStringListToLongList(level);
+
+                if (StringUtils.isEmpty(search)) {
+                    pages = teamService.getAllTeamsPageable(levelIds, offset);
                 } else {
-                    pages = teamService.getTeamsByLevelPageable(levelId, offset);
+                    pages = teamService.getAllTeamsPageable(levelIds, search, offset);
                 }
 
-                model.addAttribute("areaName", "Tất cả");
-                model.addAttribute("listLevels", levelService.getAllLevels());
+                model.addAttribute("listLevels", levelList);
             } else {
-                if (levelId == 0) {
-                    pages = teamService.getTeamsByAreaPageable(areaId, offset);
+                List<Level> levelList = levelService.getAllLevelsByArea(areaId);
+                levelIds = StringUtils.isEmpty(level) ? getListLevelIds(levelList) : PitchBookingUtils.convertFromStringListToLongList(level);
+
+                if (StringUtils.isEmpty(search)) {
+                    pages = teamService.getAllTeamsPageable(areaId, levelIds, offset);
                 } else {
-                    pages = teamService.getTeamsByAreaAndLevelPageable(areaId, levelId, offset);
+                    pages = teamService.getAllTeamsPageable(areaId, levelIds, search, offset);
                 }
 
                 model.addAttribute("areaName", districtService.getDistrictById(areaId).getName());
-                model.addAttribute("listLevels", levelService.getAllLevelsByArea(areaId));
+                model.addAttribute("listLevels", levelList);
             }
 
             int totalPages = pages.getTotalPages();
@@ -150,15 +161,23 @@ public class TeamController extends BaseController {
 
             model.addAttribute("currentPage", page);
             model.addAttribute("totalPages", totalPages);
-            model.addAttribute("area", areaId);
-            model.addAttribute("level", level);
+            model.addAttribute("aValue", area);
+            model.addAttribute("lValue", level);
+            model.addAttribute("search", search);
             model.addAttribute("listDistricts", listDistricts);
             model.addAttribute("totalTeams", teamService.countTotalTeams());
             model.addAttribute("teams", pages.getContent());
+            model.addAttribute("totalTeamsFound", pages.getTotalElements());
             return "team/list";
         } catch (Exception e) {
             log.error(e.getMessage());
             return "error/page_404";
         }
+    }
+
+    private List<Long> getListLevelIds(List<Level> levels) {
+        return levels.stream()
+                .map(level -> level.getId())
+                .collect(Collectors.toList());
     }
 }

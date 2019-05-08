@@ -85,4 +85,17 @@ public class UserServiceImpl implements UserService {
 
         return userMapper.userToUserDTO(userRepository.save(user));
     }
+
+    @Override
+    public boolean changePassword(Long id, String currentPassword, String newPassword) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new PitchBookingNotFoundException("User not found"));
+
+        if (!encoder.matches(currentPassword, user.getPassword())) {
+            return false;
+        }
+        user.setPassword(encoder.encode(newPassword));
+        userRepository.save(user);
+        return true;
+    }
 }

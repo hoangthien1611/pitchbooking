@@ -8,5 +8,9 @@ public interface LevelService {
 
     List<Level> getAllLevels();
 
+    List<Level> getAllLevels(String teamSearch);
+
     List<Level> getAllLevelsByArea(Long areaId);
+
+    List<Level> getAllLevels(Long areaId, String teamSearch);
 }

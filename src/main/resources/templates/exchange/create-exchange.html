@@ -27,14 +27,12 @@
                         <div id="makermatchRequest">
                             <div class="form-group form-group-sm">
                                 <label class="control-label col-sm-3">Thời gian: <span class="required">*</span></label>
-                                <div class="col-sm-9">
-                    <span moment-picker="vm.matchRequest.startTimeText"
-                          class="match-moment-picker ng-isolate-scope moment-picker-input" locale="vi"
-                          start-view="month" format="LLLL" tabindex="0">
-                        <i class="glyphicon glyphicon-calendar ng-scope"></i><span class="ng-binding ng-scope">&nbsp;
-                        chủ nhật, 10 tháng 3 năm 2019 17:30
-                    </span></span>
-
+                                <div class="col-sm-4 form-group">
+                                    <input type="date" id="select-date-exchange" name="dateExchange"
+                                           th:value="${'2019-05-09'}" style="padding: 2px; margin-left: 15px">
+                                </div>
+                                <div class="col-sm-5 form-inline">
+                                    <h4 id="date-show">Hello</h4>
                                 </div>
                             </div>
 
@@ -82,74 +80,12 @@
                             </div>
 
                             <div class="form-group form-group-sm">
-                                <label class="control-label col-sm-3">Tỉnh / Thành phố: <span class="required">*</span></label>
+                                <label class="control-label col-sm-3">Quận / Huyện: <span class="required">*</span></label>
                                 <div class="col-sm-9">
-                                    <select required="" ng-model="vm.selectedProvince"
-                                            class="form-control ng-pristine ng-untouched ng-valid ng-not-empty ng-valid-required"
-                                            ng-options="item.name for item in vm.listProvinces track by item.id">
-                                        <option label="Đà Nẵng" value="2">Đà Nẵng</option>
-                                        <option label="Hà Nội" value="3" selected="selected">Hà Nội</option>
-                                        <option label="Hồ Chí Minh" value="5">Hồ Chí Minh</option>
-                                        <option label="An Giang" value="6">An Giang</option>
-                                        <option label="Bà Rịa - Vũng Tàu" value="7">Bà Rịa - Vũng Tàu</option>
-                                        <option label="Bạc Liêu" value="10">Bạc Liêu</option>
-                                        <option label="Bắc Giang" value="8">Bắc Giang</option>
-                                        <option label="Bắc Kạn" value="9">Bắc Kạn</option>
-                                        <option label="Bắc Ninh" value="11">Bắc Ninh</option>
-                                        <option label="Bến Tre" value="12">Bến Tre</option>
-                                        <option label="Bình Dương" value="14">Bình Dương</option>
-                                        <option label="Bình Định" value="13">Bình Định</option>
-                                        <option label="Bình Phước" value="15">Bình Phước</option>
-                                        <option label="Bình Thuận" value="16">Bình Thuận</option>
-                                        <option label="Cà Mau" value="17">Cà Mau</option>
-                                        <option label="Cao Bằng" value="18">Cao Bằng</option>
-                                        <option label="Cần Thơ" value="1">Cần Thơ</option>
-                                        <option label="Đắk Lắk" value="19">Đắk Lắk</option>
-                                        <option label="Đắk Nông" value="20">Đắk Nông</option>
-                                        <option label="Điện Biên" value="21">Điện Biên</option>
-                                        <option label="Đồng Nai" value="22">Đồng Nai</option>
-                                        <option label="Đồng Tháp" value="23">Đồng Tháp</option>
-                                        <option label="Gia Lai" value="24">Gia Lai</option>
-                                        <option label="Hà Giang" value="25">Hà Giang</option>
-                                        <option label="Hà Nam" value="26">Hà Nam</option>
-                                        <option label="Hà Tĩnh" value="27">Hà Tĩnh</option>
-                                        <option label="Hải Dương" value="28">Hải Dương</option>
-                                        <option label="Hải Phòng" value="4">Hải Phòng</option>
-                                        <option label="Hậu Giang" value="29">Hậu Giang</option>
-                                        <option label="Hoà Bình" value="30">Hoà Bình</option>
-                                        <option label="Hưng Yên" value="31">Hưng Yên</option>
-                                        <option label="Kiên Giang" value="33">Kiên Giang</option>
-                                        <option label="Kon Tum" value="34">Kon Tum</option>
-                                        <option label="Khánh Hòa" value="32">Khánh Hòa</option>
-                                        <option label="Lai Châu" value="35">Lai Châu</option>
-                                        <option label="Lạng Sơn" value="37">Lạng Sơn</option>
-                                        <option label="Lào Cai" value="38">Lào Cai</option>
-                                        <option label="Lâm Đồng" value="36">Lâm Đồng</option>
-                                        <option label="Long An" value="39">Long An</option>
-                                        <option label="Nam Định" value="40">Nam Định</option>
-                                        <option label="Ninh Bình" value="42">Ninh Bình</option>
-                                        <option label="Ninh Thuận" value="43">Ninh Thuận</option>
-                                        <option label="Nghệ An" value="41">Nghệ An</option>
-                                        <option label="Phú Thọ" value="44">Phú Thọ</option>
-                                        <option label="Phú Yên" value="45">Phú Yên</option>
-                                        <option label="Quảng Bình" value="46">Quảng Bình</option>
-                                        <option label="Quảng Nam" value="47">Quảng Nam</option>
-                                        <option label="Quảng Ninh" value="49">Quảng Ninh</option>
-                                        <option label="Quảng Ngãi" value="48">Quảng Ngãi</option>
-                                        <option label="Quảng Trị" value="50">Quảng Trị</option>
-                                        <option label="Sóc Trăng" value="51">Sóc Trăng</option>
-                                        <option label="Sơn La" value="52">Sơn La</option>
-                                        <option label="Tây Ninh" value="53">Tây Ninh</option>
-                                        <option label="Tiền Giang" value="58">Tiền Giang</option>
-                                        <option label="Tuyên Quang" value="60">Tuyên Quang</option>
-                                        <option label="Thái Bình" value="54">Thái Bình</option>
-                                        <option label="Thái Nguyên" value="55">Thái Nguyên</option>
-                                        <option label="Thanh Hóa" value="56">Thanh Hóa</option>
-                                        <option label="Thừa Thiên Huế" value="57">Thừa Thiên Huế</option>
-                                        <option label="Trà Vinh" value="59">Trà Vinh</option>
-                                        <option label="Vĩnh Long" value="61">Vĩnh Long</option>
-                                        <option label="Vĩnh Phúc" value="62">Vĩnh Phúc</option>
-                                        <option label="Yên Bái" value="63">Yên Bái</option>
+                                    <select class="form-control">
+                                        <th:block th:each="district:${districts}">
+                                        <option th:label="${district.name}" th:value="${district.id}"></option>
+                                        </th:block>
                                     </select>
                                 </div>
                             </div>
@@ -3173,5 +3109,6 @@
 
 <footer th:replace="fragments/footer::footer"></footer>
 <div th:replace="fragments/modals::modals"></div>
+<script th:src="@{/js/my-custom/team.js}"></script>
 </body>
 </html>

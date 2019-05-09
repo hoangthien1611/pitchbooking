@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class TeamServiceImpl implements TeamService {
@@ -126,8 +127,17 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public Page<Team> get5TeamsSameLevel(Long levelId) {
-        return teamRepository.findAllByLevelId(levelId, PageRequest.of(0, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    public List<Team> get5TeamsSameLevel(Long teamId, Long levelId) {
+        Page<Team> teams = teamRepository.findAllByLevelId(levelId, PageRequest.of(0, 6));
+        List<Team> teamList = teams.getContent()
+                .stream()
+                .filter(team -> team.getId() != teamId)
+                .collect(Collectors.toList());
+
+        if (teamList.size() == 6) {
+            teamList.remove(5);
+        }
+        return teamList;
     }
 
     private boolean isPathExisted(String path) {

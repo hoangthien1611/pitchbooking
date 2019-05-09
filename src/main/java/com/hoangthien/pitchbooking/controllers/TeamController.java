@@ -96,7 +96,7 @@ public class TeamController extends BaseController {
 
             model.addAttribute("team", team);
             model.addAttribute("tab", tab);
-            model.addAttribute("teamsSameLevel", teamService.get5TeamsSameLevel(team.getLevel().getId()));
+            model.addAttribute("teamsSameLevel", teamService.get5TeamsSameLevel(team.getId(), team.getLevel().getId()));
             return "team/detail";
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -114,12 +114,13 @@ public class TeamController extends BaseController {
         try {
             Page<Team> pages;
             Long areaId = Long.valueOf(Integer.parseInt(area));
+            List<Level> levelList = new ArrayList<>();
             List<Long> levelIds = new ArrayList<>();
             int page = Integer.parseInt(pg);
             int offset = (page - 1) * Defines.NUMBER_OF_ROWS_PER_PAGE;
 
             if (areaId == 0) {
-                List<Level> levelList = levelService.getAllLevels();
+                levelList = levelService.getAllLevels(search);
                 levelIds = StringUtils.isEmpty(level) ? getListLevelIds(levelList) : PitchBookingUtils.convertFromStringListToLongList(level);
 
                 if (StringUtils.isEmpty(search)) {
@@ -130,7 +131,7 @@ public class TeamController extends BaseController {
 
                 model.addAttribute("listLevels", levelList);
             } else {
-                List<Level> levelList = levelService.getAllLevelsByArea(areaId);
+                levelList = levelService.getAllLevels(areaId, search);
                 levelIds = StringUtils.isEmpty(level) ? getListLevelIds(levelList) : PitchBookingUtils.convertFromStringListToLongList(level);
 
                 if (StringUtils.isEmpty(search)) {
@@ -176,6 +177,11 @@ public class TeamController extends BaseController {
     }
 
     private List<Long> getListLevelIds(List<Level> levels) {
+        if (levels.isEmpty()) {
+            List<Long> longs = new ArrayList<>();
+            longs.add(0L);
+            return longs;
+        }
         return levels.stream()
                 .map(level -> level.getId())
                 .collect(Collectors.toList());

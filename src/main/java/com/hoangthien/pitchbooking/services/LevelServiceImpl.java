@@ -2,6 +2,7 @@ package com.hoangthien.pitchbooking.services;
 
 import com.hoangthien.pitchbooking.entities.Level;
 import com.hoangthien.pitchbooking.repositories.LevelRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,24 @@ public class LevelServiceImpl implements LevelService {
     }
 
     @Override
+    public List<Level> getAllLevels(String teamSearch) {
+        if (StringUtils.isEmpty(teamSearch)) {
+            return levelRepository.findAll();
+        }
+        return levelRepository.findAllByTeamSearch(teamSearch);
+    }
+
+    @Override
     public List<Level> getAllLevelsByArea(Long areaId) {
         return levelRepository.findAllByAreaId(areaId);
+    }
+
+    @Override
+    public List<Level> getAllLevels(Long areaId, String teamSearch) {
+        if (StringUtils.isEmpty(teamSearch)) {
+            return levelRepository.findAllByAreaId(areaId);
+        }
+
+        return levelRepository.findAllByAreaIdAndTeamSearch(areaId, teamSearch);
     }
 }

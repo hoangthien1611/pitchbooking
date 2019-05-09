@@ -9,6 +9,8 @@ public interface DistrictService {
 
     List<District> getAllDistricts();
 
+    List<District> getAllDistricts(List<Long> levelIds, String searchTeam);
+
     List<DistrictDTO> getAllDistrictDTOS();
 
     District getDistrictById(Long id);

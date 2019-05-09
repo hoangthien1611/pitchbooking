@@ -27,6 +27,15 @@ public class DistrictServiceImpl implements DistrictService {
         return districtRepository.findAll();
     }
 
+    @Override
+    public List<District> getAllDistricts(List<Long> levelIds, String searchTeam) {
+        if (StringUtils.isEmpty(searchTeam)) {
+            return districtRepository.findAllByLevelIdIn(levelIds);
+        }
+
+        return districtRepository.findAllByLevelIdInAndSearchTeam(levelIds, searchTeam);
+    }
+
     @Transactional
     @Override
     public List<DistrictDTO> getAllDistrictDTOS() {

@@ -1,4 +1,10 @@
 $(document).ready(function () {
+    showDate();
+
+    $("#select-date-exchange").on("change", function () {
+        showDate();
+    });
+
     $('#btn-check-path').click(function () {
         $('.path-can-use').show();
     });
@@ -86,4 +92,15 @@ function goToUrl(inputId, param, value) {
     var newParam = !willCheck ? "" : (existed ? "" : ( additionalURL? ("&" + param + "=" + value) : (param + "=" + value)));
     var queries = "?" + newAdditionalURL + newParam;
     window.location.href = baseURL + ((queries.length > 1) ? queries : "");
+}
+
+function showDate() {
+    var weekdays = ["Chủ nhật", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"];
+    var date = new Date($('#select-date-exchange').val());
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+    var weekday = date.getDay();
+    var dateShow = weekdays[weekday] + ", ngày " + day + " tháng " + month + " năm " + year;
+    $("#date-show").html(dateShow);
 }

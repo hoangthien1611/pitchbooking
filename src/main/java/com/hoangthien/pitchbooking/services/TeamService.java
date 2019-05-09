@@ -30,5 +30,5 @@ public interface TeamService {
 
     long countTotalTeams();
 
-    Page<Team> get5TeamsSameLevel(Long levelId);
+    List<Team> get5TeamsSameLevel(Long teamId, Long levelId);
 }

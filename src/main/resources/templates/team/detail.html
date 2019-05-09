@@ -386,7 +386,7 @@
                                             <th:block th:text="${team.youngest + ' - ' + team.oldest}"></th:block>
                                         </p>
                                         <p>
-                                            <i class="fa fa-user" aria-hidden="true"></i>
+                                            <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
                                             <strong> Trình độ:</strong>
                                             <th:block th:text="${team.level.name}"></th:block>
                                         </p>
@@ -440,7 +440,7 @@
                             <li th:each="teamSame:${teamsSameLevel}">
                                 <div class="doi-lis-img">
                                     <a th:href="@{/team/detail/__${teamSame.path}__}">
-                                        <img class="img-responsive" th:src="@{/uploads/teamSame.avatar}"
+                                        <img class="img-responsive" th:src="@{/uploads/__${teamSame.logo}__}"
                                              th:alt="${teamSame.name}" align="thumbnail"></a>
                                 </div>
                                 <div class="doi-lis-content">
@@ -465,21 +465,6 @@
     </div>
 </div>
 
-<script>
-    function voteForItem(itemId) {
-        var voteRequest = {id: itemId};
-        makeAjaxRequest('api/matchAttendance/vote', 'POST', voteRequest, function (response) {
-            $('a[data-voteitem-id="' + itemId + '"]').html(response.data + ' lượt');
-
-            if (!response.isSuccessful) {
-                alert('Có lỗi, vui lòng thử lại');
-                setTimeout(function () {
-                    location.reload();
-                });
-            }
-        });
-    }
-</script>
 <footer th:replace="fragments/footer::footer"></footer>
 <div th:replace="fragments/modals::modals"></div>
 </body>

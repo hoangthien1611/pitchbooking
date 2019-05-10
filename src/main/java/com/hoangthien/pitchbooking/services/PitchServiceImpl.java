@@ -80,6 +80,11 @@ public class PitchServiceImpl implements PitchService {
     }
 
     @Override
+    public List<Pitch> getAllByDistrict(Long districtId) {
+        return pitchRepository.findAllByDistrictId(districtId);
+    }
+
+    @Override
     public Pitch updatePitch(PitchDTO pitchDTO) {
         Pitch pitch = pitchRepository
                 .findById(pitchDTO.getId())

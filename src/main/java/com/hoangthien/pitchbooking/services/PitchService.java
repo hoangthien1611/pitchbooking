@@ -4,6 +4,7 @@ import com.hoangthien.pitchbooking.dto.PitchDTO;
 import com.hoangthien.pitchbooking.dto.TimeFrameBooking;
 import com.hoangthien.pitchbooking.entities.Pitch;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,6 +16,8 @@ public interface PitchService {
     List<Pitch> getPitchesByOwnerId(long ownerId);
 
     Pitch getPitchById(long id);
+
+    List<Pitch> getAllByDistrict(Long districtId);
 
     Pitch updatePitch(PitchDTO pitchDTO);
 

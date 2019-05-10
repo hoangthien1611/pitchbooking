@@ -21,7 +21,7 @@ public interface PitchRepository extends JpaRepository<Pitch, Long> {
     Page<Pitch> findAllByPitchTypeIdInAndSurfaceIdInAndCostIn(List<Long> typeIds, List<Long> surfaceIds, List<Integer> costs, Pageable pageable);
 
     @Query("select distinct p from Pitch p join p.yardSurface ys join p.district d join p.groupSpecificPitches gsp join gsp.specificPitchesCosts spc join gsp.pitchType pt where d.path = ?1 and pt.id in ?2 and ys.id in ?3 and spc.cost in ?4")
-    Page<Pitch> findAllByDistrictPathAndPitchTypeIdInAndSurfaceIdInAndCostIn(String path, List<Long> typeIds, List<Long> surfaceIds, List<Integer> costs, PageRequest of);
+    Page<Pitch> findAllByDistrictPathAndPitchTypeIdInAndSurfaceIdInAndCostIn(String path, List<Long> typeIds, List<Long> surfaceIds, List<Integer> costs, Pageable pageable);
 
     @Query("select distinct p from Pitch p join p.yardSurface ys join p.district d join p.groupSpecificPitches gsp join gsp.pitchType pt where d.path = ?1 and pt.id in ?2 and ys.id in ?3")
     Page<Pitch> findAllByDistrictPathAndPitchTypeIdInAndSurfaceIdIn(String path, List<Long> typeIds, List<Long> surfaceIds, Pageable pageable);
@@ -34,4 +34,6 @@ public interface PitchRepository extends JpaRepository<Pitch, Long> {
 
     @Query("select distinct p from Pitch p join p.yardSurface ys join p.district d join p.groupSpecificPitches gsp join gsp.pitchType pt where d.path = ?1 and pt.id in ?2 and ys.id in ?3 and (LOWER(p.name) like %?4% or LOWER(p.address) like %?4%)")
     Page<Pitch> findAllByDistrictPathAndPitchTypeIdInAndSurfaceIdInAndSearch(String path, List<Long> typeIds, List<Long> surfaceIds, String search, Pageable pageable);
+
+    List<Pitch> findAllByDistrictId(Long districtId);
 }

@@ -128,16 +128,13 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public List<Team> get5TeamsSameLevel(Long teamId, Long levelId) {
-        Page<Team> teams = teamRepository.findAllByLevelId(levelId, PageRequest.of(0, 6));
-        List<Team> teamList = teams.getContent()
-                .stream()
-                .filter(team -> team.getId() != teamId)
-                .collect(Collectors.toList());
+        Page<Team> teams = teamRepository.findAllByLevelIdAndIdNot(levelId, teamId, PageRequest.of(0,5));
+        return teams.getContent();
+    }
 
-        if (teamList.size() == 6) {
-            teamList.remove(5);
-        }
-        return teamList;
+    @Override
+    public List<Team> getAllTeamsUserIn(String userName) {
+        return teamRepository.findAllByCaptainUserNameOrMemberUserName(userName);
     }
 
     private boolean isPathExisted(String path) {

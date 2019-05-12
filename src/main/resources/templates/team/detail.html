@@ -303,7 +303,7 @@
                                             <div class=tab-content id=myTabContent>
                                                 <div class="tab-pane fade in active">
                                                     <div class="row">
-                                                        <div class="col-md-3 col-xs-6 team-member-card" th:each="member,iterStat:${team.members}">
+                                                        <div class="col-md-3 col-xs-6 team-member-card" th:each="member,iterStat:${members}">
                                                             <img class="img-responsive avatar-list" style="height: 50px"
                                                                  th:src="@{/uploads/__${member.avatar}__}" align="thumb"
                                                                  th:alt="${member.fullName}">

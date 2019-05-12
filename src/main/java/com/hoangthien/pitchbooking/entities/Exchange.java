@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "exchange")
@@ -14,5 +15,29 @@ public class Exchange {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private LocalDateTime timeExchange;
 
+    @ManyToOne
+    @JoinColumn(name = "teamId")
+    private Team team;
+
+    private int hasPitch;
+
+    @ManyToOne
+    @JoinColumn(name = "districtId")
+    private District district;
+
+    @ManyToOne
+    @JoinColumn(name = "pitchId")
+    private Pitch pitch;
+
+    private String area;
+
+    private String bet;
+
+    @ManyToOne
+    @JoinColumn(name = "levelId")
+    private Level level;
+
+    private String invitation;
 }

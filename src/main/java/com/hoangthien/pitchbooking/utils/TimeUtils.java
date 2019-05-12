@@ -4,6 +4,7 @@ import com.hoangthien.pitchbooking.dto.TimeFrame;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,5 +71,20 @@ public class TimeUtils {
             timeFrames.add(new TimeFrame(getTimeStringFromInt(i), getTimeStringFromInt(i + 1)));
         }
         return timeFrames;
+    }
+
+    public static LocalTime getLocalTimeFromTimeString(String time) {
+        if (StringUtils.isEmpty(time)) {
+            return LocalTime.now();
+        }
+
+        try {
+            String[] times = time.split(":");
+            int hour = Integer.parseInt(times[0]);
+            int minute = Integer.parseInt(times[1]);
+            return LocalTime.of(hour, minute);
+        } catch (NumberFormatException e) {
+            return LocalTime.now();
+        }
     }
 }

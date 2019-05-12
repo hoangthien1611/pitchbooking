@@ -7,6 +7,7 @@ import com.hoangthien.pitchbooking.dto.TeamDTO;
 import com.hoangthien.pitchbooking.entities.District;
 import com.hoangthien.pitchbooking.entities.Level;
 import com.hoangthien.pitchbooking.entities.Team;
+import com.hoangthien.pitchbooking.entities.User;
 import com.hoangthien.pitchbooking.exception.PitchBookingException;
 import com.hoangthien.pitchbooking.services.DistrictService;
 import com.hoangthien.pitchbooking.services.FileService;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -94,8 +96,15 @@ public class TeamController extends BaseController {
             }
             Team team = teamService.getTeamByPath(path.trim());
 
+            List<User> members = new ArrayList<>();
+            members.add(team.getCaptain());
+            if (!CollectionUtils.isEmpty(team.getMembers())) {
+                members.addAll(team.getMembers());
+            }
+
             model.addAttribute("team", team);
             model.addAttribute("tab", tab);
+            model.addAttribute("members", members);
             model.addAttribute("teamsSameLevel", teamService.get5TeamsSameLevel(team.getId(), team.getLevel().getId()));
             return "team/detail";
         } catch (Exception e) {

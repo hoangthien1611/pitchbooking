@@ -260,6 +260,13 @@ public class PitchController extends BaseController {
         }
     }
 
+    @GetMapping("/get-all/{districtId}")
+    @ResponseBody
+    public List<PitchDTO> getPitch(@PathVariable("districtId") Long districtId) {
+        log.info("GET: " + BASE_URL + "/get-all/" + districtId);
+        return pitchService.getAllByDistrict(districtId);
+    }
+
     private boolean isPitchTypeExistedInGroupSpecificPitches(Long pitchtypeId, List<GroupSpecificPitches> groupSpecificPitches) {
         return groupSpecificPitches.stream()
                 .anyMatch(gr -> gr.getPitchType().getId() == pitchtypeId);

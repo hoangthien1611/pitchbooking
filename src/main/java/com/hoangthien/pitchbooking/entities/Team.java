@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -63,4 +64,10 @@ public class Team {
             inverseJoinColumns = {@JoinColumn(name = "userId")})
     @EqualsAndHashCode.Exclude
     private Set<User> members = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "team",
+            orphanRemoval = true,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Exchange> exchanges;
 }

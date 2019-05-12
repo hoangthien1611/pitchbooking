@@ -22,14 +22,19 @@
                 </div>
 
                 <div>
-                    <form class="form-horizontal" name="matchPostForm">
+                    <th:block th:if="${msg != null}" th:with="type=${msg.type == 1 ? 'success' : 'danger'}">
+                        <div th:class="${'alert msg-noti alert-' + type}" style="text-align: center">
+                            <strong th:text="${msg.message}"></strong>
+                        </div>
+                    </th:block>
+                    <form class="form-horizontal" name="matchPostForm" action="/exchange/create" method="post">
                         <div id="makermatchRequest">
                             <div class="form-group form-group-sm">
                                 <label class="control-label col-sm-3">Ngày: <span class="required">*</span></label>
                                 <div class="col-sm-4 form-group">
-                                    <input type="date" id="select-date-exchange" name="dateExchange"
-                                           th:value="${'2019-05-09'}" style="padding: 2px; margin-left: 15px">
-                                    <input type="time" id="" name="appt" style="padding: 2px" value="16:30"
+                                    <input type="date" id="select-date-exchange" name="date"
+                                           th:value="${dateDefault}" style="padding: 2px; margin-left: 15px">
+                                    <input type="time" name="time" style="padding: 2px" value="16:00"
                                            min="5:00" max="22:00" required>
                                 </div>
                                 <div class="col-sm-5 form-inline">
@@ -41,7 +46,7 @@
                                 <label class="control-label col-sm-3">Đội bóng: <span class="required">*</span></label>
                                 <div class="col-sm-9">
                                     <div style="margin-bottom: 5px;">
-                                        <select required class="form-control">
+                                        <select required class="form-control" name="teamId">
                                             <th:block  th:each="team:${teams}">
                                             <option th:label="${team.name}" th:value="${team.id}"></option>
                                             </th:block>
@@ -62,11 +67,11 @@
                                 </label>
                                 <div class="col-sm-9">
                                     <label class="control-label pull-left" style="margin-right: 20px">
-                                        <input type="radio" id="modalCbxHasStadium" name="modalCbxHasStadium">
+                                        <input type="radio" id="modalCbxHasStadium" value="1" name="hasPitch" checked>
                                         Đã có sân
                                     </label>
                                     <label class="control-label">
-                                        <input type="radio" id="modalCbxHasNotStadium" name="modalCbxHasStadium" checked>
+                                        <input type="radio" id="modalCbxHasNotStadium" value="0" name="hasPitch">
                                         Đi khách
                                     </label>
                                 </div>
@@ -75,37 +80,44 @@
                             <div class="form-group form-group-sm">
                                 <label class="control-label col-sm-3">Quận / Huyện: <span class="required">*</span></label>
                                 <div class="col-sm-9">
-                                    <select class="form-control">
+                                    <select class="form-control" name="districtId" id="select-district-exchange">
                                         <th:block th:each="district:${districts}">
-                                        <option th:label="${district.name}" th:value="${district.id}"></option>
+                                        <option th:value="${district.id}"><th:block th:text="${district.name}"></th:block></option>
                                         </th:block>
                                     </select>
                                 </div>
                             </div>
 
-                            <div class="form-group form-group-sm ng-scope" ng-if="vm.matchRequest.hasStadium">
+                            <div class="form-group form-group-sm ng-scope show-choose-pitch">
                                 <label class="control-label col-sm-3">Tên sân: <span class="required">*</span></label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="hide">
-                                    <b>Sân Viktor</b>
-                                    <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modalSelectStadium"
-                                            type="button">Chọn sân bóng...
+                                    <input type="text" name="pitchId" id="pitchIdInput" class="hide" value="0">
+                                    <b id="showPitchName">Vui lòng chọn sân!</b>
+                                    <button class="btn btn-default btn-sm btn-show-pitches" data-toggle="modal" data-target="#modalSelectStadium"
+                                            type="button" style="margin-left: 100px">Chọn sân bóng...
                                     </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group form-group-sm specific-area" style="display: none">
+                                <label class="control-label col-sm-3">Khu vực cụ thể:</label>
+                                <div class="col-sm-9 mfr-tags-holder">
+                                    <input type="text" class="form-control input-sm" name="area" id="areaInput"
+                                           placeholder="Ví du: Nguyễn Hữu Thọ, Hòa Khánh Nam...">
                                 </div>
                             </div>
 
                             <div class="form-group form-group-sm">
                                 <label class="control-label col-sm-3">Kèo: <span class="required">*</span></label>
                                 <div class="col-sm-9 mfr-tags-holder">
-                                    <input type="text"
-                                           class="form-control input-sm"
+                                    <input type="text" class="form-control input-sm" name="bet" required
                                            placeholder="Ví du: 4-5-6, sân-nước...">
                                 </div>
                             </div>
                             <div class="form-group form-group-sm">
                                 <label class="control-label col-sm-3">Trình độ mong muốn: <span class="required">*</span></label>
                                 <div class="col-sm-9 mfr-tags-holder">
-                                    <select class="form-control">
+                                    <select class="form-control" name="levelId">
                                         <th:block th:each="level:${levels}">
                                         <option th:label="${level.name}" th:value="${level.id}"></option>
                                         </th:block>
@@ -115,8 +127,8 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-3">Lời mời</label>
                                 <div class="col-sm-9">
-                                    <textarea required="" ng-model="vm.matchRequest.message" rows="3" cols="5"
-                                              class="form-control input-sm width-100p ng-pristine ng-untouched ng-empty ng-invalid ng-invalid-required"
+                                    <textarea rows="3" cols="5" name="invitation"
+                                              class="form-control input-sm width-100p"
                                               placeholder="Lời mời giao lưu"></textarea>
                                 </div>
                             </div>
@@ -126,7 +138,7 @@
                     <span class="required">* </span> Thông tin bắt buộc
                 </span>
 
-                                <button class="btn btn-primary btn-primary-extra" type="button">
+                                <button class="btn btn-primary btn-primary-extra" type="submit">
                                     <i class="fa fa-send"></i>
                                     Đăng
                                 </button>
@@ -141,36 +153,15 @@
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
                                     </button>
-                                    <h4 class="modal-title">Chọn sân bóng</h4>
+                                    <h4 class="modal-title" id="title-choose-pitch">Chọn sân bóng</h4>
                                 </div>
-                                <div class="modal-body">
-                                    <div class="form-group" th:unless="${#lists.isEmpty(pitches)}">
-                                        <input type="text"
-                                               class="form-control"
-                                               placeholder="Nhập tên sân bóng hoặc khu vực...">
-                                    </div>
-                                    <ul class="form-group stadium-list">
-                                        <li class="stadium-entry-select ng-scope" th:each="pitch:${pitches}">
-                                            <a class="btn btn-default width-100p">
-                                                <b th:text="${pitch.name}">ABC</b>
-                                                <br>
-                                                <small th:text="${pitch.address + ', ' + pitch.district.name}"></small>
-                                            </a>
-                                        </li>
-                                        <li class="stadium-entry-select ng-scope" th:if="${#lists.isEmpty(pitches)}">
-                                            <a class="btn btn-default width-100p">
-                                                <b style="color: red">Không tìm thấy sân nào ở quận / huyện này!</b>
-                                            </a>
-                                        </li>
-                                    </ul>
+                                <div class="modal-body" id="modal-choose-pitch">
+
                                 </div>
 
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">
                                         Thoát
-                                    </button>
-                                    <button type="button" class="btn btn-primary">
-                                        Xác nhận
                                     </button>
                                 </div>
                             </div>

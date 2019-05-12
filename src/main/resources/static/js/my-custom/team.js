@@ -52,6 +52,79 @@ $(document).ready(function () {
         var search = temp + "s=" + keyword;
         window.location.href = baseURL + "?" + newAdditionalURL + search;
     });
+
+    $(".btn-show-pitches").on("click", function () {
+        var districtId = $("#select-district-exchange").val();
+        var districtName = $("#select-district-exchange option:selected").text();
+        $("#title-choose-pitch").text("Chọn sân bóng tại " + districtName);
+
+        $.ajax({
+            type: 'get',
+            url: '/pitch/get-all/' + districtId,
+            success: function (data) {
+                var html = "";
+
+                if (data && data.length) {
+                    // html += "<div class=\"form-group\">"
+                    //     + "<input type=\"text\" class=\"form-control\" id=\"input-search-pitch\" placeholder=\"Nhập tên sân bóng hoặc khu vực...\">"
+                    //     + "</div>"
+                     html += "<ul class=\"form-group stadium-list\">";
+
+                    data.forEach(function (item, index) {
+                        html += "<li class=\"stadium-entry-select ng-scope\" data-dismiss=\"modal\""
+                            + "id=\"pitchItem-" +item.id  + "\" onclick=\"choosePitch(" + item.id + ")\">"
+                            + "<a class=\"btn btn-default width-100p\">"
+                            + "<b class=\"pitch-name-modal\" id=\"pitchNameSelected-" + item.id + "\">" + item.name + "</b>"
+                            + "<br>"
+                            + "<small>" + item.address + "</small>"
+                            + "</a></li>";
+                        });
+                    html + "</ul>";
+                } else {
+                    html += "<ul class=\"form-group stadium-list\">"
+                        + "<li class=\"stadium-entry-select ng-scope\">"
+                        + "<a class=\"btn btn-default width-100p\">"
+                        + "<b style=\"color: red\">Không tìm thấy sân nào ở quận / huyện này!</b>"
+                        + "</a></li></ul>";
+                }
+
+                $("#modal-choose-pitch").html(html);
+            },
+            error: function () {
+                alert('Error! Có lỗi xảy ra!');
+            }
+        });
+    });
+
+    $("#select-district-exchange").on("change", function () {
+        $("#pitchIdInput").val("0");
+        $("#showPitchName").text("Vui lòng chọn sân!");
+    });
+
+    $(document).on("keyup", "#input-search-pitch", function () {
+        var nameArr = $(".pitch-name-modal").map(function() {
+            return $(this).text();
+        }).get();
+        var keyWord = $("#input-search-pitch").val();
+        var mappedNameArr = nameArr.filter(name => name.toLowerCase().indexOf(keyWord.toLowerCase()) > -1);
+
+        console.log(nameArr);
+        console.log(mappedNameArr);
+    });
+
+    $('input[name=hasPitch]').change(function(){
+        var value = $( 'input[name=hasPitch]:checked' ).val();
+        if (value == 0) {
+            $("#pitchIdInput").val("");
+            $("#showPitchName").text("Vui lòng chọn sân!");
+            $(".show-choose-pitch").hide();
+            $(".specific-area").show();
+        } else {
+            $("#areaInput").val("");
+            $(".show-choose-pitch").show();
+            $(".specific-area").hide();
+        }
+    });
 });
 
 function goToUrl(inputId, param, value) {
@@ -103,4 +176,11 @@ function showDate() {
     var weekday = date.getDay();
     var dateShow = weekdays[weekday] + ", ngày " + day + " tháng " + month + " năm " + year;
     $("#date-show").html(dateShow);
+}
+
+function choosePitch(pitchId) {
+    var pitchNamne = $(`#pitchNameSelected-${pitchId}`).text();
+
+    $("#pitchIdInput").val(pitchId);
+    $("#showPitchName").text(pitchNamne);
 }

@@ -79,9 +79,13 @@ public class PitchServiceImpl implements PitchService {
                 .orElseThrow(() -> new PitchBookingException("Không tìm thấy sân!"));
     }
 
+    @Transactional
     @Override
-    public List<Pitch> getAllByDistrict(Long districtId) {
-        return pitchRepository.findAllByDistrictId(districtId);
+    public List<PitchDTO> getAllByDistrict(Long districtId) {
+        return pitchRepository.findAllByDistrictId(districtId)
+                .stream()
+                .map(pitchMapper::pitchToPitchDTO)
+                .collect(Collectors.toList());
     }
 
     @Override

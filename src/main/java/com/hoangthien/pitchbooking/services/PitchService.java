@@ -17,7 +17,7 @@ public interface PitchService {
 
     Pitch getPitchById(long id);
 
-    List<Pitch> getAllByDistrict(Long districtId);
+    List<PitchDTO> getAllByDistrict(Long districtId);
 
     Pitch updatePitch(PitchDTO pitchDTO);
 

@@ -1,22 +1,28 @@
 package com.hoangthien.pitchbooking.controllers;
 
+import com.hoangthien.pitchbooking.constants.Defines;
 import com.hoangthien.pitchbooking.constants.MessageType;
 import com.hoangthien.pitchbooking.dto.ExchangeDTO;
 import com.hoangthien.pitchbooking.dto.Message;
+import com.hoangthien.pitchbooking.entities.Exchange;
+import com.hoangthien.pitchbooking.entities.Level;
 import com.hoangthien.pitchbooking.exception.PitchBookingException;
 import com.hoangthien.pitchbooking.services.*;
+import com.hoangthien.pitchbooking.utils.PitchBookingUtils;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/exchange")
@@ -38,10 +44,54 @@ public class ExchangeController extends BaseController {
     @Autowired
     private ExchangeService exchangeService;
 
-    @GetMapping("/waiting")
-    public String getListWaiting() {
-        log.info("GET: /exchange/waiting");
-        return "exchange/list-waiting";
+    @GetMapping("/waiting/{path}")
+    public String getListWaiting(Model model, @PathVariable("path") String path,
+                                 @RequestParam(value = "p", defaultValue = "1") String pg,
+                                 @RequestParam(value = "l", defaultValue = "") String lValue,
+                                 @RequestParam(value = "h", defaultValue = "") String hPValue,
+                                 @RequestParam(value = "s", defaultValue = "") String search) {
+        log.info("GET: /exchange/waiting/" + path);
+
+        try {
+            int page = Integer.parseInt(pg);
+            int offset = (page - 1) * Defines.NUMBER_OF_ROWS_PER_PAGE;
+            Page<Exchange> pageExchanges;
+            List<Level> levelList = levelService.getAllLevelsByExchange(path, search);
+            List<Long> levelIds = StringUtils.isEmpty(lValue) ? getLevelIdsFromLevels(levelList) : PitchBookingUtils.convertFromStringListToLongList(lValue);
+            List<Integer> hasPitchList = StringUtils.isEmpty(hPValue) ? Arrays.asList(0, 1) : PitchBookingUtils.convertFromStringListToIntList(hPValue);
+
+            if (StringUtils.isEmpty(search)) {
+                pageExchanges = exchangeService.getAllPageable(path, hasPitchList, levelIds, offset);
+            } else {
+                pageExchanges = exchangeService.getAllPageable(path, hasPitchList, levelIds, search, offset);
+            }
+
+            int totalPages = pageExchanges.getTotalPages();
+            if (totalPages > 0) {
+                int pageEnd = (totalPages < 5) ? totalPages : 5;
+                int pageStart = 1;
+                if (page > 3) {
+                    pageEnd = ((page + 2) <= totalPages) ? (page + 2) : totalPages;
+                    pageStart = ((pageEnd - 4) < 1) ? 1 : (pageEnd - 4);
+                }
+                model.addAttribute("pageStart", pageStart);
+                model.addAttribute("pageEnd", pageEnd);
+            }
+
+            model.addAttribute("pitches", pageExchanges.getContent());
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", totalPages);
+            model.addAttribute("lValue", lValue);
+            model.addAttribute("hPValue", hPValue);
+            model.addAttribute("search", search);
+            model.addAttribute("path", path);
+            model.addAttribute("levelList", levelList);
+
+            return "exchange/list-waiting";
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return "error/page_404";
+        }
     }
 
     @GetMapping("/create")
@@ -62,7 +112,6 @@ public class ExchangeController extends BaseController {
     @PostMapping("/create")
     public String create(@ModelAttribute ExchangeDTO exchangeDTO, RedirectAttributes ra) {
         log.info("POST: /exchange/create");
-        log.info(exchangeDTO);
         if (exchangeDTO.getTeamId() == 0) {
             ra.addFlashAttribute("msg", new Message(MessageType.ERROR, "Vui lòng chọn đội bóng!"));
             return "redirect:/exchange/create";
@@ -79,5 +128,11 @@ public class ExchangeController extends BaseController {
             ra.addFlashAttribute("msg", new Message(MessageType.ERROR, e.getMessage()));
         }
         return "redirect:/exchange/create";
+    }
+
+    private List<Long> getLevelIdsFromLevels(List<Level> levels) {
+        return levels.stream()
+                .map(level -> level.getId())
+                .collect(Collectors.toList());
     }
 }

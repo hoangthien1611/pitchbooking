@@ -24,4 +24,10 @@ public class Level {
             cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @ToString.Exclude
     private List<Team> teams;
+
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "level",
+            orphanRemoval = true,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Exchange> exchanges;
 }

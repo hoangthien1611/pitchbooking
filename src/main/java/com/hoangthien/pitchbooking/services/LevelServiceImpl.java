@@ -40,4 +40,12 @@ public class LevelServiceImpl implements LevelService {
 
         return levelRepository.findAllByAreaIdAndTeamSearch(areaId, teamSearch);
     }
+
+    @Override
+    public List<Level> getAllLevelsByExchange(String path, String search) {
+        if (StringUtils.isEmpty(search)) {
+            return  levelRepository.findAllByDistrictPath(path);
+        }
+        return null;
+    }
 }

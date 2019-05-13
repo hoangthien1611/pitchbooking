@@ -198,7 +198,7 @@ public class PitchController extends BaseController {
             List<Long> surfaceIdValues = StringUtils.isEmpty(fValue) ? getSurfaceIdsFromSurfaces(yardSurfaces) : PitchBookingUtils.convertFromStringListToLongList(fValue);
             Page<Pitch> pagePitches;
 
-            if (Defines.DISTRICT_PATH_ALL.equals(path)) {
+            if (Defines.DISTRICT_PATH_ALL.equalsIgnoreCase(path)) {
                 if (StringUtils.isEmpty(search)) {
                     pagePitches = pitchService.getAllPageable(costValues, typeIdValues, surfaceIdValues, offset);
                 } else {

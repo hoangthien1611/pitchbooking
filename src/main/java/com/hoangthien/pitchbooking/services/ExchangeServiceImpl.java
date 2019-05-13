@@ -1,5 +1,6 @@
 package com.hoangthien.pitchbooking.services;
 
+import com.hoangthien.pitchbooking.constants.Defines;
 import com.hoangthien.pitchbooking.dto.ExchangeDTO;
 import com.hoangthien.pitchbooking.entities.*;
 import com.hoangthien.pitchbooking.exception.PitchBookingException;
@@ -7,10 +8,13 @@ import com.hoangthien.pitchbooking.mapper.ExchangeMapper;
 import com.hoangthien.pitchbooking.repositories.*;
 import com.hoangthien.pitchbooking.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ExchangeServiceImpl implements ExchangeService {
@@ -69,5 +73,23 @@ public class ExchangeServiceImpl implements ExchangeService {
 
         exchangeRepository.save(exchange);
         return true;
+    }
+
+    @Override
+    public Page<Exchange> getAllPageable(String path, List<Integer> hasPitch, List<Long> levelIds, String search, int offset) {
+        if (Defines.DISTRICT_PATH_ALL.equalsIgnoreCase(path)) {
+            return exchangeRepository.findAllByHasPitchInAndLevelIdInAndSearch(hasPitch, levelIds, search, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+        }
+
+        return exchangeRepository.findAllByDistrictPathAndHasPitchInAndLevelIdInAndSearch(path, hasPitch, levelIds, search.toLowerCase(), PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    }
+
+    @Override
+    public Page<Exchange> getAllPageable(String path, List<Integer> hasPitch, List<Long> levelIds, int offset) {
+        if (Defines.DISTRICT_PATH_ALL.equalsIgnoreCase(path)) {
+            return exchangeRepository.findAllByHasPitchInAndLevelIdIn(hasPitch, levelIds, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+        }
+
+        return exchangeRepository.findAllByDistrictPathAndHasPitchInAndLevelIdIn(path, hasPitch, levelIds, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
     }
 }

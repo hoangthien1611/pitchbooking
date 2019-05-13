@@ -13,4 +13,6 @@ public interface LevelService {
     List<Level> getAllLevelsByArea(Long areaId);
 
     List<Level> getAllLevels(Long areaId, String teamSearch);
+
+    List<Level> getAllLevelsByExchange(String path, String search);
 }

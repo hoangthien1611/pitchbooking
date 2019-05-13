@@ -37,6 +37,9 @@ public class ExchangeServiceImpl implements ExchangeService {
     @Autowired
     private LevelRepository levelRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public boolean save(ExchangeDTO exchangeDTO) {
         LocalDate dateExchange = TimeUtils.getLocalDateFromDateString(exchangeDTO.getDate());
@@ -64,12 +67,17 @@ public class ExchangeServiceImpl implements ExchangeService {
         Level level = levelRepository.findById(exchangeDTO.getLevelId())
                 .orElseThrow(() -> new PitchBookingException("Trình độ không hợp lệ"));
 
+        User user = userRepository.findByUserName(exchangeDTO.getUsername())
+                .orElseThrow(() -> new PitchBookingException("User not found"));
+
         Exchange exchange = exchangeMapper.exchangeDTOToExchange(exchangeDTO);
         exchange.setTimeExchange(timeExchange);
         exchange.setDistrict(district);
         exchange.setLevel(level);
         exchange.setPitch(pitch);
         exchange.setTeam(team);
+        exchange.setUserCreated(user);
+        exchange.setStatus(0);
 
         exchangeRepository.save(exchange);
         return true;
@@ -77,19 +85,23 @@ public class ExchangeServiceImpl implements ExchangeService {
 
     @Override
     public Page<Exchange> getAllPageable(String path, List<Integer> hasPitch, List<Long> levelIds, String search, int offset) {
+        LocalDateTime now = LocalDateTime.now();
+
         if (Defines.DISTRICT_PATH_ALL.equalsIgnoreCase(path)) {
-            return exchangeRepository.findAllByHasPitchInAndLevelIdInAndSearch(hasPitch, levelIds, search, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+            return exchangeRepository.findAllByHasPitchInAndLevelIdInAndSearchAndTimeExchangeAfter(hasPitch, levelIds, search.toLowerCase(), now, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
         }
 
-        return exchangeRepository.findAllByDistrictPathAndHasPitchInAndLevelIdInAndSearch(path, hasPitch, levelIds, search.toLowerCase(), PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+        return exchangeRepository.findAllByDistrictPathAndHasPitchInAndLevelIdInAndSearchAndTimeExchangeAfter(path, hasPitch, levelIds, search.toLowerCase(), now, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
     }
 
     @Override
     public Page<Exchange> getAllPageable(String path, List<Integer> hasPitch, List<Long> levelIds, int offset) {
+        LocalDateTime now = LocalDateTime.now();
+
         if (Defines.DISTRICT_PATH_ALL.equalsIgnoreCase(path)) {
-            return exchangeRepository.findAllByHasPitchInAndLevelIdIn(hasPitch, levelIds, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+            return exchangeRepository.findAllByHasPitchInAndLevelIdInAndTimeExchangeAfter(hasPitch, levelIds, now, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
         }
 
-        return exchangeRepository.findAllByDistrictPathAndHasPitchInAndLevelIdIn(path, hasPitch, levelIds, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+        return exchangeRepository.findAllByDistrictPathAndHasPitchInAndLevelIdInAndTimeExchangeAfter(path, hasPitch, levelIds, now, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
     }
 }

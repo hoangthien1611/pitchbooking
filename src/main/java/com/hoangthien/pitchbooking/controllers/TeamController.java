@@ -130,7 +130,8 @@ public class TeamController extends BaseController {
 
             if (areaId == 0) {
                 levelList = levelService.getAllLevels(search);
-                levelIds = StringUtils.isEmpty(level) ? getListLevelIds(levelList) : PitchBookingUtils.convertFromStringListToLongList(level);
+                levelIds = StringUtils.isEmpty(level) ? PitchBookingUtils.getIdsFromLevels(levelList)
+                        : PitchBookingUtils.convertFromStringListToLongList(level);
 
                 if (StringUtils.isEmpty(search)) {
                     pages = teamService.getAllTeamsPageable(levelIds, offset);
@@ -141,7 +142,8 @@ public class TeamController extends BaseController {
                 model.addAttribute("listLevels", levelList);
             } else {
                 levelList = levelService.getAllLevels(areaId, search);
-                levelIds = StringUtils.isEmpty(level) ? getListLevelIds(levelList) : PitchBookingUtils.convertFromStringListToLongList(level);
+                levelIds = StringUtils.isEmpty(level) ? PitchBookingUtils.getIdsFromLevels(levelList)
+                        : PitchBookingUtils.convertFromStringListToLongList(level);
 
                 if (StringUtils.isEmpty(search)) {
                     pages = teamService.getAllTeamsPageable(areaId, levelIds, offset);
@@ -183,16 +185,5 @@ public class TeamController extends BaseController {
             log.error(e.getMessage());
             return "error/page_404";
         }
-    }
-
-    private List<Long> getListLevelIds(List<Level> levels) {
-        if (levels.isEmpty()) {
-            List<Long> longs = new ArrayList<>();
-            longs.add(0L);
-            return longs;
-        }
-        return levels.stream()
-                .map(level -> level.getId())
-                .collect(Collectors.toList());
     }
 }

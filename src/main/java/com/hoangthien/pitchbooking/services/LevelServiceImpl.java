@@ -1,5 +1,6 @@
 package com.hoangthien.pitchbooking.services;
 
+import com.hoangthien.pitchbooking.constants.Defines;
 import com.hoangthien.pitchbooking.entities.Level;
 import com.hoangthien.pitchbooking.repositories.LevelRepository;
 import org.apache.commons.lang3.StringUtils;
@@ -44,8 +45,12 @@ public class LevelServiceImpl implements LevelService {
     @Override
     public List<Level> getAllLevelsByExchange(String path, String search) {
         if (StringUtils.isEmpty(search)) {
-            return  levelRepository.findAllByDistrictPath(path);
+            return Defines.DISTRICT_PATH_ALL.equalsIgnoreCase(path)
+                    ? levelRepository.findAll()
+                    : levelRepository.findAllByDistrictPath(path);
         }
-        return null;
+        return Defines.DISTRICT_PATH_ALL.equalsIgnoreCase(path)
+                ? levelRepository.findAllByExchangeSearch(search.toLowerCase())
+                : levelRepository.findAllByDistrictPathAndExchangeSearch(path, search.toLowerCase());
     }
 }

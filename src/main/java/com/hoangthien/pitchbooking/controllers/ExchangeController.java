@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,7 +58,8 @@ public class ExchangeController extends BaseController {
             int offset = (page - 1) * Defines.NUMBER_OF_ROWS_PER_PAGE;
             Page<Exchange> pageExchanges;
             List<Level> levelList = levelService.getAllLevelsByExchange(path, search);
-            List<Long> levelIds = StringUtils.isEmpty(lValue) ? getLevelIdsFromLevels(levelList) : PitchBookingUtils.convertFromStringListToLongList(lValue);
+            List<Long> levelIds = StringUtils.isEmpty(lValue) ? PitchBookingUtils.getIdsFromLevels(levelList)
+                    : PitchBookingUtils.convertFromStringListToLongList(lValue);
             List<Integer> hasPitchList = StringUtils.isEmpty(hPValue) ? Arrays.asList(0, 1) : PitchBookingUtils.convertFromStringListToIntList(hPValue);
 
             if (StringUtils.isEmpty(search)) {
@@ -78,7 +80,10 @@ public class ExchangeController extends BaseController {
                 model.addAttribute("pageEnd", pageEnd);
             }
 
-            model.addAttribute("pitches", pageExchanges.getContent());
+            String districtName = Defines.DISTRICT_PATH_ALL.equalsIgnoreCase(path) ? ""
+                    : districtService.getDistrictDTOByPath(path).getName();
+
+            model.addAttribute("exchanges", pageExchanges.getContent());
             model.addAttribute("currentPage", page);
             model.addAttribute("totalPages", totalPages);
             model.addAttribute("lValue", lValue);
@@ -86,6 +91,8 @@ public class ExchangeController extends BaseController {
             model.addAttribute("search", search);
             model.addAttribute("path", path);
             model.addAttribute("levelList", levelList);
+            model.addAttribute("districtName", districtName);
+            model.addAttribute("totalExchangesFound", pageExchanges.getTotalElements());
 
             return "exchange/list-waiting";
         } catch (Exception e) {
@@ -110,7 +117,7 @@ public class ExchangeController extends BaseController {
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute ExchangeDTO exchangeDTO, RedirectAttributes ra) {
+    public String create(@ModelAttribute ExchangeDTO exchangeDTO, RedirectAttributes ra, Principal principal) {
         log.info("POST: /exchange/create");
         if (exchangeDTO.getTeamId() == 0) {
             ra.addFlashAttribute("msg", new Message(MessageType.ERROR, "Vui lòng chọn đội bóng!"));
@@ -121,6 +128,7 @@ public class ExchangeController extends BaseController {
             return "redirect:/exchange/create";
         }
         try {
+            exchangeDTO.setUsername(principal.getName());
             if (exchangeService.save(exchangeDTO)) {
                 ra.addFlashAttribute("msg", new Message(MessageType.SUCCESS, "Tạo thành công"));
             }
@@ -128,11 +136,5 @@ public class ExchangeController extends BaseController {
             ra.addFlashAttribute("msg", new Message(MessageType.ERROR, e.getMessage()));
         }
         return "redirect:/exchange/create";
-    }
-
-    private List<Long> getLevelIdsFromLevels(List<Level> levels) {
-        return levels.stream()
-                .map(level -> level.getId())
-                .collect(Collectors.toList());
     }
 }

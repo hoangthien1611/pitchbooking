@@ -28,4 +28,6 @@ public class ExchangeDTO {
     private Long levelId;
 
     private String invitation;
+
+    private String username;
 }

@@ -20,4 +20,10 @@ public interface LevelRepository extends JpaRepository<Level, Long> {
 
     @Query("select distinct lv from Level lv join lv.exchanges e join e.district d where d.path = ?1")
     List<Level> findAllByDistrictPath(String path);
+
+    @Query("select distinct lv from Level lv join lv.exchanges e join e.team t where LOWER(e.bet) like %?1% or lower(e.area) like %?1% or lower(t.name) like %?1%")
+    List<Level> findAllByExchangeSearch(String search);
+
+    @Query("select distinct lv from Level lv join lv.exchanges e join e.district d join e.team t where d.path = ?1 and (LOWER(e.bet) like %?2% or lower(e.area) like %?2% or lower(t.name) like %?2%)")
+    List<Level> findAllByDistrictPathAndExchangeSearch(String path, String search);
 }

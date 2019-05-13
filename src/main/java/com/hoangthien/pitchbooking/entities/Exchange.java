@@ -40,4 +40,10 @@ public class Exchange {
     private Level level;
 
     private String invitation;
+
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User userCreated;
+
+    private int status;
 }

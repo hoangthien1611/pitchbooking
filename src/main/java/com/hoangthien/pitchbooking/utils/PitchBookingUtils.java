@@ -1,6 +1,7 @@
 package com.hoangthien.pitchbooking.utils;
 
 import com.hoangthien.pitchbooking.dto.Cost;
+import com.hoangthien.pitchbooking.entities.Level;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
@@ -79,5 +80,16 @@ public class PitchBookingUtils {
                 break;
         }
         return result;
+    }
+
+    public static List<Long> getIdsFromLevels(List<Level> levels) {
+        if (levels.isEmpty()) {
+            List<Long> longs = new ArrayList<>();
+            longs.add(0L);
+            return longs;
+        }
+        return levels.stream()
+                .map(level -> level.getId())
+                .collect(Collectors.toList());
     }
 }

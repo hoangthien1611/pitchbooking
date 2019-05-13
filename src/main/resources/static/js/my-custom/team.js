@@ -53,6 +53,27 @@ $(document).ready(function () {
         window.location.href = baseURL + "?" + newAdditionalURL + search;
     });
 
+    $(".btn-search-exchange").on("click", function () {
+        var keyword = $("#searchExchange").val();
+        var newAdditionalURL = "";
+        var tempArray = document.location.href.split("?");
+        var baseURL = tempArray[0];
+        var additionalURL = tempArray[1];
+        var temp = "";
+        if (additionalURL) {
+            tempArray = additionalURL.split("&");
+            for (var i=0; i<tempArray.length; i++){
+                if(tempArray[i].split('=')[0] != 's'){
+                    newAdditionalURL += temp + tempArray[i];
+                    temp = "&";
+                }
+            }
+        }
+
+        var search = temp + "s=" + keyword;
+        window.location.href = baseURL + "?" + newAdditionalURL + search;
+    });
+
     $(".btn-show-pitches").on("click", function () {
         var districtId = $("#select-district-exchange").val();
         var districtName = $("#select-district-exchange option:selected").text();

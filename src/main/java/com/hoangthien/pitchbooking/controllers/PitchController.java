@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,6 +59,9 @@ public class PitchController extends BaseController {
     @Autowired
     private SpecificPitchesCostService specificPitchesCostService;
 
+    @Autowired
+    private BookingService bookingService;
+
     @GetMapping("/management/create")
     public String create(Model model) {
         log.info("GET: " + BASE_URL + "/create");
@@ -92,10 +96,17 @@ public class PitchController extends BaseController {
     }
 
     @GetMapping("/management")
-    public String ownPitches(Model model) {
+    public String ownPitches(Model model, Principal principal) {
         log.info("GET: " + BASE_URL + "/management");
-        model.addAttribute("pitches", pitchService.getPitchesByOwnerId(1L));
+        model.addAttribute("pitches", pitchService.getPitchesByOwner(principal.getName()));
         return "pitch/own-pitches";
+    }
+
+    @GetMapping("/management/booking-requests")
+    public String getBookingRequest(Model model, Principal principal) {
+        log.info("GET: " + BASE_URL + "/management/booking-requests");
+        model.addAttribute("bookings", bookingService.getAllByUserNameAndNotAccepted(principal.getName()));
+        return "pitch/booking-requests";
     }
 
     @GetMapping("/management/pitch-info/{pitchId}")
@@ -251,8 +262,10 @@ public class PitchController extends BaseController {
         log.info("GET: " + BASE_URL + "/detail/" + pitch);
         try {
             Long pitchId = Long.valueOf(Integer.parseInt(pitch));
-            model.addAttribute("pitch", pitchService.getPitchById(pitchId));
+            Pitch pitchDetail = pitchService.getPitchById(pitchId);
+            model.addAttribute("pitch", pitchDetail);
             model.addAttribute("today", LocalDate.now().toString());
+            model.addAttribute("pitchesSameDistrict", pitchService.get3PitchesSameDistrict(pitchId, pitchDetail.getDistrict().getId()));
             return "pitch/detail";
         } catch (Exception e) {
             log.error(e.getMessage());

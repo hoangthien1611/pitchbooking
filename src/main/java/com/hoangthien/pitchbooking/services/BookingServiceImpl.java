@@ -68,7 +68,7 @@ public class BookingServiceImpl implements BookingService {
                             dateBooking, bookingDTO.getFromTime(), bookingDTO.getToTime(), bookingDTO.getChildPitchId());
 
             if (bookingOptional.isPresent()) {
-                throw new PitchBookingException("Sân ở thời điểm này đã được đặt!");
+                throw new PitchBookingException("Sân ở thời điểm này đã có người đặt!");
             }
 
             bookingDTO.setId(null);
@@ -180,6 +180,26 @@ public class BookingServiceImpl implements BookingService {
         booking.setUserBooking(userBooking);
 
         return bookingMapper.bookingToBookingDTO(bookingRepository.save(booking));
+    }
+
+    @Override
+    public List<BookingDTO> getAllByUserNameAndNotAccepted(String userName) {
+        LocalDateTime now = LocalDateTime.now();
+        return bookingRepository.findAllByOwnerUserNameAndNotAccepted(userName)
+                .stream()
+                .map(booking -> {
+                    BookingDTO bookingDTO = bookingMapper.bookingToBookingDTO(booking);
+                    if (now.toLocalDate().isAfter(booking.getDateBooking()) ||
+                            (now.toLocalDate().isEqual(booking.getDateBooking())
+                                    && now.getHour() >= TimeUtils.getTimeIntFromString(booking.getFromTime()))) {
+                        bookingDTO.setOutDate(true);
+                    }
+                    bookingDTO.setDateBookingString(TimeUtils.getDateStringFromLocalDate(booking.getDateBooking()));
+                    bookingDTO.setPitchName(booking.getChildPitch().getGroupSpecificPitches().getPitch().getName());
+
+                    return bookingDTO;
+                })
+                .collect(Collectors.toList());
     }
 
     private Optional<ChildPitch> getChildPitchAvailable(List<ChildPitch> childPitches, List<Booking> bookings) {

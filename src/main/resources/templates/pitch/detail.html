@@ -9,7 +9,7 @@
     <div class="container">
         <div class="breadcrum-line">
             <a href="/"><i class="fa fa-home"></i>&nbsp; Trang chủ</a>
-            <a href="/pitch/all" class="" title="S&#226;n b&#243;ng"><i class="fa fa-angle-right"></i>&nbsp; Sân bóng</a>
+            <a href="/pitch/all" class="" title="Sân bóng"><i class="fa fa-angle-right"></i>&nbsp; Sân bóng</a>
             <a><i class="fa fa-angle-right"></i>&nbsp;
                 <th:block th:text="${pitch.name}"></th:block></a>
         </div>
@@ -166,123 +166,38 @@
                     <p class="title-box"><i class="fa fa-map-marker" aria-hidden="true"></i> Sân bóng cùng địa bàn</p>
                     <div class="list-item-san list-item-san-sidebar">
                         <div class="slider-near-san owl-carousel owl-theme" style="opacity: 1; display: block;">
-                            <div>
+                            <div th:each="samePitch:${pitchesSameDistrict}">
                                 <div class="item-card">
                                     <div class="row">
                                         <div class="col-md-12 item-preview-image">
-                                            <a href="/san-bong-hai-dang-26674011.html"
-                                               title="S&#226;n b&#243;ng Hải Đăng">
+                                            <a th:href="@{/pitch/detail/__${samePitch.id}__}"
+                                               th:title="${samePitch.name}">
                                                 <img class="img-responsive"
-                                                     src="https://res.givator.com/pictures/11017/600/2017_02/medium/P1080096.JPG"
-                                                     alt="S&#226;n b&#243;ng Hải Đăng" align="thumbnail">
+                                                     th:src="@{/uploads/__${samePitch.avatar}__}"
+                                                     th:alt="${samePitch.name}" align="thumbnail">
                                             </a>
                                         </div>
                                         <div class="col-md-12 right-item-san">
-                                            <h2><a href="/san-bong-hai-dang-26674011.html" class="item-name-link">S&#226;n
-                                                b&#243;ng Hải Đăng</a></h2>
+                                            <h2><a th:href="@{/pitch/detail/__${samePitch.id}__}" class="item-name-link">
+                                                <th:block th:text="${samePitch.name}"></th:block>
+                                            </a></h2>
                                             <p>
-                                                <i class="fa fa-map-o" aria-hidden="true"></i> 56 Tố Hữu , Trung Văn
-                                                (Quận Nam Từ Li&#234;m, H&#224; Nội)
-                                                <a href="javascript:showGmapPopup('map_canvas', 20.9943949, 105.7873625, 'S&#226;n b&#243;ng Hải Đăng')"><span
-                                                        class="fa fa-map-marker"></span></a>
+                                                <i class="fa fa-map-o" aria-hidden="true"></i>
+                                                <th:block th:text="${samePitch.address + ', ' + samePitch.district.name}"></th:block>
                                             </p>
-                                            <div>
-                                                <p><strong>Gi&#225; thu&#234; s&#226;n 7 người</strong></p>
-                                                <p>06:00 - 16:00 <span class="price-san">300.000<sup>vnđ</sup></span>
-                                                </p>
-                                                <p>16:00 - 17:30 <span class="price-san">600.000<sup>vnđ</sup></span>
-                                                </p>
-                                                <p>17:30 - 20:30 <span class="price-san">800.000<sup>vnđ</sup></span>
-                                                </p>
-                                                <p>20:30 - 22:00 <span class="price-san">400.000<sup>vnđ</sup></span>
+                                            <div th:each="groupPitches:${samePitch.groupSpecificPitches}">
+                                                <p><strong th:text="${'Giá thuê sân ' + groupPitches.pitchType.name}"></strong></p>
+                                                <p th:each="pitchesCost:${groupPitches.specificPitchesCosts}">
+                                                    <th:block th:text="${pitchesCost.fromTime + ' - ' + pitchesCost.toTime + ', ' + pitchesCost.groupDays.name}"></th:block>
+                                                    <span class="price-san"><th:block th:text="${pitchesCost.getCostCommafy()}"></th:block><sup>vnđ</sup></span>
                                                 </p>
                                             </div>
 
                                             <p class="phone-numb"><i class="fa fa-phone-square" aria-hidden="true"></i>
-                                                0961678071</p>
+                                                <th:block th:text="${samePitch.phoneNumber}"></th:block></p>
 
-                                            <a href="/san-bong-hai-dang-26674011.html"
-                                               title="S&#226;n b&#243;ng Hải Đăng" class="btn-chi-tiet"><i
-                                                    class="fa fa-long-arrow-right" aria-hidden="true"></i> Chi tiết</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="item-card">
-                                    <div class="row">
-                                        <div class="col-md-12 item-preview-image">
-                                            <a href="/coma-6-tay-mo-tu-liem.html"
-                                               title="Coma 6 - T&#226;y Mỗ - Từ Li&#234;m">
-                                                <img class="img-responsive"
-                                                     src="https://res.givator.com/pictures/11017/600/2018_06/medium/khu-the-thao-coma6.jpg"
-                                                     alt="Coma 6 - T&#226;y Mỗ - Từ Li&#234;m" align="thumbnail">
-                                            </a>
-                                        </div>
-                                        <div class="col-md-12 right-item-san">
-                                            <h2><a href="/coma-6-tay-mo-tu-liem.html" class="item-name-link">Coma 6 - T&#226;y
-                                                Mỗ - Từ Li&#234;m</a></h2>
-                                            <p>
-                                                <i class="fa fa-map-o" aria-hidden="true"></i> Khu đ&#244; thị Dream
-                                                Town, Đường 70, Phường T&#226;y Mỗ - Quận Nam Từ Li&#234;m - Th&#224;nh
-                                                phố H&#224; Nội (Quận Nam Từ Li&#234;m, H&#224; Nội)
-                                            </p>
-                                            <div>
-                                                <p><strong>Gi&#225; thu&#234; s&#226;n 7 người</strong></p>
-                                                <p>17:30 - 19:00 <span class="price-san">600.000<sup>vnđ</sup></span>
-                                                </p>
-                                                <p>19:00 - 20:30 <span class="price-san">600.000<sup>vnđ</sup></span>
-                                                </p>
-                                                <p>20:30 - 22:00 <span class="price-san">Liên hệ</span></p>
-                                            </div>
-
-                                            <p class="phone-numb"><i class="fa fa-phone-square" aria-hidden="true"></i>
-                                                Phương Ph&#249;ng - 0902298111</p>
-
-                                            <a href="/coma-6-tay-mo-tu-liem.html"
-                                               title="Coma 6 - T&#226;y Mỗ - Từ Li&#234;m" class="btn-chi-tiet"><i
-                                                    class="fa fa-long-arrow-right" aria-hidden="true"></i> Chi tiết</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="item-card">
-                                    <div class="row">
-                                        <div class="col-md-12 item-preview-image">
-                                            <a href="/san-bong-da-son-trang-5.html"
-                                               title="S&#226;n b&#243;ng đ&#225; Sơn Trang 5">
-                                                <img class="img-responsive"
-                                                     src="https://res.givator.com/pictures/11017/600/2017_02/medium/P1080074.JPG"
-                                                     alt="S&#226;n b&#243;ng đ&#225; Sơn Trang 5" align="thumbnail">
-                                            </a>
-                                        </div>
-                                        <div class="col-md-12 right-item-san">
-                                            <h2><a href="/san-bong-da-son-trang-5.html" class="item-name-link">S&#226;n
-                                                b&#243;ng đ&#225; Sơn Trang 5</a></h2>
-                                            <p>
-                                                <i class="fa fa-map-o" aria-hidden="true"></i> 54 Tố Hữu ( L&#234; Văn
-                                                Lương k&#233;o d&#224;i), Trung Văn (Quận Nam Từ Li&#234;m, H&#224; Nội)
-                                                <a href="javascript:showGmapPopup('map_canvas', 20.9946158, 105.7874595, 'S&#226;n b&#243;ng đ&#225; Sơn Trang 5')"><span
-                                                        class="fa fa-map-marker"></span></a>
-                                            </p>
-                                            <div>
-                                                <p><strong>Gi&#225; thu&#234; s&#226;n 7 người</strong></p>
-                                                <p>06:00 - 16:00 <span class="price-san">300.000<sup>vnđ</sup></span>
-                                                </p>
-                                                <p>16:00 - 17:30 <span class="price-san">600.000<sup>vnđ</sup></span>
-                                                </p>
-                                                <p>17:30 - 20:30 <span class="price-san">800.000<sup>vnđ</sup></span>
-                                                </p>
-                                                <p>20:30 - 22:00 <span class="price-san">400.000<sup>vnđ</sup></span>
-                                                </p>
-                                            </div>
-
-                                            <p class="phone-numb"><i class="fa fa-phone-square" aria-hidden="true"></i>
-                                                S&#226;n b&#243;ng Sơn Trang 5 - 0912221518</p>
-
-                                            <a href="/san-bong-da-son-trang-5.html"
-                                               title="S&#226;n b&#243;ng đ&#225; Sơn Trang 5" class="btn-chi-tiet"><i
+                                            <a th:href="@{/pitch/detail/__${samePitch.id}__}"
+                                               th:title="${samePitch.name}" class="btn-chi-tiet"><i
                                                     class="fa fa-long-arrow-right" aria-hidden="true"></i> Chi tiết</a>
                                         </div>
                                     </div>

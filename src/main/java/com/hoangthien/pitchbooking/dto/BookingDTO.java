@@ -32,4 +32,10 @@ public class BookingDTO {
     private Long userId;
 
     private Long pitchesCostId;
+
+    private String childPitchName;
+
+    private String pitchName;
+
+    private boolean outDate = false;
 }

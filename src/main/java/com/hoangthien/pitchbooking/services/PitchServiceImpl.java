@@ -69,8 +69,8 @@ public class PitchServiceImpl implements PitchService {
 
     @Transactional
     @Override
-    public List<Pitch> getPitchesByOwnerId(long ownerId) {
-        return pitchRepository.findAllByOwnerId(ownerId);
+    public List<Pitch> getPitchesByOwner(String userName) {
+        return pitchRepository.findAllByOwnerUserName(userName);
     }
 
     @Override
@@ -204,6 +204,12 @@ public class PitchServiceImpl implements PitchService {
     @Override
     public Page<Pitch> getAllPageable(List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, String search, int offset) {
         return pitchRepository.findAllByPitchTypeIdInAndSurfaceIdInAndCostInAndSearch(typeIds, surfaceIds, costs, search.toLowerCase(), PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    }
+
+    @Override
+    public List<Pitch> get3PitchesSameDistrict(Long pitchId, Long districtId) {
+        Page<Pitch> pitches = pitchRepository.findAllByDistrictIdAndIdNot(districtId, pitchId, PageRequest.of(0, 3));
+        return pitches.getContent();
     }
 
     private boolean isTimeFrameInTimeRange(TimeFrame timeFrame, String timeStart, String timeEnd) {

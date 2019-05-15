@@ -13,7 +13,7 @@ public interface PitchService {
 
     Pitch saveNewPitch(PitchDTO pitchDTO);
 
-    List<Pitch> getPitchesByOwnerId(long ownerId);
+    List<Pitch> getPitchesByOwner(String userName);
 
     Pitch getPitchById(long id);
 
@@ -34,4 +34,6 @@ public interface PitchService {
     Page<Pitch> getAllPageable(List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, int offset);
 
     Page<Pitch> getAllPageable(List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, String search, int offset);
+
+    List<Pitch> get3PitchesSameDistrict(Long pitchId, Long districtId);
 }

@@ -2,7 +2,6 @@ package com.hoangthien.pitchbooking.repositories;
 
 import com.hoangthien.pitchbooking.entities.Pitch;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,7 +12,7 @@ import java.util.List;
 @Repository
 public interface PitchRepository extends JpaRepository<Pitch, Long> {
 
-    List<Pitch> findAllByOwnerId(Long ownerId);
+    List<Pitch> findAllByOwnerUserName(String userName);
 
     Page<Pitch> findAll(Pageable pageable);
 
@@ -36,4 +35,6 @@ public interface PitchRepository extends JpaRepository<Pitch, Long> {
     Page<Pitch> findAllByDistrictPathAndPitchTypeIdInAndSurfaceIdInAndSearch(String path, List<Long> typeIds, List<Long> surfaceIds, String search, Pageable pageable);
 
     List<Pitch> findAllByDistrictId(Long districtId);
+
+    Page<Pitch> findAllByDistrictIdAndIdNot(Long districtId, Long pitchId, Pageable pageable);
 }

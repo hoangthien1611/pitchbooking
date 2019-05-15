@@ -18,4 +18,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findAllByPitchesCostIdAndTimeBooking(Long pitchesCostId, LocalDate date, String fromTime, String toTime);
 
     Optional<Booking> findFirstByDateBookingAndFromTimeAndToTimeAndChildPitchId(LocalDate localDate, String fromTime, String toTime, Long childPitchId);
+
+    @Query("select distinct b from Booking b join b.childPitch cp join cp.groupSpecificPitches gsp join gsp.pitch p join p.owner o where o.userName = ?1 and b.accepted = false")
+    List<Booking> findAllByOwnerUserNameAndNotAccepted(String userName);
 }

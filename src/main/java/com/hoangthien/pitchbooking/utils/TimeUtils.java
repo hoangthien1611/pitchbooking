@@ -65,6 +65,19 @@ public class TimeUtils {
         }
     }
 
+    public static String getDateStringFromLocalDate(LocalDate localDate) {
+        if (localDate == null) {
+            return "";
+        }
+
+        try {
+            String[] yearMonthDay = localDate.toString().split("-");
+            return yearMonthDay[2] + "/" + yearMonthDay[1] + "/" + yearMonthDay[0];
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
     public static List<TimeFrame> generateTimeFrameList(Integer start, Integer end) {
         List<TimeFrame> timeFrames = new ArrayList<>();
         for (int i = start; i < end; i++) {

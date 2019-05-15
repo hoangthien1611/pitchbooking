@@ -7,7 +7,7 @@
 
 <div class="top-banner-box ng-scope">
     <div class="container">
-        <h2 class="page-title">Danh sách sân bóng</h2>
+        <h2 class="page-title">Yêu cầu đặt sân</h2>
     </div>
 </div>
 
@@ -35,7 +35,7 @@
                     <li class="active">
                         <a >
                             <i class="fa fa-list" aria-hidden="true"></i>
-                            Yêu cầu đặt sân <b class="badge badge-primary ng-binding" style="background-color:red" th:text="${bookings.size()}"></b>
+                            Yêu cầu đặt sân <b class="badge badge-primary show-total-requests" style="background-color:red" th:text="${bookings.size()}"></b>
                         </a>
                     </li>
                 </ul>
@@ -54,21 +54,21 @@
                                         <th class="text-right" width="180">Tác vụ</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="tbody-requests">
                                     <tr th:if="${#lists.isEmpty(bookings)}">
                                         <td colspan="6">
                                             Không có yêu cầu đặt sân nào
                                         </td>
                                     </tr>
-                                    <tr th:unless="${#lists.isEmpty(bookings)}" th:each="booking,i:${bookings}">
+                                    <tr th:unless="${#lists.isEmpty(bookings)}" th:each="booking,i:${bookings}" th:id="${'request-' + booking.id}">
                                         <td th:text="${i.count}"></td>
                                         <td th:text="${booking.childPitchName + ' (' + booking.pitchName + ')'}"></td>
                                         <td th:text="${booking.orderName + ' - ' + booking.orderPhone}"></td>
-                                        <td th:text="${booking.fromTime + '-' + booking.toTime + ' ngày ' + booking.dateBookingString}"></td>
+                                        <td th:text="${booking.fromTime + '-' + booking.toTime + ' Ngày ' + booking.dateBookingString}"></td>
                                         <td th:text="${booking.content}"></td>
                                         <td class="text-right">
                                             <div class="form-group">
-                                                <a class="btn btn-success btn-sm ng-scope"
+                                                <a class="btn btn-success btn-sm ng-scope" th:onclick="'javascript:acceptBooking('+ ${booking.id} +')'"
                                                    title="Chấp nhận" th:if="${booking.outDate == false}">
                                                     <i class="fa fa-plus"></i> Chấp nhận
                                                 </a>
@@ -76,8 +76,8 @@
                                                    title="Chấp nhận" th:if="${booking.outDate == true}">
                                                     <i class="fa fa-ban"></i> Đã quá hạn
                                                 </button>
-                                                <a class="btn btn-danger btn-sm"
-                                                   title="Xóa">
+                                                <a class="btn btn-danger btn-sm" title="Xóa"
+                                                   th:onclick="'javascript:delBooking('+ ${booking.id} +')'">
                                                     <i class="fa fa-remove"></i> Xóa
                                                 </a>
                                             </div>
@@ -98,6 +98,6 @@
 </div>
 <footer th:replace="fragments/footer::footer"></footer>
 <div th:replace="fragments/modals::modals"></div>
-<script th:src="@{/js/my-custom/pitch.js}"></script>
+<script th:src="@{/js/my-custom/bookings.js}"></script>
 </body>
 </html>

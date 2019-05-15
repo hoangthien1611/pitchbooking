@@ -8,6 +8,7 @@ import com.hoangthien.pitchbooking.entities.ChildPitch;
 import com.hoangthien.pitchbooking.entities.SpecificPitchesCost;
 import com.hoangthien.pitchbooking.entities.User;
 import com.hoangthien.pitchbooking.exception.PitchBookingException;
+import com.hoangthien.pitchbooking.exception.PitchBookingNotFoundException;
 import com.hoangthien.pitchbooking.mapper.BookingMapper;
 import com.hoangthien.pitchbooking.repositories.BookingRepository;
 import com.hoangthien.pitchbooking.repositories.ChildPitchRepository;
@@ -45,7 +46,7 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingDTO save(BookingDTO bookingDTO) {
         User userBooking = userRepository
-                .findById(bookingDTO.getUserId())
+                .findByUserName(bookingDTO.getUserName())
                 .orElseThrow(() -> new PitchBookingException("User not found!"));
 
         ChildPitch childPitch = childPitchRepository
@@ -156,7 +157,7 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(() -> new PitchBookingException("PitchesCost not found!"));
 
         User userBooking = userRepository
-                .findById(bookingDTO.getUserId())
+                .findByUserName(bookingDTO.getUserName())
                 .orElseThrow(() -> new PitchBookingException("User not found!"));
 
         LocalDate dateBooking = TimeUtils.getLocalDateFromDateString(bookingDTO.getDateBookingString());
@@ -196,6 +197,35 @@ public class BookingServiceImpl implements BookingService {
                     }
                     bookingDTO.setDateBookingString(TimeUtils.getDateStringFromLocalDate(booking.getDateBooking()));
                     bookingDTO.setPitchName(booking.getChildPitch().getGroupSpecificPitches().getPitch().getName());
+
+                    return bookingDTO;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean acceptBooking(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy booking!"));
+        booking.setAccepted(true);
+        bookingRepository.save(booking);
+        return true;
+    }
+
+    @Override
+    public List<BookingDTO> getAllBookingsOfAUser(String userName) {
+        LocalDateTime now = LocalDateTime.now();
+        return bookingRepository.findAllByUserBookingUserName(userName)
+                .stream()
+                .map(booking -> {
+                    BookingDTO bookingDTO = bookingMapper.bookingToBookingDTO(booking);
+                    bookingDTO.setDateBookingString(TimeUtils.getDateStringFromLocalDate(booking.getDateBooking()));
+                    bookingDTO.setPitchName(booking.getChildPitch().getGroupSpecificPitches().getPitch().getName());
+                    if (now.toLocalDate().isAfter(booking.getDateBooking()) ||
+                            (now.toLocalDate().isEqual(booking.getDateBooking())
+                                    && now.getHour() >= TimeUtils.getTimeIntFromString(booking.getFromTime()))) {
+                        bookingDTO.setOutDate(true);
+                    }
 
                     return bookingDTO;
                 })

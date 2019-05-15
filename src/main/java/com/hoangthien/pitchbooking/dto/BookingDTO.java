@@ -31,6 +31,8 @@ public class BookingDTO {
 
     private Long userId;
 
+    private String userName;
+
     private Long pitchesCostId;
 
     private String childPitchName;
@@ -38,4 +40,21 @@ public class BookingDTO {
     private String pitchName;
 
     private boolean outDate = false;
+
+    private boolean accepted;
+
+    private String pitchAvatar;
+
+    private Long pitchId;
+
+    private String pitchAddress;
+
+    public String getCostCommafy() {
+        String regex = "(\\d)(?=(\\d{3})+$)";
+        String costString = "" + cost;
+        if (costString.length() > 4) {
+            costString = costString.replaceAll(regex, "$1,");
+        }
+        return costString;
+    }
 }

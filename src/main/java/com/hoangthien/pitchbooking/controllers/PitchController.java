@@ -99,6 +99,7 @@ public class PitchController extends BaseController {
     public String ownPitches(Model model, Principal principal) {
         log.info("GET: " + BASE_URL + "/management");
         model.addAttribute("pitches", pitchService.getPitchesByOwner(principal.getName()));
+        model.addAttribute("totalRequests", bookingService.getAllByUserNameAndNotAccepted(principal.getName()).size());
         return "pitch/own-pitches";
     }
 

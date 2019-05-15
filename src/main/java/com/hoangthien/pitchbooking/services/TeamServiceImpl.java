@@ -137,7 +137,8 @@ public class TeamServiceImpl implements TeamService {
         return teamRepository.findAllByCaptainUserNameOrMemberUserName(userName);
     }
 
-    private boolean isPathExisted(String path) {
+    @Override
+    public boolean isPathExisted(String path) {
         return teamRepository.existsByPath(path);
     }
 }

@@ -33,4 +33,6 @@ public interface TeamService {
     List<Team> get5TeamsSameLevel(Long teamId, Long levelId);
 
     List<Team> getAllTeamsUserIn(String userName);
+
+    boolean isPathExisted(String path);
 }

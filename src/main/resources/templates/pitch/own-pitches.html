@@ -5,6 +5,11 @@
 <div th:replace="fragments/header::header"></div>
 
 <div ng-view="" class="ng-scope" style="">
+    <div class="top-banner-box">
+        <div class="container">
+            <h2 class="page-title">Danh sách sân</h2>
+        </div>
+    </div>
     <div class="breadcrum ng-scope">
         <div class="container">
             <div class="breadcrum-line">
@@ -28,13 +33,12 @@
                             <a th:href="@{/pitch/management/booking-requests}">
                                 <i class="fa fa-list"></i>
                                 Yêu cầu đặt sân
-                                <b class="badge badge-primary" style="background-color:red">0</b>
+                                <b class="badge badge-primary" style="background-color:red" th:text="${totalRequests}"></b>
                             </a>
                         </li>
                     </ul>
                     <div id="stadiumListTabContent" class="tab-content">
                         <div class="tab-pane fade" id="booking">
-
                         </div>
 
                         <div class="tab-pane fade active in" id="#/stadium">

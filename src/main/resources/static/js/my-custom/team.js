@@ -6,7 +6,31 @@ $(document).ready(function () {
     });
 
     $('#btn-check-path').click(function () {
-        $('.path-can-use').show();
+        var path = $("#input-path").val();
+        if (!path) {
+            $('.path-can-use').hide();
+            $('.path-cannot-use').show();
+            return;
+        }
+        $.ajax({
+            type: 'get',
+            url: '/team/check-path',
+            data: {
+                path
+            },
+            success: function (data) {
+                if (!data) {
+                    $('.path-can-use').show();
+                    $('.path-cannot-use').hide();
+                } else {
+                    $('.path-can-use').hide();
+                    $('.path-cannot-use').show();
+                }
+            },
+            error: function () {
+                alert('Error! Có lỗi xảy ra!');
+            }
+        });
     });
 
     function readURL(input, destination) {

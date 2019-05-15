@@ -86,6 +86,13 @@ public class TeamController extends BaseController {
         return "redirect:/team/detail/" + teamDTO.getPath();
     }
 
+    @GetMapping("/check-path")
+    @ResponseBody
+    public boolean checkPath(@RequestParam("path") String path) {
+        log.info("GET: " + BASE_URL + "/check-path");
+        return teamService.isPathExisted(path);
+    }
+
     @GetMapping("/detail/{path}")
     public String detail(Model model, @PathVariable("path") String path, @RequestParam(value = "tab", defaultValue = "1") String tabStr) {
         log.info("GET: " + BASE_URL + "/detail/" + path);

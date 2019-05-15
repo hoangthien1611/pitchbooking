@@ -11,5 +11,8 @@ public interface BookingMapper {
     Booking bookingDTOToBooking(BookingDTO bookingDTO);
 
     @Mapping(source = "childPitch.name", target = "childPitchName")
+    @Mapping(source = "childPitch.groupSpecificPitches.pitch.avatar", target = "pitchAvatar")
+    @Mapping(source = "childPitch.groupSpecificPitches.pitch.id", target = "pitchId")
+    @Mapping(source = "childPitch.groupSpecificPitches.pitch.address", target = "pitchAddress")
     BookingDTO bookingToBookingDTO(Booking booking);
 }

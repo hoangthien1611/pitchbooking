@@ -6,7 +6,7 @@
 
 <div class="top-banner-box top-banner-box-doi">
     <div class="container">
-        <p class="page-title">Thêm mới Team</p>
+        <h2 class="page-title">Thêm mới Team</h2>
     </div>
 </div>
 <div class="content-wrap is-admin-page">
@@ -15,13 +15,13 @@
             <div class="col-md-3">
                 <div class="sidebar sidebar-tien-ich">
                     <ul class="list-left-links">
-                        <li><a href="https://www.timdoinhanh.com/match/inviting" class="red">Đang bắt đối</a></li>
-                        <li><a href="https://www.timdoinhanh.com/stadium/bookinghistory">Đặt sân</a></li>
+                        <li><a class="red">Đang bắt đối</a></li>
+                        <li><a>Đặt sân</a></li>
                         <li>
                             <a th:href="@{/team/create}">Quản lý đội bóng</a>
                         </li>
-                        <li><a href="https://www.timdoinhanh.com/stadium/management">Quản lý sân</a></li>
-                        <li><a href="https://www.timdoinhanh.com/user/profile">Tài khoản</a></li>
+                        <li><a href="/pitch/management">Quản lý sân</a></li>
+                        <li><a href="/user/profile">Tài khoản</a></li>
                     </ul>
                 </div>
             </div>
@@ -29,14 +29,6 @@
 
                 <div class="layout-main">
                     <div id="settings-content" class="tab-content stacked-content ng-scope" ng-view="">
-                        <div class="alert alert-warning ng-scope">
-                            <strong>Chú ý!</strong>
-                            <br>
-                            Bạn nên cập nhật số điện thoại vào tài khoản để đối tác có thể liên hệ trực tiếp.
-                            <br>
-                            Cập nhật số điện thoại <a href="" target="_blank">tại
-                            đây</a>
-                        </div>
                         <div class="page-team-setting layout-main-content ng-scope">
                             <div class="heading-block">
                                 <p class="title-box ng-scope"><i
@@ -51,8 +43,8 @@
                                 <div class="form-group alert alert-warning">
                                     <label class="control-label col-sm-3"><strong>Địa chỉ truy cập:</strong></label>
                                     <div class="col-sm-9">
-                                        <a target="_blank" th:href="${#httpServletRequest.getContextPath()}">a</a>
-                                        <input type="text" name="path" class="input-transparent" required="">
+                                        <a th:text="${'http://localhost:8000/team/detail/'}"></a>
+                                        <input type="text" name="path" class="input-transparent" id="input-path" required>
                                         <button type="button" id="btn-check-path"
                                                 class="btn btn-primary inlineBlock btn-sm">Kiểm tra
                                         </button>

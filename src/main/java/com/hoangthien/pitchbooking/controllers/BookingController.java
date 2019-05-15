@@ -2,6 +2,7 @@ package com.hoangthien.pitchbooking.controllers;
 
 import com.hoangthien.pitchbooking.dto.BookingCheck;
 import com.hoangthien.pitchbooking.dto.BookingDTO;
+import com.hoangthien.pitchbooking.exception.PitchBookingNotFoundException;
 import com.hoangthien.pitchbooking.services.BookingService;
 import com.hoangthien.pitchbooking.utils.TimeUtils;
 import lombok.extern.log4j.Log4j2;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,10 +26,10 @@ public class BookingController {
 
     @PostMapping
     @ResponseBody
-    public BookingDTO save(@ModelAttribute BookingDTO bookingDTO) {
+    public BookingDTO save(@ModelAttribute BookingDTO bookingDTO, Principal principal) {
         log.info("POST: " + BASE_URL);
         try {
-            bookingDTO.setUserId(1L);
+            bookingDTO.setUserName(principal.getName());
             return bookingService.save(bookingDTO);
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -38,7 +40,7 @@ public class BookingController {
     @DeleteMapping("/{bookingId}")
     @ResponseBody
     public String delete(@PathVariable("bookingId") Long bookingId) {
-        log.info("DELETE: " + BASE_URL);
+        log.info("DELETE: " + BASE_URL + "/" + bookingId);
         try {
             bookingService.delete(bookingId);
             return "SUCCESS";
@@ -62,10 +64,10 @@ public class BookingController {
 
     @PostMapping("/for-user")
     @ResponseBody
-    public String savePublic(@ModelAttribute BookingDTO bookingDTO) {
+    public String savePublic(@ModelAttribute BookingDTO bookingDTO, Principal principal) {
         log.info("POST: " + BASE_URL + "/for-user");
         try {
-            bookingDTO.setUserId(1L);
+            bookingDTO.setUserName(principal.getName());
             if (bookingService.saveForUser(bookingDTO) != null) {
                 return "SUCCESS";
             }
@@ -73,6 +75,18 @@ public class BookingController {
         } catch (Exception e) {
             log.error(e.getMessage());
             return null;
+        }
+    }
+
+    @PatchMapping("/{bookingId}")
+    @ResponseBody
+    public boolean accept(@PathVariable("bookingId") Long bookingId) {
+        log.info("PATCH: " + BASE_URL + "/" + bookingId);
+        try {
+            return bookingService.acceptBooking(bookingId);
+        } catch (PitchBookingNotFoundException e) {
+            log.error(e.getMessage());
+            return false;
         }
     }
 }

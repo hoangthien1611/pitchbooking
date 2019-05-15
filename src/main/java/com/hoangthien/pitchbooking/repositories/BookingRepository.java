@@ -21,4 +21,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     @Query("select distinct b from Booking b join b.childPitch cp join cp.groupSpecificPitches gsp join gsp.pitch p join p.owner o where o.userName = ?1 and b.accepted = false")
     List<Booking> findAllByOwnerUserNameAndNotAccepted(String userName);
+
+    List<Booking> findAllByUserBookingUserName(String userName);
 }

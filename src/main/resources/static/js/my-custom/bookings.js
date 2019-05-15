@@ -131,3 +131,53 @@ function deleteBooking(index, childPitchId, bookingId) {
         });
     }
 }
+
+function delBooking(bookingId) {
+    var result = confirm('Bạn có chắc chắn muốn xóa?');
+    if (result) {
+        $.ajax({
+            type: 'delete',
+            url: '/booking/' + bookingId,
+            success: function (data) {
+                if (data) {
+                    alert('Xóa thành công');
+                    removeRow(bookingId);
+                } else {
+                    alert("Xóa thất bại!");
+                }
+            },
+            error: function () {
+                alert('Error! Có lỗi xảy ra!');
+            }
+        });
+    }
+}
+
+function acceptBooking(bookingId) {
+    $.ajax({
+        type: 'patch',
+        url: '/booking/' + bookingId,
+        success: function (data) {
+            if (data) {
+                alert('Chấp nhận thành công');
+                removeRow(bookingId);
+            } else {
+                alert("Chấp nhận thất bại!");
+            }
+        },
+        error: function () {
+            alert('Error! Có lỗi xảy ra!');
+        }
+    });
+}
+
+function removeRow(bookingId) {
+    var total = parseInt($(".show-total-requests").text());
+    total -= 1;
+    $(`#request-${bookingId}`).remove();
+    $(".show-total-requests").text(total);
+    if (total == 0) {
+        var tr = "<tr><td colspan=\"6\">Không có yêu cầu đặt sân nào</td>";
+        $("#tbody-requests").append(tr);
+    }
+}

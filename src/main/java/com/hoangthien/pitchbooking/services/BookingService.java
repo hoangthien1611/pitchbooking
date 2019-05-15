@@ -18,4 +18,8 @@ public interface BookingService {
     BookingDTO saveForUser(BookingDTO bookingDTO);
 
     List<BookingDTO> getAllByUserNameAndNotAccepted(String userName);
+
+    boolean acceptBooking(Long bookingId);
+
+    List<BookingDTO> getAllBookingsOfAUser(String userName);
 }

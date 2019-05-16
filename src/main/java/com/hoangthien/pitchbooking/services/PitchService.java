@@ -21,6 +21,8 @@ public interface PitchService {
 
     Pitch updatePitch(PitchDTO pitchDTO);
 
+    boolean deletePitch(Long pitchId);
+
     List<TimeFrameBooking> getTimeFrameBookingsByDate(Long pitchId, LocalDate dateBooking);
 
     Page<Pitch> getAllPageable(String path, List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, int offset);

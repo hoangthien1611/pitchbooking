@@ -7,6 +7,7 @@ import com.hoangthien.pitchbooking.dto.TimeFrame;
 import com.hoangthien.pitchbooking.dto.TimeFrameBooking;
 import com.hoangthien.pitchbooking.entities.*;
 import com.hoangthien.pitchbooking.exception.PitchBookingException;
+import com.hoangthien.pitchbooking.exception.PitchBookingNotFoundException;
 import com.hoangthien.pitchbooking.mapper.PitchMapper;
 import com.hoangthien.pitchbooking.repositories.*;
 import com.hoangthien.pitchbooking.utils.PitchBookingUtils;
@@ -54,9 +55,8 @@ public class PitchServiceImpl implements PitchService {
                 .findById(pitchDTO.getDistrictId())
                 .orElseThrow(() -> new PitchBookingException("Quận / huyện không tìm thấy!"));
 
-        // Update later
         User owner = userRepository
-                .findById(1L)
+                .findByUserName(pitchDTO.getOwnerUserName())
                 .orElseThrow(() -> new PitchBookingException("Không tìm thấy chủ sân!"));
 
         Pitch pitch = pitchMapper.pitchDTOToPitch(pitchDTO);
@@ -76,7 +76,7 @@ public class PitchServiceImpl implements PitchService {
     @Override
     public Pitch getPitchById(long id) {
         return pitchRepository.findById(id)
-                .orElseThrow(() -> new PitchBookingException("Không tìm thấy sân!"));
+                .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy sân!"));
     }
 
     @Transactional
@@ -102,11 +102,6 @@ public class PitchServiceImpl implements PitchService {
                 .findById(pitchDTO.getDistrictId())
                 .orElseThrow(() -> new PitchBookingException("Quận / huyện không tìm thấy!"));
 
-        // Update later
-        User owner = userRepository
-                .findById(1L)
-                .orElseThrow(() -> new PitchBookingException("Không tìm thấy chủ sân!"));
-
         pitch.setName(pitchDTO.getName());
         pitch.setIntroduction(pitchDTO.getIntroduction());
         pitch.setDetailDescription(pitchDTO.getDetailDescription());
@@ -123,6 +118,15 @@ public class PitchServiceImpl implements PitchService {
         }
 
         return pitchRepository.save(pitch);
+    }
+
+    @Override
+    public boolean deletePitch(Long pitchId) {
+        pitchRepository.findById(pitchId)
+                .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy sân cần xóa"));
+
+        pitchRepository.deleteById(pitchId);
+        return true;
     }
 
     @Override

@@ -284,3 +284,25 @@ function passPitchesIdToModal(pitchesId, number) {
     $("#pitchesIdChange").val(pitchesId);
     $("#numberChange").val(number);
 }
+
+function deletePitch(pitchId) {
+    console.log('del');
+    var result = confirm('Bạn có chắc chắn muốn xóa?');
+    if (result) {
+        $.ajax({
+            type: 'delete',
+            url: '/pitch/management/' + pitchId,
+            success: function (data) {
+                if (data) {
+                    alert('Xóa thành công');
+                    $(`#tr-pitch-${pitchId}`).remove();
+                } else {
+                    alert("Xóa thất bại!");
+                }
+            },
+            error: function () {
+                alert('Error! Có lỗi xảy ra!');
+            }
+        });
+    }
+}

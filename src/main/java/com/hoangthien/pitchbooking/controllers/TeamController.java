@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,7 +61,7 @@ public class TeamController extends BaseController {
 
     @PostMapping("/create")
     public String create(@Valid @ModelAttribute TeamDTO teamDTO, BindingResult rs, @RequestParam("imgLogo") MultipartFile logo,
-                         @RequestParam("imgTeam") MultipartFile banner, RedirectAttributes ra) {
+                         @RequestParam("imgTeam") MultipartFile banner, RedirectAttributes ra, Principal principal) {
         log.info("POST: " + BASE_URL + "/create");
         if (rs.hasErrors()) {
             ra.addFlashAttribute("msg", new Message(MessageType.ERROR, "Vui lòng nhập đầy đủ thông tin phù hợp!"));
@@ -76,7 +77,7 @@ public class TeamController extends BaseController {
                 teamDTO.setPicture(fileService.saveFile(banner));
             }
 
-            teamService.saveNewTeam(teamDTO);
+            teamService.saveNewTeam(teamDTO, principal.getName());
         } catch (Exception e) {
             ra.addFlashAttribute("msg", new Message(MessageType.ERROR, e.getMessage()));
             return "redirect:/team/create";
@@ -91,6 +92,13 @@ public class TeamController extends BaseController {
     public boolean checkPath(@RequestParam("path") String path) {
         log.info("GET: " + BASE_URL + "/check-path");
         return teamService.isPathExisted(path);
+    }
+
+    @GetMapping("/my-teams")
+    public String getMyTeams(Model model, Principal principal) {
+        log.info("GET: /team/my-teams");
+        model.addAttribute("teams", teamService.getAllTeamsUserIn(principal.getName()));
+        return "team/my-teams";
     }
 
     @GetMapping("/detail/{path}")

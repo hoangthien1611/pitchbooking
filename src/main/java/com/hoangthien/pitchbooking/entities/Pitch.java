@@ -55,6 +55,7 @@ public class Pitch implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "pitch",
+            orphanRemoval = true,
             cascade = CascadeType.ALL)
     private List<GroupSpecificPitches> groupSpecificPitches;
 }

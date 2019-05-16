@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface TeamService {
 
-    Team saveNewTeam(TeamDTO teamDTO);
+    Team saveNewTeam(TeamDTO teamDTO, String userName);
 
     Team getTeamByPath(String path);
 

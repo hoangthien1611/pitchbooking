@@ -8,6 +8,8 @@ import com.hoangthien.pitchbooking.entities.GroupSpecificPitches;
 import com.hoangthien.pitchbooking.entities.Pitch;
 import com.hoangthien.pitchbooking.entities.PitchType;
 import com.hoangthien.pitchbooking.entities.YardSurface;
+import com.hoangthien.pitchbooking.exception.PitchBookingNotFoundException;
+import com.hoangthien.pitchbooking.exception.PitchBookingUnauthorizedException;
 import com.hoangthien.pitchbooking.services.*;
 import com.hoangthien.pitchbooking.utils.PitchBookingUtils;
 import com.hoangthien.pitchbooking.utils.TimeUtils;
@@ -72,7 +74,8 @@ public class PitchController extends BaseController {
 
     @PostMapping("/management/create")
     public String create(@Valid @ModelAttribute PitchDTO pitchDTO, BindingResult rs,
-                         @RequestParam("imgAvatar") MultipartFile avatar, RedirectAttributes ra) {
+                         @RequestParam("imgAvatar") MultipartFile avatar, RedirectAttributes ra,
+                         Principal principal) {
         log.info("POST: " + BASE_URL + "/create");
 
         if (rs.hasErrors()) {
@@ -84,6 +87,7 @@ public class PitchController extends BaseController {
             if (!avatar.getOriginalFilename().isEmpty()) {
                 pitchDTO.setAvatar(fileService.saveFile(avatar));
             }
+            pitchDTO.setOwnerUserName(principal.getName());
 
             pitchService.saveNewPitch(pitchDTO);
             ra.addFlashAttribute("msg", new Message(MessageType.SUCCESS, "Thêm sân bóng mới thành công"));
@@ -111,24 +115,31 @@ public class PitchController extends BaseController {
     }
 
     @GetMapping("/management/pitch-info/{pitchId}")
-    public String info(Model model, @PathVariable("pitchId") String pitch) {
+    public String info(Model model, @PathVariable("pitchId") String pitch, Principal principal) {
         log.info("GET: " + BASE_URL + "/management/pitch-info/{pitchId}");
         try {
             Long pitchId = Long.valueOf(Integer.parseInt(pitch));
-            model.addAttribute("pitch", pitchService.getPitchById(pitchId));
+            Pitch pitchFound = pitchService.getPitchById(pitchId);
+            if (!pitchFound.getOwner().getUserName().equals(principal.getName())) {
+                throw new PitchBookingUnauthorizedException("Unauthorized!!!");
+            }
+            model.addAttribute("pitch", pitchFound);
             model.addAttribute("listDistricts", districtService.getAllDistricts());
             model.addAttribute("listSurfaces", yardSurfaceService.getAllYardSurfaces());
             return "pitch/edit";
-        } catch (Exception e) {
+        } catch (PitchBookingNotFoundException e) {
             log.error(e.getMessage());
             return "error/page_404";
+        } catch (PitchBookingUnauthorizedException e) {
+            log.error(e.getMessage());
+            return "error/page_403";
         }
     }
 
     @PostMapping("/management/pitch-info/edit")
     public String edit(@Valid @ModelAttribute PitchDTO pitchDTO, BindingResult rs,
                        @RequestParam("imgAvatar") MultipartFile avatar, RedirectAttributes ra) {
-        log.info("POST: " + BASE_URL + "/management/pitch-info/{pitchId}");
+        log.info("POST: " + BASE_URL + "/management/pitch-info/edit");
 
         if (rs.hasErrors()) {
             ra.addFlashAttribute("msg", new Message(MessageType.ERROR, "Vui lòng nhập đầy đủ thông tin phù hợp!"));
@@ -149,7 +160,7 @@ public class PitchController extends BaseController {
     }
 
     @GetMapping("/management/pitch-prices/{pitchId}")
-    public String getPrices(Model model, @PathVariable("pitchId") String pitch) {
+    public String getPrices(Model model, @PathVariable("pitchId") String pitch, Principal principal) {
         log.info("GET: " + BASE_URL + "/management/pitch-prices/{pitchId}");
         try {
             Long pitchId = Long.valueOf(Integer.parseInt(pitch));
@@ -160,34 +171,63 @@ public class PitchController extends BaseController {
                     .filter(pitchType -> !isPitchTypeExistedInGroupSpecificPitches(pitchType.getId(), groupSpecificPitches))
                     .collect(Collectors.toList());
 
+            Pitch pitchFound = pitchService.getPitchById(pitchId);
+            if (!pitchFound.getOwner().getUserName().equals(principal.getName())) {
+                throw new PitchBookingUnauthorizedException("Unauthorized!!!");
+            }
+
             model.addAttribute("specificPitches", groupSpecificPitches);
             model.addAttribute("pitchId", pitchId);
-            model.addAttribute("pitchName", pitchService.getPitchById(pitchId).getName());
+            model.addAttribute("pitchName", pitchFound.getName());
             model.addAttribute("groupDaysList", groupDaysService.getAll());
             model.addAttribute("pitchTypeList", pitchTypesAfterFilter);
             model.addAttribute("listTimeFrame", TimeUtils.getTimeStringsFromStartToEnd(Defines.TIME_START, Defines.TIME_END));
             return "pitch/prices";
-        } catch (Exception e) {
+        } catch (PitchBookingNotFoundException e) {
             log.error(e.getMessage());
             return "error/page_404";
+        } catch (PitchBookingUnauthorizedException e) {
+            log.error(e.getMessage());
+            return "error/page_403";
         }
     }
 
     @GetMapping("/management/pitch-bookings/{pitchId}")
-    public String booking(Model model, @PathVariable("pitchId") String pitch, @RequestParam(value = "date", required = false) String date) {
+    public String booking(Model model, @PathVariable("pitchId") String pitch,
+                          @RequestParam(value = "date", required = false) String date, Principal principal) {
         log.info("GET: " + BASE_URL + "/management/pitch-bookings/{pitchId}");
         try {
             Long pitchId = Long.valueOf(Integer.parseInt(pitch));
             LocalDate dateBooking = TimeUtils.getLocalDateFromDateString(date);
 
+            Pitch pitchFound = pitchService.getPitchById(pitchId);
+            if (!pitchFound.getOwner().getUserName().equals(principal.getName())) {
+                throw new PitchBookingUnauthorizedException("Unauthorized!!!");
+            }
+
             model.addAttribute("date", dateBooking.toString());
             model.addAttribute("pitchId", pitchId);
-            model.addAttribute("pitchName", pitchService.getPitchById(pitchId).getName());
+            model.addAttribute("pitchName", pitchFound.getName());
             model.addAttribute("timeFrameBookings", pitchService.getTimeFrameBookingsByDate(pitchId, dateBooking));
             return "pitch/bookings";
-        } catch (Exception e) {
+        } catch (PitchBookingNotFoundException e) {
             log.error(e.getMessage());
             return "error/page_404";
+        } catch (PitchBookingUnauthorizedException e) {
+            log.error(e.getMessage());
+            return "error/page_403";
+        }
+    }
+
+    @DeleteMapping("/management/{pitchId}")
+    @ResponseBody
+    public boolean deletePitch(@PathVariable("pitchId") Long pitchId) {
+        log.info("DELETE: pitch/management/" + pitchId);
+        try {
+            return pitchService.deletePitch(pitchId);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return false;
         }
     }
 

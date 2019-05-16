@@ -41,7 +41,7 @@ public class TeamServiceImpl implements TeamService {
     private TeamMapper teamMapper;
 
     @Override
-    public Team saveNewTeam(TeamDTO teamDTO) {
+    public Team saveNewTeam(TeamDTO teamDTO, String userName) {
         if (isPathExisted(teamDTO.getPath().trim())) {
             throw new PitchBookingException("Path đã tồn tại!");
         }
@@ -57,9 +57,8 @@ public class TeamServiceImpl implements TeamService {
                 .findById(teamDTO.getAreaId())
                 .orElseThrow(() -> new PitchBookingException("Khu vực không tìm thấy!"));
 
-        // Update later
         User captain = userRepository
-                .findById(1L)
+                .findByUserName(userName)
                 .orElseThrow(() -> new PitchBookingException("Không tìm thấy đội trưởng!"));
 
         Set<User> members = new HashSet<>();

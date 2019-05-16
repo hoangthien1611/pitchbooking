@@ -7,14 +7,14 @@
 <div ng-view="" class="ng-scope" style="">
     <div class="top-banner-box">
         <div class="container">
-            <h2 class="page-title">Danh sách sân</h2>
+            <h2 class="page-title">Đội bóng của tôi</h2>
         </div>
     </div>
     <div class="breadcrum ng-scope">
         <div class="container">
             <div class="breadcrum-line">
                 <a href="/"><i class="fa fa-home"></i>&nbsp; Trang chủ</a>
-                <a th:href="@{/pitch/management}"><i class="fa fa-angle-right"></i>&nbsp; Danh sách sân</a>
+                <a><i class="fa fa-angle-right"></i>&nbsp; Đội bóng của tôi</a>
             </div>
         </div>
     </div>
@@ -26,14 +26,7 @@
                         <li class="active">
                             <a>
                                 <i class="fa fa-list"></i>
-                                Danh sách sân
-                            </a>
-                        </li>
-                        <li>
-                            <a th:href="@{/pitch/management/booking-requests}">
-                                <i class="fa fa-list"></i>
-                                Yêu cầu đặt sân
-                                <b class="badge badge-primary" style="background-color:red" th:text="${totalRequests}"></b>
+                                Đội bóng của tôi
                             </a>
                         </li>
                     </ul>
@@ -46,71 +39,68 @@
                                 <div class="pull-right" style="margin-bottom:30px;">
                                     <div class="dropdown">
                                         <a class="btn btn-primary btn-primary-extra"
-                                           th:href="@{/pitch/management/create}">
-                                            <i class="fa fa-plus-square" aria-hidden="true"></i> &nbsp;&nbsp;Tạo sân mới
+                                           th:href="@{/team/create}">
+                                            <i class="fa fa-plus-square" aria-hidden="true"></i> &nbsp;&nbsp;Tạo đội bóng mới
                                         </a>
                                     </div>
                                 </div>
-                                <th:block th:unless="${#lists.isEmpty(pitches)}">
+                                <th:block th:unless="${#lists.isEmpty(teams)}">
                                     <table class="table table-striped table-responsive table-stadium-list ng-scope">
                                         <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Tên sân</th>
-                                            <th>Thông tin sân</th>
+                                            <th>Tên đội bóng</th>
+                                            <th>Thông tin đội bóng</th>
                                             <th>Ảnh đại diện</th>
+                                            <th>Ảnh bìa</th>
                                             <th align="right" style="text-align:right">Tác vụ</th>
                                         </tr>
                                         </thead>
 
                                         <tbody>
-                                        <tr th:each="pitch,iterStat:${pitches}" th:id="${'tr-pitch-' + pitch.id}">
+                                        <tr th:each="team,iterStat:${teams}" th:id="${'tr-pitch-' + team.id}">
                                             <td th:text="${iterStat.count}">1</td>
                                             <td>
-                                                <a th:href="@{/pitch/management/pitch-info/__${pitch.id}__}">
-                                                    <strong th:text="${pitch.name}">Viktor</strong>
+                                                <a th:href="@{/team/detail/__${team.path}__}">
+                                                    <strong th:text="${team.name}">Viktor</strong>
                                                 </a>
                                             </td>
                                             <td>
                                                 <div>
                                                     <i class="fa fa-map-o"></i>
-                                                    <th:block th:text="${pitch.address + ', ' + pitch.district.name}"></th:block>
+                                                    <th:block th:text="${team.area.name}"></th:block>
                                                 </div>
                                                 <div>
-                                                    <i class="fa fa-phone-square"></i>
-                                                    <a th:text="${pitch.phoneNumber}"></a>
+                                                    <i class="fa fa-clock-o"></i>
+                                                    <th:block th:text="${team.time}"></th:block>
                                                 </div>
                                                 <div>
-                                                    <i class="fa fa-facebook-square" aria-hidden="true"></i>
-                                                    <a th:text="${pitch.facebook}"> fb.com/viktor</a>
+                                                    <i class="fa fa-users"></i>
+                                                    <th:block th:text="${team.youngest + ' - ' + team.oldest}"></th:block>
                                                 </div>
                                                 <div>
-                                                    <i class="fa fa-envelope-o"></i>
-                                                    <a th:text="${pitch.email}">hoangthien@thien.com</a>
+                                                    <i class="fa fa-shirtsinbulk"></i>
+                                                    <th:block th:text="${team.level.name}"></th:block>
                                                 </div>
-
                                             </td>
                                             <td>
-                                                <img height="120" th:src="@{/uploads/__${pitch.avatar}__}">
+                                                <img height="120" th:src="@{/uploads/__${team.logo}__}">
+                                            </td>
+                                            <td>
+                                                <img height="120" th:src="@{/uploads/__${team.picture}__}">
                                             </td>
 
                                             <td align="right" style="text-align:right">
                                                 <div class="form-group">
-                                                    <a th:href="@{/pitch/management/pitch-bookings/__${pitch.id}__}"
-                                                       class="btn btn-info btn-sm" style="width:130px">
-                                                        <i class="fa fa-calendar" aria-hidden="true"></i> Đặt sân
-                                                    </a>
-                                                </div>
-                                                <div class="form-group">
-                                                    <a class="btn btn-default btn-sm" title="Chỉnh sửa"
+                                                    <a class="btn btn-info btn-sm" title="Chỉnh sửa"
                                                        style="width:130px"
-                                                       th:href="@{/pitch/management/pitch-info/__${pitch.id}__}">
+                                                       th:href="@{/team/edit/__${team.id}__}">
                                                         <i class="fa fa-pencil"></i> Sửa thông tin
                                                     </a>
                                                 </div>
                                                 <div class="form-group">
                                                     <a class="btn btn-danger btn-sm" title="Xóa" style="width:130px"
-                                                       th:onclick="'javascript:deletePitch('+ ${pitch.id} +')'">
+                                                       th:onclick="'javascript:deleteTeam('+ ${team.id} +')'">
                                                         <i class="fa fa-remove"></i> Xóa
                                                     </a>
                                                 </div>
@@ -132,6 +122,6 @@
 </div>
 <footer th:replace="fragments/footer::footer"></footer>
 <div th:replace="fragments/modals::modals"></div>
-<script th:src="@{/js/my-custom/pitch.js}"></script>
+<script th:src="@{/js/my-custom/team.js}"></script>
 </body>
 </html>

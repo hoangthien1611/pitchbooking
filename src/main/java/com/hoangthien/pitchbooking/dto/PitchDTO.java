@@ -32,4 +32,6 @@ public class PitchDTO {
     private long yardSurfaceId;
 
     private long districtId;
+
+    private String ownerUserName;
 }

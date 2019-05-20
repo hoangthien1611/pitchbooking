@@ -6,7 +6,7 @@
 
 <div class="top-banner-box top-banner-box-doi">
     <div class="container">
-        <h2 class="page-title">Thêm mới Đội bóng</h2>
+        <h2 class="page-title">Chỉnh sửa Đội bóng</h2>
     </div>
 </div>
 <div class="content-wrap is-admin-page">
@@ -39,12 +39,12 @@
                                     <strong th:text="${msg.message}"></strong>
                                 </div>
                             </th:block>
-                            <form class="form-horizontal" role="form" th:action="@{/team/create}" method="post" enctype="multipart/form-data">
+                            <form class="form-horizontal" role="form" th:action="@{/team/edit}" method="post" enctype="multipart/form-data">
                                 <div class="form-group alert alert-warning">
                                     <label class="control-label col-sm-3"><strong>Địa chỉ truy cập:</strong></label>
                                     <div class="col-sm-9">
                                         <a th:text="${'http://localhost:8000/team/detail/'}"></a>
-                                        <input type="text" name="path" class="input-transparent" id="input-path" required>
+                                        <input type="text" name="path" class="input-transparent" th:value="${team.path}" id="input-path" required>
                                         <button type="button" id="btn-check-path"
                                                 class="btn btn-primary inlineBlock btn-sm">Kiểm tra
                                         </button>
@@ -62,7 +62,7 @@
                                 <div class="form-group form-group-sm">
                                     <label class="control-label col-sm-3">Tên đội:</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="name"
+                                        <input type="text" class="form-control" name="name" th:value="${team.name}"
                                                id="name" placeholder="Nhập tên đội bóng của bạn" required>
                                     </div>
                                 </div>
@@ -70,13 +70,14 @@
                                     <label class="control-label col-sm-3">Khu vực:</label>
                                     <div class="col-sm-9">
                                         <select class="form-control" name="areaId">
-                                            <th:block th:if="${#lists.isEmpty(listDistricts)}">
+                                            <th:block th:if="${#lists.isEmpty(districts)}">
                                                 <option value="?">Không có dữ liệu!</option>
                                             </th:block>
-                                            <th:block th:unless="${#lists.isEmpty(listDistricts)}">
-                                                <option th:each="district,iterStat:${listDistricts}"
+                                            <th:block th:unless="${#lists.isEmpty(districts)}">
+                                                <option th:each="district,iterStat:${districts}"
                                                         th:text="${district.name}"
-                                                        th:value="${district.id}"></option>
+                                                        th:value="${district.id}"
+                                                        th:selected="${district.id == team.area.id ? true : false}"></option>
                                             </th:block>
                                         </select>
                                     </div>
@@ -87,7 +88,8 @@
                                         <select class="form-control" name="levelId">
                                             <option th:each="level,iterStat:${listLevels}"
                                                     th:text="${level.name}"
-                                                    th:value="${level.id}"></option>
+                                                    th:value="${level.id}"
+                                                    th:selected="${level.id == team.level.id? true: false}"></option>
                                         </select>
                                     </div>
                                 </div>
@@ -95,25 +97,25 @@
                                     <label class="control-label col-sm-3">Logo:</label>
                                     <div class="col-sm-9" style="padding-top:5px;">
                                         <input id="fileLogoFilePath" name="imgLogo" type="file">
-                                        <img id="imageLogo" />
+                                        <img id="imageLogo" style="max-width: 300px;" th:src="@{/uploads/__${team.logo}__}" />
                                     </div>
                                 </div>
                                 <div class="form-group form-group-sm">
                                     <label class="control-label col-sm-3">Ảnh đội:</label>
                                     <div class="col-sm-9" style="padding-top:5px;">
                                         <input id="fileBannerFilePath" type="file" name="imgTeam">
-                                        <img id="imageTeam" />
+                                        <img id="imageTeam" style="max-width: 300px;" th:src="@{/uploads/__${team.picture}__}" />
                                     </div>
                                 </div>
                                 <div class="form-group age-range  form-group-sm">
                                     <label class="control-label col-sm-3">Độ tuổi:</label>
                                     <div class="col-md-9 row">
                                         <div class="col-sm-4 inlineBlock">
-                                            <input type="number" class="form-control" name="youngest"
+                                            <input type="number" class="form-control" name="youngest" th:value="${team.youngest}"
                                                    id="inpYoungestAge" placeholder="Ít tuổi nhất" required>
                                         </div>
                                         <div class="col-sm-4 inlineBlock mobile-pull-right">
-                                            <input type="number" class="form-control" name="oldest"
+                                            <input type="number" class="form-control" name="oldest" th:value="${team.oldest}"
                                                    id="inpOldestAge" placeholder="Lớn tuổi nhất" required>
                                         </div>
                                     </div>
@@ -123,7 +125,7 @@
                                     <label class="control-label col-sm-3">Giới thiệu:</label>
                                     <div class="col-sm-9">
                                         <textarea cols="5" id="inpAbout" name="description" class="form-control"
-                                                  placeholder="Giới thiệu" required></textarea>
+                                                  placeholder="Giới thiệu" required th:text="${team.description}"></textarea>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -145,7 +147,7 @@
                                 <div class="form-group form-group-sm">
                                     <label class="control-label col-sm-3 mobile-hidden">Thời gian đá:</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="time"
+                                        <input type="text" class="form-control" name="time" th:value="${team.time}"
                                                id="time" placeholder="Nhập thời gian đá" required>
                                     </div>
                                 </div>
@@ -154,7 +156,7 @@
                                     <div class="col-sm-offset-2 col-sm-10">
                                         <button type="submit" class="btn btn-primary btn-primary-extra">
                                             <i class="fa fa-save"></i>
-                                            Thêm
+                                            Cập nhật
                                         </button>
                                     </div>
                                 </div>

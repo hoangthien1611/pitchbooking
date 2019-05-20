@@ -4,8 +4,10 @@ import com.hoangthien.pitchbooking.entities.Pitch;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -37,4 +39,9 @@ public interface PitchRepository extends JpaRepository<Pitch, Long> {
     List<Pitch> findAllByDistrictId(Long districtId);
 
     Page<Pitch> findAllByDistrictIdAndIdNot(Long districtId, Long pitchId, Pageable pageable);
+
+    @Transactional
+    @Modifying
+    @Query("delete from Pitch p where p.id = ?1")
+    void deleteById(Long id);
 }

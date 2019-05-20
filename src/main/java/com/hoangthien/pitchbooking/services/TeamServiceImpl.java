@@ -7,6 +7,7 @@ import com.hoangthien.pitchbooking.entities.Level;
 import com.hoangthien.pitchbooking.entities.Team;
 import com.hoangthien.pitchbooking.entities.User;
 import com.hoangthien.pitchbooking.exception.PitchBookingException;
+import com.hoangthien.pitchbooking.exception.PitchBookingNotFoundException;
 import com.hoangthien.pitchbooking.mapper.TeamMapper;
 import com.hoangthien.pitchbooking.repositories.DistrictRepository;
 import com.hoangthien.pitchbooking.repositories.LevelRepository;
@@ -61,14 +62,10 @@ public class TeamServiceImpl implements TeamService {
                 .findByUserName(userName)
                 .orElseThrow(() -> new PitchBookingException("Không tìm thấy đội trưởng!"));
 
-        Set<User> members = new HashSet<>();
-        members.add(captain);
-
         Team team = teamMapper.teamDTOToTeam(teamDTO);
         team.setLevel(level);
         team.setArea(area);
         team.setCaptain(captain);
-        team.setMembers(members);
 
         return teamRepository.save(team);
     }
@@ -78,6 +75,12 @@ public class TeamServiceImpl implements TeamService {
         return teamRepository
                 .findByPath(path)
                 .orElseThrow(() -> new PitchBookingException("Không tìm thấy team!"));
+    }
+
+    @Override
+    public Team getTeamById(Long id) {
+        return teamRepository.findById(id)
+                .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy team!"));
     }
 
     @Override
@@ -127,17 +130,30 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public List<Team> get5TeamsSameLevel(Long teamId, Long levelId) {
-        Page<Team> teams = teamRepository.findAllByLevelIdAndIdNot(levelId, teamId, PageRequest.of(0,5));
+        Page<Team> teams = teamRepository.findAllByLevelIdAndIdNot(levelId, teamId, PageRequest.of(0, 5));
         return teams.getContent();
     }
 
     @Override
     public List<Team> getAllTeamsUserIn(String userName) {
-        return teamRepository.findAllByCaptainUserNameOrMemberUserName(userName);
+        List<Team> teamsByCaptain = teamRepository.findAllByCaptainUserName(userName);
+        List<Team> teamsByMember = teamRepository.findAllByMemberUserName(userName);
+        teamsByMember.forEach(team -> {
+            if (!teamsByCaptain.contains(team)) {
+                teamsByCaptain.add(team);
+            }
+        });
+        return teamsByCaptain;
     }
 
     @Override
     public boolean isPathExisted(String path) {
         return teamRepository.existsByPath(path);
+    }
+
+    @Override
+    public boolean delete(Long teamId) {
+        teamRepository.deleteById(teamId);
+        return true;
     }
 }

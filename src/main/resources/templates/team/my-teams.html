@@ -58,7 +58,7 @@
                                         </thead>
 
                                         <tbody>
-                                        <tr th:each="team,iterStat:${teams}" th:id="${'tr-pitch-' + team.id}">
+                                        <tr th:each="team,iterStat:${teams}" th:id="${'tr-team-' + team.id}">
                                             <td th:text="${iterStat.count}">1</td>
                                             <td>
                                                 <a th:href="@{/team/detail/__${team.path}__}">
@@ -67,20 +67,24 @@
                                             </td>
                                             <td>
                                                 <div>
+                                                    <i class="fa fa-user"></i>
+                                                    <a th:href="@{/user/profile/__${team.captain.id}__}" th:text="${'Đội trưởng: ' + team.captain.fullName}"></a>
+                                                </div>
+                                                <div>
                                                     <i class="fa fa-map-o"></i>
-                                                    <th:block th:text="${team.area.name}"></th:block>
+                                                    <th:block th:text="${'Khu vực: ' + team.area.name}"></th:block>
                                                 </div>
                                                 <div>
                                                     <i class="fa fa-clock-o"></i>
-                                                    <th:block th:text="${team.time}"></th:block>
+                                                    <th:block th:text="${'Thời gian: ' + team.time}"></th:block>
                                                 </div>
                                                 <div>
                                                     <i class="fa fa-users"></i>
-                                                    <th:block th:text="${team.youngest + ' - ' + team.oldest}"></th:block>
+                                                    <th:block th:text="${'Độ tuổi: ' + team.youngest + ' - ' + team.oldest}"></th:block>
                                                 </div>
                                                 <div>
                                                     <i class="fa fa-shirtsinbulk"></i>
-                                                    <th:block th:text="${team.level.name}"></th:block>
+                                                    <th:block th:text="${'Trình độ: ' + team.level.name}"></th:block>
                                                 </div>
                                             </td>
                                             <td>

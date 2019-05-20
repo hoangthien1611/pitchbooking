@@ -12,6 +12,8 @@ public interface TeamService {
 
     Team getTeamByPath(String path);
 
+    Team getTeamById(Long id);
+
     Page<Team> getTeamsByAreaAndLevelPageable(Long areaId, Long levelId, int offset);
 
     Page<Team> getTeamsByAreaPageable(Long areaId, int offset);
@@ -35,4 +37,6 @@ public interface TeamService {
     List<Team> getAllTeamsUserIn(String userName);
 
     boolean isPathExisted(String path);
+
+    boolean delete(Long teamId);
 }

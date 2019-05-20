@@ -229,3 +229,24 @@ function choosePitch(pitchId) {
     $("#pitchIdInput").val(pitchId);
     $("#showPitchName").text(pitchNamne);
 }
+
+function deleteTeam(teamId) {
+    var result = confirm('Bạn có chắc chắn muốn xóa?');
+    if (result) {
+        $.ajax({
+            type: 'delete',
+            url: '/team/' + teamId,
+            success: function (data) {
+                if (data) {
+                    alert('Xóa thành công');
+                    $(`#tr-team-${teamId}`).remove();
+                } else {
+                    alert("Xóa thất bại!");
+                }
+            },
+            error: function () {
+                alert('Error! Có lỗi xảy ra!');
+            }
+        });
+    }
+}

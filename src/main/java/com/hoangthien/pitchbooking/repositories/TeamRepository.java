@@ -38,6 +38,8 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
 
     Page<Team> findAllByLevelIdAndIdNot(Long levelId, Long teamId, Pageable pageable);
 
-    @Query("select distinct t from Team t join t.captain c join t.members m where c.userName = ?1 or m.userName = ?1")
-    List<Team> findAllByCaptainUserNameOrMemberUserName(String userName);
+    @Query("select distinct t from Team t join t.members m where m.userName = ?1")
+    List<Team> findAllByMemberUserName(String userName);
+
+    List<Team> findAllByCaptainUserName(String userName);
 }

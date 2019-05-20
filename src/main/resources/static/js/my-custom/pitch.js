@@ -286,7 +286,6 @@ function passPitchesIdToModal(pitchesId, number) {
 }
 
 function deletePitch(pitchId) {
-    console.log('del');
     var result = confirm('Bạn có chắc chắn muốn xóa?');
     if (result) {
         $.ajax({

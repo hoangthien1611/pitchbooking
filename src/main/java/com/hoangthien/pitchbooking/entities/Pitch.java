@@ -4,10 +4,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.OnDelete;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+
+import static org.hibernate.annotations.OnDeleteAction.CASCADE;
 
 @Entity
 @Table(name = "pitch")
@@ -53,9 +56,10 @@ public class Pitch implements Serializable {
     @JoinColumn(name = "districtId")
     private District district;
 
+    @OnDelete(action = CASCADE)
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "pitch",
             orphanRemoval = true,
-            cascade = CascadeType.ALL)
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<GroupSpecificPitches> groupSpecificPitches;
 }

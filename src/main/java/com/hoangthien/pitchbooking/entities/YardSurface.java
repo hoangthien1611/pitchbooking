@@ -20,7 +20,9 @@ public class YardSurface {
     private String name;
 
     @OneToMany(fetch = FetchType.LAZY,
-            mappedBy = "yardSurface")
+            mappedBy = "yardSurface",
+            orphanRemoval = true,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @ToString.Exclude
     private List<Pitch> pitches;
 }

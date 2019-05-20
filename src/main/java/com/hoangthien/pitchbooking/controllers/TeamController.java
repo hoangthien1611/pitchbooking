@@ -9,6 +9,7 @@ import com.hoangthien.pitchbooking.entities.Level;
 import com.hoangthien.pitchbooking.entities.Team;
 import com.hoangthien.pitchbooking.entities.User;
 import com.hoangthien.pitchbooking.exception.PitchBookingException;
+import com.hoangthien.pitchbooking.exception.PitchBookingUnauthorizedException;
 import com.hoangthien.pitchbooking.services.DistrictService;
 import com.hoangthien.pitchbooking.services.FileService;
 import com.hoangthien.pitchbooking.services.LevelService;
@@ -99,6 +100,37 @@ public class TeamController extends BaseController {
         log.info("GET: /team/my-teams");
         model.addAttribute("teams", teamService.getAllTeamsUserIn(principal.getName()));
         return "team/my-teams";
+    }
+
+    @DeleteMapping("/{teamId}")
+    @ResponseBody
+    public boolean delete(@PathVariable("teamId") Long teamId, Principal principal) {
+        log.info("DELETE: /team/" + teamId);
+        try {
+            Team teamFound = teamService.getTeamById(teamId);
+            if (!teamFound.getCaptain().getUserName().equals(principal.getName())) {
+                throw new PitchBookingUnauthorizedException("Unauthorized!!!");
+            }
+
+            return teamService.delete(teamId);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return false;
+        }
+    }
+
+    @GetMapping("/edit/{teamId}")
+    public String edit(Model model, @PathVariable("teamId") String team) {
+        log.info("GET: /team/edit/" + team);
+        try {
+            Long teamId = Long.valueOf(Integer.parseInt(team));
+            model.addAttribute("team", teamService.getTeamById(teamId));
+            model.addAttribute("listLevels", levelService.getAllLevels());
+            return "team/edit";
+        } catch (NumberFormatException e) {
+            log.error(e.getMessage());
+            return "error/page_404";
+        }
     }
 
     @GetMapping("/detail/{path}")

@@ -127,7 +127,7 @@ public class PitchController extends BaseController {
             model.addAttribute("listDistricts", districtService.getAllDistricts());
             model.addAttribute("listSurfaces", yardSurfaceService.getAllYardSurfaces());
             return "pitch/edit";
-        } catch (PitchBookingNotFoundException e) {
+        } catch (PitchBookingNotFoundException | NumberFormatException e) {
             log.error(e.getMessage());
             return "error/page_404";
         } catch (PitchBookingUnauthorizedException e) {
@@ -183,7 +183,7 @@ public class PitchController extends BaseController {
             model.addAttribute("pitchTypeList", pitchTypesAfterFilter);
             model.addAttribute("listTimeFrame", TimeUtils.getTimeStringsFromStartToEnd(Defines.TIME_START, Defines.TIME_END));
             return "pitch/prices";
-        } catch (PitchBookingNotFoundException e) {
+        } catch (PitchBookingNotFoundException | NumberFormatException e) {
             log.error(e.getMessage());
             return "error/page_404";
         } catch (PitchBookingUnauthorizedException e) {
@@ -210,7 +210,7 @@ public class PitchController extends BaseController {
             model.addAttribute("pitchName", pitchFound.getName());
             model.addAttribute("timeFrameBookings", pitchService.getTimeFrameBookingsByDate(pitchId, dateBooking));
             return "pitch/bookings";
-        } catch (PitchBookingNotFoundException e) {
+        } catch (PitchBookingNotFoundException | NumberFormatException e) {
             log.error(e.getMessage());
             return "error/page_404";
         } catch (PitchBookingUnauthorizedException e) {

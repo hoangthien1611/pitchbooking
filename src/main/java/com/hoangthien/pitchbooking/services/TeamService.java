@@ -10,6 +10,8 @@ public interface TeamService {
 
     Team saveNewTeam(TeamDTO teamDTO, String userName);
 
+    Team update(TeamDTO teamDTO);
+
     Team getTeamByPath(String path);
 
     Team getTeamById(Long id);

@@ -29,6 +29,4 @@ public class TeamDTO {
     private Long captainId;
 
     private Long areaId;
-
-    private Long homeId;
 }

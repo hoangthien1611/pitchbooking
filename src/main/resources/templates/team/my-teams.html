@@ -68,7 +68,7 @@
                                             <td>
                                                 <div>
                                                     <i class="fa fa-user"></i>
-                                                    <a th:href="@{/user/profile/__${team.captain.id}__}" th:text="${'Đội trưởng: ' + team.captain.fullName}"></a>
+                                                    <th:block th:text="${'Đội trưởng: '}"></th:block><a th:href="@{/user/profile/__${team.captain.id}__}" th:text="${team.captain.fullName}"></a>
                                                 </div>
                                                 <div>
                                                     <i class="fa fa-map-o"></i>

@@ -13,8 +13,7 @@ $(document).ready(function() {
 
             reader.onload = function(e) {
                 $("#avatarImg").attr('src', e.target.result);
-                $("#avatarImg").attr('height', 200);
-                $("#avatarImg").attr('width', 250);
+                $("#avatarImg").css('max-width', 300);
             }
 
             reader.readAsDataURL(this.files[0]);

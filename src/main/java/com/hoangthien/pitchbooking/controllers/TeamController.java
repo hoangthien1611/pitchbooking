@@ -9,6 +9,7 @@ import com.hoangthien.pitchbooking.entities.Level;
 import com.hoangthien.pitchbooking.entities.Team;
 import com.hoangthien.pitchbooking.entities.User;
 import com.hoangthien.pitchbooking.exception.PitchBookingException;
+import com.hoangthien.pitchbooking.exception.PitchBookingNotFoundException;
 import com.hoangthien.pitchbooking.exception.PitchBookingUnauthorizedException;
 import com.hoangthien.pitchbooking.services.DistrictService;
 import com.hoangthien.pitchbooking.services.FileService;
@@ -120,16 +121,23 @@ public class TeamController extends BaseController {
     }
 
     @GetMapping("/edit/{teamId}")
-    public String edit(Model model, @PathVariable("teamId") String team) {
+    public String edit(Model model, @PathVariable("teamId") String team, Principal principal) {
         log.info("GET: /team/edit/" + team);
         try {
             Long teamId = Long.valueOf(Integer.parseInt(team));
-            model.addAttribute("team", teamService.getTeamById(teamId));
+            Team teamFound = teamService.getTeamById(teamId);
+            if (!teamFound.getCaptain().getUserName().equals(principal.getName())) {
+                throw new PitchBookingUnauthorizedException("Unauthorized!!!");
+            }
+            model.addAttribute("team", teamFound);
             model.addAttribute("listLevels", levelService.getAllLevels());
             return "team/edit";
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException | PitchBookingNotFoundException e) {
             log.error(e.getMessage());
             return "error/page_404";
+        } catch (PitchBookingUnauthorizedException e) {
+            log.error(e.getMessage());
+            return "error/page_403";
         }
     }
 
@@ -158,6 +166,27 @@ public class TeamController extends BaseController {
             log.error(e.getMessage());
         }
         return "error/page_404";
+    }
+
+    @PostMapping("/edit")
+    public String edit(@ModelAttribute TeamDTO teamDTO, RedirectAttributes ra, @RequestParam("imgLogo") MultipartFile logo,
+                       @RequestParam("imgTeam") MultipartFile banner) {
+        log.info("POST: /team/edit");
+        try {
+            if (!logo.getOriginalFilename().isEmpty()) {
+                teamDTO.setLogo(fileService.saveFile(logo));
+            }
+            if (!banner.getOriginalFilename().isEmpty()) {
+                teamDTO.setPicture(fileService.saveFile(banner));
+            }
+
+            teamService.update(teamDTO);
+            ra.addFlashAttribute("msg", new Message(MessageType.SUCCESS, "Chỉnh sửa thành công"));
+            return "redirect:/team/detail/" + teamDTO.getPath();
+        } catch (Exception e) {
+            ra.addFlashAttribute("msg", new Message(MessageType.ERROR, e.getMessage()));
+            return "redirect:/team/edit/" + teamDTO.getId();
+        }
     }
 
     @GetMapping("/search")

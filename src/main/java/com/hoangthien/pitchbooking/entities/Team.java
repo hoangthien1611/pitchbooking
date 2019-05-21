@@ -47,13 +47,6 @@ public class Team {
     @JoinColumn(name = "districtId")
     private District area;
 
-    @OneToOne(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
-    @JoinColumn(name = "pitchId")
-    private Pitch home;
-
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,

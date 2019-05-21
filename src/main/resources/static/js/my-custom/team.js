@@ -40,8 +40,7 @@ $(document).ready(function () {
 
             reader.onload = function(e) {
                 $(`${destination}`).attr('src', e.target.result);
-                $(`${destination}`).attr('height', 100);
-                $(`${destination}`).attr('width', 150);
+                $(`${destination}`).css('max-width', 300);
             }
 
             reader.readAsDataURL(input.files[0]);

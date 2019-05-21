@@ -71,6 +71,44 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    public Team update(TeamDTO teamDTO) {
+        if (isPathExisted(teamDTO.getPath().trim())) {
+            throw new PitchBookingException("Path đã tồn tại!");
+        }
+        if (teamDTO.getYoungest() > teamDTO.getOldest()) {
+            throw new PitchBookingException("Tuổi nhỏ nhất không được lớn hơn tuổi lớn nhất!");
+        }
+
+        Team team = teamRepository.findById(teamDTO.getId())
+                .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy team cần update"));
+
+        Level level = levelRepository
+                .findById(teamDTO.getLevelId())
+                .orElseThrow(() -> new PitchBookingException("Trình độ không hợp lệ!"));
+
+        District area = districtRepository
+                .findById(teamDTO.getAreaId())
+                .orElseThrow(() -> new PitchBookingException("Khu vực không tìm thấy!"));
+
+        team.setLevel(level);
+        team.setArea(area);
+        team.setDescription(teamDTO.getDescription());
+        team.setName(teamDTO.getName());
+        team.setPath(teamDTO.getPath());
+        team.setTime(teamDTO.getTime());
+        team.setYoungest(teamDTO.getYoungest());
+        team.setOldest(teamDTO.getOldest());
+        if (teamDTO.getLogo() != null) {
+            team.setLogo(teamDTO.getLogo());
+        }
+        if (teamDTO.getPicture() != null) {
+            team.setPicture(teamDTO.getPicture());
+        }
+
+        return teamRepository.save(team);
+    }
+
+    @Override
     public Team getTeamByPath(String path) {
         return teamRepository
                 .findByPath(path)

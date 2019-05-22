@@ -6,6 +6,7 @@ import com.hoangthien.pitchbooking.dto.UserDTO;
 import com.hoangthien.pitchbooking.exception.PitchBookingException;
 import com.hoangthien.pitchbooking.exception.PitchBookingNotFoundException;
 import com.hoangthien.pitchbooking.services.BookingService;
+import com.hoangthien.pitchbooking.services.InvitationService;
 import com.hoangthien.pitchbooking.services.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class UserController extends BaseController {
 
     @Autowired
     private BookingService bookingService;
+
+    @Autowired
+    private InvitationService invitationService;
 
     @PostMapping("/check-userName")
     @ResponseBody
@@ -89,5 +93,11 @@ public class UserController extends BaseController {
         log.info("GET: /user/booking-history");
         model.addAttribute("bookings", bookingService.getAllBookingsOfAUser(principal.getName()));
         return "profile/booking-history";
+    }
+
+    @GetMapping("/invitation-history")
+    public String invitationHistory() {
+        log.info("GET: /user/invitation-history");
+        return "profile/invitation-history";
     }
 }

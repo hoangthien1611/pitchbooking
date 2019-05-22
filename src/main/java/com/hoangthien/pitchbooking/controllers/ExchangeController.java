@@ -6,6 +6,7 @@ import com.hoangthien.pitchbooking.dto.ExchangeDTO;
 import com.hoangthien.pitchbooking.dto.Message;
 import com.hoangthien.pitchbooking.entities.Exchange;
 import com.hoangthien.pitchbooking.entities.Level;
+import com.hoangthien.pitchbooking.entities.Team;
 import com.hoangthien.pitchbooking.exception.PitchBookingException;
 import com.hoangthien.pitchbooking.services.*;
 import com.hoangthien.pitchbooking.utils.PitchBookingUtils;
@@ -50,7 +51,8 @@ public class ExchangeController extends BaseController {
                                  @RequestParam(value = "p", defaultValue = "1") String pg,
                                  @RequestParam(value = "l", defaultValue = "") String lValue,
                                  @RequestParam(value = "h", defaultValue = "") String hPValue,
-                                 @RequestParam(value = "s", defaultValue = "") String search) {
+                                 @RequestParam(value = "s", defaultValue = "") String search,
+                                 Principal principal) {
         log.info("GET: /exchange/waiting/" + path);
 
         try {
@@ -83,6 +85,11 @@ public class ExchangeController extends BaseController {
             String districtName = Defines.DISTRICT_PATH_ALL.equalsIgnoreCase(path) ? ""
                     : districtService.getDistrictDTOByPath(path).getName();
 
+            List<Team> myTeams = new ArrayList<>();
+            if (principal != null) {
+                myTeams = teamService.getAllTeamsUserIn(principal.getName());
+            }
+
             model.addAttribute("exchanges", pageExchanges.getContent());
             model.addAttribute("currentPage", page);
             model.addAttribute("totalPages", totalPages);
@@ -93,6 +100,7 @@ public class ExchangeController extends BaseController {
             model.addAttribute("levelList", levelList);
             model.addAttribute("districtName", districtName);
             model.addAttribute("totalExchangesFound", pageExchanges.getTotalElements());
+            model.addAttribute("myTeams", myTeams);
 
             return "exchange/list-waiting";
         } catch (Exception e) {

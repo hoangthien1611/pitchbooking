@@ -72,15 +72,18 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public Team update(TeamDTO teamDTO) {
-        if (isPathExisted(teamDTO.getPath().trim())) {
-            throw new PitchBookingException("Path đã tồn tại!");
-        }
         if (teamDTO.getYoungest() > teamDTO.getOldest()) {
             throw new PitchBookingException("Tuổi nhỏ nhất không được lớn hơn tuổi lớn nhất!");
         }
 
         Team team = teamRepository.findById(teamDTO.getId())
                 .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy team cần update"));
+
+        if (!team.getPath().equalsIgnoreCase(teamDTO.getPath().trim())) {
+            if (isPathExisted(teamDTO.getPath().trim())) {
+                throw new PitchBookingException("Path đã tồn tại!");
+            }
+        }
 
         Level level = levelRepository
                 .findById(teamDTO.getLevelId())

@@ -86,7 +86,7 @@ public class TeamController extends BaseController {
         }
 
         ra.addFlashAttribute("msg", new Message(MessageType.SUCCESS, "Thêm đội bóng mới thành công"));
-        return "redirect:/team/detail/" + teamDTO.getPath();
+        return "redirect:/team/my-teams";
     }
 
     @GetMapping("/check-path")
@@ -173,16 +173,16 @@ public class TeamController extends BaseController {
                        @RequestParam("imgTeam") MultipartFile banner) {
         log.info("POST: /team/edit");
         try {
-            if (!logo.getOriginalFilename().isEmpty()) {
-                teamDTO.setLogo(fileService.saveFile(logo));
-            }
             if (!banner.getOriginalFilename().isEmpty()) {
                 teamDTO.setPicture(fileService.saveFile(banner));
+            }
+            if (!logo.getOriginalFilename().isEmpty()) {
+                teamDTO.setLogo(fileService.saveFile(logo));
             }
 
             teamService.update(teamDTO);
             ra.addFlashAttribute("msg", new Message(MessageType.SUCCESS, "Chỉnh sửa thành công"));
-            return "redirect:/team/detail/" + teamDTO.getPath();
+            return "redirect:/team/my-teams";
         } catch (Exception e) {
             ra.addFlashAttribute("msg", new Message(MessageType.ERROR, e.getMessage()));
             return "redirect:/team/edit/" + teamDTO.getId();

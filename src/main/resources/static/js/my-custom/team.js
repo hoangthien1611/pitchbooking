@@ -169,6 +169,34 @@ $(document).ready(function () {
             $(".specific-area").hide();
         }
     });
+
+    $(".btn-submit-invite").on("click", function () {
+        var exchangeId = $("#exchangeId").val();
+        var teamSenderId = $("#teamSenderId").val();
+        var message = $("#messageModal").val();
+
+        var data = {
+            exchangeId,
+            teamSenderId,
+            message
+        }
+
+        $.ajax({
+            type: 'post',
+            url: '/invitation',
+            data: data,
+            success: function (data) {
+                if (data) {
+                    alert('Gửi lời mời thành công');
+                } else {
+                    alert("Gửi lời mời thất bại!");
+                }
+            },
+            error: function () {
+                alert('Error! Có lỗi xảy ra!');
+            }
+        });
+    })
 });
 
 function goToUrl(inputId, param, value) {
@@ -248,4 +276,8 @@ function deleteTeam(teamId) {
             }
         });
     }
+}
+
+function openInvitation(exchangeId) {
+    $("#exchangeId").val(exchangeId);
 }

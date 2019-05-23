@@ -33,8 +33,14 @@ public class InvitationServiceImpl implements InvitationService {
 
     @Override
     public boolean createInvitation(InvitationDTO invitationDTO, String userName) {
-        User user = userRepository.findByUserName(userName)
-                .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy user"));
+        User user;
+        if (invitationDTO.getUserId() == null) {
+            user = userRepository.findByUserName(userName)
+                    .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy user"));
+        } else {
+            user = userRepository.findById(invitationDTO.getUserId())
+                    .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy user"));
+        }
 
         Team team = teamRepository.findById(invitationDTO.getTeamId())
                 .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy đội khách"));

@@ -101,4 +101,17 @@ public class UserController extends BaseController {
         model.addAttribute("invitations", invitationService.getAllOfAUser(principal.getName()));
         return "profile/invitation-history";
     }
+
+    @GetMapping("/profile/{id}")
+    public String userInfo(Model model, @PathVariable("id") String id) {
+        log.info("GET: /user/profile/" + id);
+        try {
+            Long userId = Long.valueOf(Integer.parseInt(id));
+            model.addAttribute("user", userService.getUser(userId));
+            return "profile/user-info";
+        } catch (Exception e) {
+            log.error(e);
+            return "error/page_404";
+        }
+    }
 }

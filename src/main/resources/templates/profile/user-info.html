@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head::head"></head>
+<body ng-app="sportApp" class="mobile-app-false ng-scope" data-gr-c-s-loaded="true">
+<div th:replace="fragments/header::header"></div>
+<div class="content-wrap">
+    <div class="container">
+        <!-- PROFILE -->
+        <div id="profile">
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="list-item-san">
+                        <li class="item-card">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="img-profile">
+                                        <img width="100%" th:src="@{/uploads/__${user.avatar}__}" alt="avatar">
+                                    </div>
+                                </div>
+                                <div class="col-md-9 right-item-san profile-view">
+                                    <div class="form-group col-md-11">
+                                        <p><strong>Họ và Tên:</strong> <th:block th:text="${user.fullName}"></th:block></p>
+                                        <p><strong>Email:</strong> <th:block th:text="${user.email}"></th:block></p>
+                                        <p><strong>Điện thoại:</strong>  <th:block th:text="${user.phoneNumber}"></th:block></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                    </ul>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="fragments/footer::footer"></footer>
+<div th:replace="fragments/modals::modals"></div>
+<script th:src="@{/js/my-custom/user.js}"></script>
+</body>
+</html>

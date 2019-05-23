@@ -86,7 +86,10 @@ public class PitchController extends BaseController {
         try {
             if (!avatar.getOriginalFilename().isEmpty()) {
                 pitchDTO.setAvatar(fileService.saveFile(avatar));
+            } else {
+                pitchDTO.setAvatar("default-pitch.jpg");
             }
+
             pitchDTO.setOwnerUserName(principal.getName());
 
             pitchService.saveNewPitch(pitchDTO);

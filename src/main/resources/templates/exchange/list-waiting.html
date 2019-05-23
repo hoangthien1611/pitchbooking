@@ -145,8 +145,8 @@
                                                 <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
                                             </button>
                                             <button class="btn btn-sm btn-default pull-right btn-batdoi modal-link-angularjs"
-                                                    data-toggle="modal" data-target="#sendInvitation"
-                                                    th:onclick="'javascript:openInvitation('+ ${exchange.id} +')'"
+                                                    data-toggle="modal" data-target="#sendInvitation2"
+                                                    th:onclick="'javascript:openInvitation2(\''+ ${exchange.userCreated.id} + '\',\'' + ${exchange.team.id} + '\')'"
                                                     sec:authorize="isAuthenticated()" th:if="${!exchange.userCreated.userName.equals(#authentication.name) && exchange.hasPitch == 0}">
                                                 <i class="fa fa-send" aria-hidden="true"></i> Mời giao lưu
                                             </button>
@@ -258,7 +258,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Gửi lời mời giao lưu</h4>
+                    <h4 class="modal-title">Mời giao lưu</h4>
                 </div>
                 <div class="modal-body">
                     <div class="col-md-12">
@@ -293,6 +293,84 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                     <button type="button" class="btn btn-success btn-submit-invite" data-dismiss="modal">Gửi</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="sendInvitation2" role="dialog">
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Mời giao lưu</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <h5 style="margin-bottom: 15px">Chọn trận đấu để mời:</h5>
+                        <ul class="list-item-san">
+                            <li th:if="${#lists.isEmpty(myExchanges)}">
+                                <h4 style="color: red">Không có trận đấu nào đang sẵn sàng để chọn!</h4>
+                                <a href="/exchange/create">Click để tạo trận đấu</a>
+                            </li>
+                            <li class="item-card ng-scope" style="position:relative;" th:each="myEx,itemStat:${myExchanges}">
+                                <div class="row">
+                                    <div class="col-md-12 right-item-san right-item-doi">
+                                        <div class="header-item-doi header-tim-doi @">
+                                            <div class="match-header-texts">
+                                                <h2>
+                                                    <a th:href="${myEx.team.path}" th:title="${myEx.team.name}" class="ng-binding ng-scope">
+                                                        <a th:href="@{/team/detail/__${myEx.team.path}__}"
+                                                           th:title="${myEx.team.name}" th:text="${myEx.team.name}">
+                                                        </a>
+                                                        <a th:href="@{/pitch/detail/__${myEx.pitch.id}__}">
+                                                            <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                                            <th:block th:text="${myEx.pitch.name}"></th:block>
+                                                        </a>
+                                                    </a>
+                                                </h2>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <p class="tim-doi-time ng-binding"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+                                                <strong>Thời gian:</strong>
+                                                <th:block th:text="${myEx.timeExchange}"></th:block>
+                                            </p>
+
+                                            <p class="item-stadium-address ng-binding ng-scope"><i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                                <strong>Địa chỉ:</strong>
+                                                <th:block th:text="${myEx.pitch.address + ', ' + myEx.pitch.district.name}"></th:block>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="text-highlight ng-scope" style="position:absolute; top:0px; right:10px;">
+                                    <input name="exchange2" type="radio" th:value="${myEx.id}" th:checked="${itemStat.count == 1? true : false}" style="width: 3em; height: 3em">
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="form-group row" th:unless="${#lists.isEmpty(myExchanges)}">
+                        <label class="col-md-3 control-label" style="font-weight: bold; margin-top: 5px;">Lời mời</label>
+                        <div class="col-md-9">
+                                <textarea rows="3" cols="5" name="message" id="messageModal2"
+                                          class="form-control input-sm width-100p"
+                                          placeholder="Lời mời giao lưu"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row hide">
+                        <div class="col-md-6">
+                            <input type="number" name="userId" id="userId2" class="form-control input-sm">
+                            <input type="number" name="teamId" id="teamId2" class="form-control input-sm">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-success btn-submit-invite2" data-dismiss="modal" th:unless="${#lists.isEmpty(myExchanges)}">Gửi</button>
                 </div>
             </div>
 

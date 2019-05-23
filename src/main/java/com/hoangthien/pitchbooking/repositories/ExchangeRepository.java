@@ -24,4 +24,7 @@ public interface ExchangeRepository extends JpaRepository<Exchange, Long> {
 
     @Query("select distinct e from Exchange e join e.district d join e.level l where e.hasPitch in ?1 and l.id in ?2 and e.timeExchange > ?3")
     Page<Exchange> findAllByHasPitchInAndLevelIdInAndTimeExchangeAfter(List<Integer> hasPitch, List<Long> levelIds, LocalDateTime now, Pageable pageable);
+
+
+    List<Exchange> findAllByUserCreatedUserNameAndTimeExchangeAfterAndHasPitchEqualsAndStatusEquals(String userName, LocalDateTime now, int i, int i1);
 }

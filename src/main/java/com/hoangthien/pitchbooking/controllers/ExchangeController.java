@@ -86,8 +86,10 @@ public class ExchangeController extends BaseController {
                     : districtService.getDistrictDTOByPath(path).getName();
 
             List<Team> myTeams = new ArrayList<>();
+            List<Exchange> myExchanges = new ArrayList<>();
             if (principal != null) {
                 myTeams = teamService.getAllTeamsUserIn(principal.getName());
+                myExchanges = exchangeService.getAllByUserAndAvailable(principal.getName());
             }
 
             model.addAttribute("exchanges", pageExchanges.getContent());
@@ -101,6 +103,7 @@ public class ExchangeController extends BaseController {
             model.addAttribute("districtName", districtName);
             model.addAttribute("totalExchangesFound", pageExchanges.getTotalElements());
             model.addAttribute("myTeams", myTeams);
+            model.addAttribute("myExchanges", myExchanges);
 
             return "exchange/list-waiting";
         } catch (Exception e) {

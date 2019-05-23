@@ -104,4 +104,10 @@ public class ExchangeServiceImpl implements ExchangeService {
 
         return exchangeRepository.findAllByDistrictPathAndHasPitchInAndLevelIdInAndTimeExchangeAfter(path, hasPitch, levelIds, now, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
     }
+
+    @Override
+    public List<Exchange> getAllByUserAndAvailable(String userName) {
+        LocalDateTime now = LocalDateTime.now();
+        return exchangeRepository.findAllByUserCreatedUserNameAndTimeExchangeAfterAndHasPitchEqualsAndStatusEquals(userName, now, 1, 0);
+    }
 }

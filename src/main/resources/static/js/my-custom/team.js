@@ -198,6 +198,40 @@ $(document).ready(function () {
                 alert('Error! Có lỗi xảy ra!');
             }
         });
+    });
+
+    $(".btn-submit-invite2").on("click", function () {
+        var userId = $("#userId2").val();
+        var teamId = $("#teamId2").val();
+        var message = $("#messageModal2").val();
+        var exchangeId = $("input[name='exchange2']:checked").val();
+
+        var data = {
+            exchangeId,
+            userId,
+            teamId,
+            message,
+            type: 2
+        }
+
+        console.log(data);
+
+        $.ajax({
+            type: 'post',
+            url: '/invitation',
+            data: data,
+            success: function (data) {
+                if (data) {
+                    alert('Gửi lời mời thành công');
+                } else {
+                    alert("Thất bại! Trận đấu này đã tìm được được đối hoặc thông tin không đúng!");
+                    location.reload(true);
+                }
+            },
+            error: function () {
+                alert('Error! Có lỗi xảy ra!');
+            }
+        });
     })
 });
 
@@ -282,6 +316,10 @@ function deleteTeam(teamId) {
 
 function openInvitation(exchangeId) {
     $("#exchangeId").val(exchangeId);
+}
+function openInvitation2(userId, teamId) {
+    $("#userId2").val(userId);
+    $("#teamId2").val(teamId);
 }
 
 function acceptInvitation(invitationId) {

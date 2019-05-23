@@ -95,7 +95,7 @@
                 </div>
 
             </div>
-            <div class="col-md-8">
+            <div class="col-md-6">
                 <div class="p-content">
                     <h1 class="title-intent title-pages mobile-marginlr-15">
                         <i class="fa fa-futbol-o" aria-hidden="true"></i>
@@ -141,8 +141,14 @@
                                             <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
                                                     data-toggle="modal" data-target="#sendInvitation"
                                                     th:onclick="'javascript:openInvitation('+ ${exchange.id} +')'"
-                                                    sec:authorize="isAuthenticated()" th:if="${!exchange.userCreated.userName.equals(#authentication.name)}">
+                                                    sec:authorize="isAuthenticated()" th:if="${!exchange.userCreated.userName.equals(#authentication.name) && exchange.hasPitch != 0}">
                                                 <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
+                                            </button>
+                                            <button class="btn btn-sm btn-default pull-right btn-batdoi modal-link-angularjs"
+                                                    data-toggle="modal" data-target="#sendInvitation"
+                                                    th:onclick="'javascript:openInvitation('+ ${exchange.id} +')'"
+                                                    sec:authorize="isAuthenticated()" th:if="${!exchange.userCreated.userName.equals(#authentication.name) && exchange.hasPitch == 0}">
+                                                <i class="fa fa-send" aria-hidden="true"></i> Mời giao lưu
                                             </button>
                                         </div>
                                     </div>
@@ -190,8 +196,8 @@
                                     </p>
                                     <p>
                                         <i class="fa fa-shirtsinbulk" aria-hidden="true"></i> <strong>Trạng thái:</strong>
-                                        <span class="red" th:if="${exchange.status == 0}">Đang chờ</span>
-                                        <span class="blue" th:if="${exchange.status == 1}">Đã có đối</span>
+                                        <span style="color: blue" th:if="${exchange.status == 0}">Đang chờ</span>
+                                        <span class="red" th:if="${exchange.status == 1}">Đã có đối</span>
                                     </p>
                                     <p class="quost-doi">
                                         <th:block th:text="${exchange.invitation}"></th:block>

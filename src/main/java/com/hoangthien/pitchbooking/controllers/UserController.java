@@ -96,8 +96,9 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("/invitation-history")
-    public String invitationHistory() {
+    public String invitationHistory(Model model, Principal principal) {
         log.info("GET: /user/invitation-history");
+        model.addAttribute("invitations", invitationService.getAllOfAUser(principal.getName()));
         return "profile/invitation-history";
     }
 }

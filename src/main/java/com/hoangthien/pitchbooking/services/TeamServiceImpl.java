@@ -177,14 +177,15 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public List<Team> getAllTeamsUserIn(String userName) {
-        List<Team> teamsByCaptain = teamRepository.findAllByCaptainUserName(userName);
-        List<Team> teamsByMember = teamRepository.findAllByMemberUserName(userName);
-        teamsByMember.forEach(team -> {
-            if (!teamsByCaptain.contains(team)) {
-                teamsByCaptain.add(team);
-            }
-        });
-        return teamsByCaptain;
+//        List<Team> teamsByCaptain = teamRepository.findAllByCaptainUserName(userName);
+//        List<Team> teamsByMember = teamRepository.findAllByMemberUserName(userName);
+//        teamsByMember.forEach(team -> {
+//            if (!teamsByCaptain.contains(team)) {
+//                teamsByCaptain.add(team);
+//            }
+//        });
+//        return teamsByCaptain;
+        return teamRepository.findAllByCaptainUserNameAndMemberUserName(userName);
     }
 
     @Override

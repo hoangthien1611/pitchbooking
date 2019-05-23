@@ -33,14 +33,13 @@
                 <div class="col-md-3">
                     <div class="sidebar sidebar-tien-ich">
                         <ul class="list-left-links">
-                            <li><a class="red">Đang bắt đối</a></li>
-                            <li><a>Đặt sân</a></li>
+                            <li><a href="/user/invitation-history"><i class="fa fa-caret-right"></i>&nbsp; Lời mời giao lưu</a></li>
+                            <li><a href="/user/booking-history"><i class="fa fa-caret-right"></i>&nbsp; Lịch sử đặt sân</a></li>
                             <li>
-                                <a>Quản lý đội bóng</a>
-                                <!-- ngIf: myTeams.length>0 -->
+                                <a href="/team/my-teams"><i class="fa fa-caret-right"></i>&nbsp; Đội bóng của tôi</a>
                             </li>
-                            <li><a href="/pitch/management">Quản lý sân</a></li>
-                            <li><a>Tài khoản</a></li>
+                            <li><a href="/pitch/management"><i class="fa fa-caret-right"></i>&nbsp; Quản lý sân</a></li>
+                            <li><a href="/user/profile"><i class="fa fa-caret-right"></i>&nbsp; Tài khoản</a></li>
                         </ul>
                     </div>
                 </div>
@@ -55,12 +54,6 @@
                                              th:src="@{/uploads/__${user.avatar}__}"
                                              alt="avatar">
                                     </div>
-
-
-                                    <!--<span style="display:none">-->
-                                        <!--<input id="btnprofileUpload" onchange="return sport.account.readURL(this);"-->
-                                               <!--name="profileUpload" type="file">-->
-                                    <!--</span>-->
 
                                 </div>
                                 <div class="col-md-9 right-item-san profile-view">
@@ -140,15 +133,13 @@
                     <div class="col-md-3">
                         <div class="sidebar sidebar-tien-ich">
                             <ul class="list-left-links">
-                                <li><a class="red">Đang bắt đối</a>
-                                </li>
-                                <li><a >Đặt sân</a></li>
+                                <li><a href="/user/invitation-history"><i class="fa fa-caret-right"></i>&nbsp; Lời mời giao lưu</a></li>
+                                <li><a href="/user/booking-history"><i class="fa fa-caret-right"></i>&nbsp; Lịch sử đặt sân</a></li>
                                 <li>
-                                    <a>Quản lý đội bóng</a>
-                                    <!-- ngIf: myTeams.length>0 -->
+                                    <a href="/team/my-teams"><i class="fa fa-caret-right"></i>&nbsp; Đội bóng của tôi</a>
                                 </li>
-                                <li><a href="/pitch/management">Quản lý sân</a></li>
-                                <li><a >Tài khoản</a></li>
+                                <li><a href="/pitch/management"><i class="fa fa-caret-right"></i>&nbsp; Quản lý sân</a></li>
+                                <li><a href="/user/profile"><i class="fa fa-caret-right"></i>&nbsp; Tài khoản</a></li>
                             </ul>
                         </div>
                     </div>

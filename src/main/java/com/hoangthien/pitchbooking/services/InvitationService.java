@@ -10,4 +10,6 @@ public interface InvitationService {
     boolean createInvitation(InvitationDTO invitationDTO, String userName);
 
     List<Invitation> getAllOfAUser(String userName);
+
+    boolean changeStatus(Long invitationId, int status);
 }

@@ -172,13 +172,14 @@ $(document).ready(function () {
 
     $(".btn-submit-invite").on("click", function () {
         var exchangeId = $("#exchangeId").val();
-        var teamSenderId = $("#teamSenderId").val();
+        var teamId = $("#teamSenderId").val();
         var message = $("#messageModal").val();
 
         var data = {
             exchangeId,
-            teamSenderId,
-            message
+            teamId,
+            message,
+            type: 1
         }
 
         $.ajax({
@@ -189,7 +190,8 @@ $(document).ready(function () {
                 if (data) {
                     alert('Gửi lời mời thành công');
                 } else {
-                    alert("Gửi lời mời thất bại!");
+                    alert("Thất bại! Trận đấu này đã tìm được được đối hoặc thông tin không đúng!");
+                    location.reload(true);
                 }
             },
             error: function () {
@@ -280,4 +282,37 @@ function deleteTeam(teamId) {
 
 function openInvitation(exchangeId) {
     $("#exchangeId").val(exchangeId);
+}
+
+function acceptInvitation(invitationId) {
+    changeInvitaionStatus(invitationId, 1);
+}
+
+function refuseInvitation(invitationId) {
+    changeInvitaionStatus(invitationId, 2);
+}
+
+function changeInvitaionStatus(id, status) {
+    $.ajax({
+        type: 'patch',
+        url: '/invitation/' + id,
+        data: {
+            status
+        },
+        success: function (data) {
+            if (data) {
+                var txt = status == 1? 'Bạn đã chấp nhận' : 'Bạn đã từ chối';
+                var color = status == 1? 'green' : 'red';
+
+                $(`#dropdown-right-${id}`).remove();
+                $(`.stt-text-${id}`).text(txt);
+                $(`.stt-text-${id}`).css("color", color);
+            } else {
+                alert("Thay đổi trạng thái thất bại!");
+            }
+        },
+        error: function () {
+            alert('Error! Có lỗi xảy ra!');
+        }
+    });
 }

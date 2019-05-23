@@ -28,7 +28,8 @@
             <nav class="mobi-none" role="navigation">
                 <ul class="nav navbar-nav navbar-right" ng-controller="NotificationCtrl">
                     <li>
-                        <a href="/exchange/waiting/all" title="Tìm đối đá bóng">Tìm đối nhanh</a>
+                        <a href="/exchange/waiting/all" title="Tìm đối đá bóng">
+                            <i class="fa fa-search" aria-hidden="true"></i>&nbsp; Tìm đối nhanh</a>
                         <ul class="navbar-nav-dropdown">
                             <li class="navbar-match-finding">
                                 <a href="/exchange/waiting/all" title="Đối đang chờ">
@@ -47,10 +48,9 @@
 
                         </ul>
                     </li>
-                    <li style="display:none"></li>
                     <li class="navbar-stadium">
-                        <a href="/pitch/all" title="Sân cỏ nhân tạo, Sân 5 người, 7 người..."><i
-                                class="fa fa-futbol-o" aria-hidden="true"></i>Đặt sân nhanh</a>
+                        <a href="/pitch/all" title="Sân cỏ nhân tạo, Sân 5 người, 7 người...">
+                            <i class="fa fa-futbol-o" aria-hidden="true"></i>Đặt sân nhanh</a>
                         <ul class="navbar-nav-dropdown">
                             <li th:each="district:${districts}">
                                 <a th:href="@{/pitch/__${district.path}__}">
@@ -61,7 +61,8 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="/team/search" title="Danh sách các đội bóng, tạo đội bóng">Đội bóng</a>
+                        <a href="/team/search" title="Danh sách các đội bóng, tạo đội bóng">
+                            <i class="fa fa-users" aria-hidden="true"></i>&nbsp; Đội bóng</a>
                         <ul class="navbar-nav-dropdown">
                             <li class="navbar-team">
                                 <a href="/team/search" title="Danh sách các đội bóng">
@@ -71,7 +72,7 @@
                             </li>
                             <li class="navbar-invite">
                                 <a href="/team/create">
-                                    <i class="fa fa-beer"></i>
+                                    <i class="fa fa-plus-square-o"></i>
                                     Tạo đội bóng mới
                                 </a>
                             </li>
@@ -124,9 +125,9 @@
                                 </a>
                             </li>
                             <li>
-                                <a>
-                                    <i class="fa fa-futbol-o"></i>
-                                    Đang bắt đối
+                                <a href="/user/invitation-history">
+                                    <i class="fa fa-envelope-o"></i>
+                                    Lời mời giao lưu
                                 </a>
                             </li>
                             <li>

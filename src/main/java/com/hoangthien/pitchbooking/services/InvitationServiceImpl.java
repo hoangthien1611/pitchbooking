@@ -5,6 +5,7 @@ import com.hoangthien.pitchbooking.entities.Exchange;
 import com.hoangthien.pitchbooking.entities.Invitation;
 import com.hoangthien.pitchbooking.entities.Team;
 import com.hoangthien.pitchbooking.entities.User;
+import com.hoangthien.pitchbooking.exception.PitchBookingException;
 import com.hoangthien.pitchbooking.exception.PitchBookingNotFoundException;
 import com.hoangthien.pitchbooking.repositories.ExchangeRepository;
 import com.hoangthien.pitchbooking.repositories.InvitationRepository;
@@ -33,20 +34,25 @@ public class InvitationServiceImpl implements InvitationService {
     @Override
     public boolean createInvitation(InvitationDTO invitationDTO, String userName) {
         User user = userRepository.findByUserName(userName)
-                .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy người gửi"));
+                .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy user"));
 
-        Team team = teamRepository.findById(invitationDTO.getTeamSenderId())
-                .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy đội bóng"));
+        Team team = teamRepository.findById(invitationDTO.getTeamId())
+                .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy đội khách"));
 
         Exchange exchange = exchangeRepository.findById(invitationDTO.getExchangeId())
                 .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy exchange"));
 
+        if (exchange.getStatus() != 0) {
+            throw new PitchBookingException("Trận đấu này đã tìm được đối");
+        }
+
         Invitation invitation = new Invitation();
-        invitation.setUserSender(user);
+        invitation.setUser(user);
         invitation.setExchange(exchange);
-        invitation.setTeamSender(team);
+        invitation.setTeam(team);
         invitation.setMessage(invitationDTO.getMessage());
         invitation.setStatus(0);
+        invitation.setType(invitationDTO.getType());
         invitationRepository.save(invitation);
 
         return true;
@@ -54,6 +60,21 @@ public class InvitationServiceImpl implements InvitationService {
 
     @Override
     public List<Invitation> getAllOfAUser(String userName) {
-        return invitationRepository.findAllByUserSenderUserName(userName);
+        return invitationRepository.findAllByUserUserName(userName);
+    }
+
+    @Override
+    public boolean changeStatus(Long invitationId, int status) {
+        Invitation invitation = invitationRepository.findById(invitationId)
+                .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy lời mời!"));
+
+        invitation.setStatus(status);
+        invitationRepository.save(invitation);
+        if (status == 1) {
+            Exchange exchange = invitation.getExchange();
+            exchange.setStatus(1);
+            exchangeRepository.save(exchange);
+        }
+        return true;
     }
 }

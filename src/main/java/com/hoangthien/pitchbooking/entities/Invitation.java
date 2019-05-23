@@ -20,13 +20,15 @@ public class Invitation {
 
     @ManyToOne
     @JoinColumn(name = "userId")
-    private User userSender;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "teamId")
-    private Team teamSender;
+    private Team team;
 
     private String message;
 
     private int status;
+
+    private int type;
 }

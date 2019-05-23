@@ -5,7 +5,7 @@
 <div th:replace="fragments/header::header"></div>
 <div class="top-banner-box">
     <div class="container">
-        <h2 class="page-title">Lịch sử đặt sân</h2>
+        <h2 class="page-title">Lời mời giao lưu</h2>
     </div>
 </div>
 
@@ -13,7 +13,7 @@
     <div class="container">
         <div class="breadcrum-line">
             <a href="/"><i class="fa fa-home"></i>&nbsp; Trang chủ</a>
-            <a><i class="fa fa-angle-right"></i>&nbsp; Lịch sử đặt sân</a>
+            <a><i class="fa fa-angle-right"></i>&nbsp; Đang bắt đối</a>
         </div>
     </div>
 </div>
@@ -24,56 +24,99 @@
             <div class="col-md-3">
                 <div class="sidebar sidebar-tien-ich">
                     <ul class="list-left-links">
-                        <li><a href="https://www.timdoinhanh.com/match/inviting" class="red">Đang bắt đối</a></li>
-                        <li><a href="https://www.timdoinhanh.com/stadium/bookinghistory">Đặt sân</a></li>
+                        <li><a href="/user/invitation-history"><i class="fa fa-caret-right"></i>&nbsp; Lời mời giao lưu</a></li>
+                        <li><a href="/user/booking-history"><i class="fa fa-caret-right"></i>&nbsp; Lịch sử đặt sân</a></li>
                         <li>
-                            <a href="https://www.timdoinhanh.com/team/management">Quản lý đội bóng</a>
-                            <!-- ngIf: myTeams.length>0 -->
+                            <a href="/team/my-teams"><i class="fa fa-caret-right"></i>&nbsp; Đội bóng của tôi</a>
                         </li>
-                        <li><a href="/pitch/management">Quản lý sân</a></li>
-                        <li><a href="/user/profile">Tài khoản</a></li>
+                        <li><a href="/pitch/management"><i class="fa fa-caret-right"></i>&nbsp; Quản lý sân</a></li>
+                        <li><a href="/user/profile"><i class="fa fa-caret-right"></i>&nbsp; Tài khoản</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="col-md-9">
-                <div class="content-cts">
-                    <h1 id="a" class="title-intent title-pages"><i class="fa fa-futbol-o" aria-hidden="true"></i> Lịch
-                        sử đặt sân của bạn</h1>
-                    <ul class="list-item-san">
-                        <li class="item-card booking-review" th:each="booking:${bookings}">
-                            <div class="row" style="margin-bottom:20px;">
-                                <div class="col-md-4">
-                                    <a th:title="${booking.pitchName}" th:href="@{/pitch/detail/__${booking.pitchId}__}">
-                                        <img class="img-responsive"
-                                             th:src="@{/uploads/__${booking.pitchAvatar}__}">
-                                    </a>
-                                </div>
-                                <div class="col-md-8 right-item-san right-item-doi">
-                                    <h2><a th:href="@{/pitch/detail/__${booking.pitchId}__}" th:text="${booking.pitchName}"></a></h2>
-                                    <p>
-                                        <i class="fa fa-map-o" aria-hidden="true"></i>
-                                        <th:block th:text="${booking.pitchAddress}"></th:block>
-                                    </p>
-                                    <p><i class="fa fa-reorder"></i> <strong>Giá : </strong>
-                                        <span class="price-san"><th:block th:text="${booking.getCostCommafy()}"></th:block><sup>vnđ</sup></span>
-                                    </p>
-                                    <span class="cho-doi hidden-xs" th:if="${booking.accepted == false}">Đang chờ phê duyệt</span>
-                                    <p><i class="fa fa-user"></i> <strong>Người đặt : </strong> <th:block th:text="${booking.orderName}"></th:block></p>
-                                    <p><i class="fa fa-calendar-check-o" aria-hidden="true"></i><strong> Thời gian:</strong>
-                                        <th:block th:text="${booking.fromTime + ' - ' + booking.toTime + ' Ngày ' + booking.dateBookingString}"></th:block>
-                                    </p>
-                                    <p>
-                                        <i class="fa fa-sticky-note"></i> <strong>Ghi chú:</strong><th:block th:text="${booking.content}"></th:block>
-                                    </p>
-                                    <div class="footer-item-doi">
-                                        <button class="btn btn-primary btn-primary-extra btn-chi-tiet-x">Hủy bỏ
-                                        </button>
-                                    </div>
+            <div class="col-md-7">
+                <h3 th:if="${#lists.isEmpty(invitations)}" class="text-center">Không có lời mời nào!</h3>
+                <div class="q-container ngloaded" th:each="invitation:${invitations}">
+                    <div class="q-items ng-scope" th:with="isUser=${invitation.user.userName.equals(#authentication.name)}">
+                        <div class="q-info">
+                            <h4 class="q-info-headline" th:text="${isUser ? 'Trận đấu sân khách' : 'Trận đấu sân nhà'}"></h4>
+                            <ul class="list-item-san">
+                                <li class="item-card match-finding-item mfr-qi-partner-failed">
+                                        <div class="row">
+                                            <div class="col-md-12 right-item-san right-item-doi">
+                                                <div class="header-item-doi header-tim-doi @">
+                                                    <div class="match-header-texts">
+                                                        <h2>
+                                                            <a th:href="@{/team/detail/__${invitation.exchange.team.path}__}"
+                                                               th:title="${invitation.exchange.team.name}" th:text="${invitation.exchange.team.name}">
+                                                            </a>
+                                                            <a th:href="@{/pitch/detail/__${invitation.exchange.pitch.id}__}">
+                                                                <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                                                <th:block th:text="${invitation.exchange.pitch.name}"></th:block>
+                                                            </a>
+                                                        </h2>
+                                                    </div>
+                                                    <!--type = 1: bắt đối, type = 2: gửi lời mời-->
+                                                    <div class="btn-doi-top pull-right ng-scope" th:id="${'dropdown-right-' + invitation.id}"
+                                                         th:if="${(isUser && invitation.type == 2 && invitation.status == 0) ||
+                                                         (!isUser && invitation.type == 1 && invitation.status == 0)}">
+                                                            <div class="dropdown pull-right dropdown-match-btn-more">
+                                                                <span class="dropdown-toggle" data-toggle="dropdown">
+                                                                    <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                                                </span>
+                                                                <ul class="dropdown-menu">
+                                                                    <li th:onclick="'javascript:acceptInvitation('+ ${invitation.id} +')'"><a href="#">Chấp nhận</a></li>
+                                                                    <li th:onclick="'javascript:refuseInvitation('+ ${invitation.id} +')'"><a href="#">Từ chối</a></li>
+                                                                </ul>
+                                                            </div>
 
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <p class="tim-doi-time ng-binding">
+                                                        <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+                                                        <strong>Thời gian:</strong>
+                                                        <th:block th:text="${invitation.exchange.timeExchange}"></th:block>
+                                                    </p>
+
+                                                    <p class="item-stadium-address ng-binding ng-scope">
+                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                                        <strong>Địa chỉ:</strong>
+                                                        <th:block th:text="${invitation.exchange.pitch.address + ', ' + invitation.exchange.pitch.district.name}"></th:block>
+                                                    </p>
+
+                                                    <p class="item-stadium-address">
+                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                                        <strong>Đội khách:</strong>
+                                                        <a th:href="@{/team/detail/__${invitation.team.path}__}" target="_blank"
+                                                            th:text="${invitation.team.name}">
+                                                        </a>
+                                                    </p>
+
+                                                    <p class="item-stadium-address">
+                                                        <i class="fa fa-quote-left" aria-hidden="true"></i>
+                                                        <strong>Lời nhắn:</strong>
+                                                        <th:block th:text="${invitation.message}"></th:block>
+                                                    </p>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="mfr-qi-container text-center">
+                                            <div th:class="${'status-text stt-text-' + invitation.id}" style="color: yellow" th:if="${invitation.status == 0}"
+                                                th:text="${(isUser && invitation.type == 2 || !isUser && invitation.type == 1) ? 'Đang chờ bạn phản hồi' : 'Chờ đối phương phản hồi'}"></div>
+                                            <div th:class="${'status-text stt-text-' + invitation.id}" style="color: green" th:if="${invitation.status == 1}"
+                                                 th:text="${(isUser && invitation.type == 2 || !isUser && invitation.type == 1) ? 'Bạn đã chấp nhận' : 'Đối phương đã chấp nhận'}"></div>
+                                            <div th:class="${'status-text stt-text-' + invitation.id}" style="color: red" th:if="${invitation.status == 2}"
+                                                 th:text="${(isUser && invitation.type == 2 || !isUser && invitation.type == 1) ? 'Bạn đã từ chối' : 'Đối phương đã từ chối'}"></div>
+                                        </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

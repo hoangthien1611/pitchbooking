@@ -11,7 +11,13 @@ public class InvitationDTO {
 
     private Long exchangeId;
 
-    private Long teamSenderId;
+    private Long teamId;
+
+    private Long userId;
 
     private String message;
+
+    private int type;
+
+    private int status;
 }

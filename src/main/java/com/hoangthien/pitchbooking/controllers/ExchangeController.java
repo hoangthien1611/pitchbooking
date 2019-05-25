@@ -148,4 +148,16 @@ public class ExchangeController extends BaseController {
         }
         return "redirect:/exchange/create";
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public boolean delete(@PathVariable("id") Long id) {
+        log.info("DELETE: /exchange/" + id);
+        try {
+            return exchangeService.delete(id);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return false;
+        }
+    }
 }

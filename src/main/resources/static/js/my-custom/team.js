@@ -354,3 +354,24 @@ function changeInvitaionStatus(id, status) {
         }
     });
 }
+
+function deleteExchange(exchangeId) {
+    var result = confirm('Bạn có chắc chắn muốn xóa?');
+    if (result) {
+        $.ajax({
+            type: 'delete',
+            url: '/exchange/' + exchangeId,
+            success: function (data) {
+                if (data) {
+                    alert('Xóa thành công');
+                    $(`#exchange-${exchangeId}`).remove();
+                } else {
+                    alert("Xóa thất bại!");
+                }
+            },
+            error: function () {
+                alert('Error! Có lỗi xảy ra!');
+            }
+        });
+    }
+}

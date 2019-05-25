@@ -46,4 +46,20 @@ public class Exchange {
     private User userCreated;
 
     private int status;
+
+    @org.springframework.data.annotation.Transient
+    public String getTimeString() {
+        String minute = timeExchange.getMinute() < 10 ? ("0" + timeExchange.getMinute()) : ("" + timeExchange.getMinute());
+        return new StringBuilder()
+                .append(timeExchange.getHour())
+                .append("h")
+                .append(minute)
+                .append(" Ngày ")
+                .append(timeExchange.getDayOfMonth())
+                .append("/")
+                .append(timeExchange.getMonthValue())
+                .append("/")
+                .append(timeExchange.getYear())
+                .toString();
+    }
 }

@@ -15,4 +15,6 @@ public interface ExchangeService {
     Page<Exchange> getAllPageable(String path, List<Integer> hasPitch, List<Long> levelIds, int offset);
 
     List<Exchange> getAllByUserAndAvailable(String userName);
+
+    boolean delete(Long exchangeId);
 }

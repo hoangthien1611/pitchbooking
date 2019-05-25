@@ -161,7 +161,7 @@
                                     </p>
 
                                     <p class="tim-doi-time"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-                                        <strong>Thời gian:</strong> <th:block th:text="${exchange.timeExchange}"></th:block>
+                                        <strong>Thời gian:</strong> <th:block th:text="${exchange.getTimeString()}"></th:block>
                                     </p>
 
                                     <th:block th:if="${exchange.hasPitch == 1}">
@@ -200,6 +200,7 @@
                                         <span class="red" th:if="${exchange.status == 1}">Đã có đối</span>
                                     </p>
                                     <p class="quost-doi">
+                                        <i class="fa fa-quote-left" aria-hidden="true"></i>
                                         <th:block th:text="${exchange.invitation}"></th:block>
                                     </p>
                                 </div>
@@ -337,7 +338,7 @@
                                         <div>
                                             <p class="tim-doi-time ng-binding"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>
                                                 <strong>Thời gian:</strong>
-                                                <th:block th:text="${myEx.timeExchange}"></th:block>
+                                                <th:block th:text="${myEx.getTimeString()}"></th:block>
                                             </p>
 
                                             <p class="item-stadium-address ng-binding ng-scope"><i class="fa fa-shirtsinbulk" aria-hidden="true"></i>

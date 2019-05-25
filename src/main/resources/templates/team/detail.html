@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head th:replace="fragments/head::head"></head>
 
 <body ng-app="sportApp" class="mobile-app-false team-detail-body">
@@ -9,8 +9,8 @@
 <div class="top-banner-box top-banner-box-doi">
     <div class="container">
         <p class="page-title"></p>
-        <div class="team-banner-btn-container">
-            <a class="btn btn-info btn-sm modal-link-angularjs">
+        <div class="team-banner-btn-container" th:if="${!isThisUserBelongsToTeam}">
+            <a class="btn btn-info btn-sm modal-link-angularjs" th:onclick="">
                 <i class="fa fa-send-o"></i>
                 Tham gia đội bóng
             </a>
@@ -28,7 +28,7 @@
                     <span>
                         <a th:href="@{/user/profile/__${team.captain.id}__}" th:text="${team.captain.fullName}"></a> (đội trưởng)
                     </span>
-                <span class="chat-nhanh" ng-click="onQuickChat(4308);"><i class="fa fa-comments" aria-hidden="true"></i> Nói chuyện</span>
+                <span class="chat-nhanh"><i class="fa fa-comments" aria-hidden="true"></i> Nói chuyện</span>
             </p>
         </div>
         <div class="wrap-ul-doi">
@@ -39,8 +39,6 @@
                     viên</a></li>
                 <li th:class="${tab == 3 ? 'active' : ''}"><a th:href="@{/team/detail/__${team.path}__?tab=3}">Giới
                     thiệu</a></li>
-                <li th:class="${tab == 4 ? 'active' : ''}"><a th:href="@{/team/detail/__${team.path}__?tab=4}">Quỹ
-                    bóng</a></li>
                 <li th:if="${team.captain.userName.equals(#authentication.name)}">
                     <a th:href="@{/team/edit/__${team.id}__}"><i class="fa fa-gear"></i>&nbsp; Cập nhật thông tin</a>
                 </li>
@@ -59,226 +57,86 @@
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="p-content">
-                                    <ul class="list-item-san" ng-controller="matchFindingCtrl">
-                                        <li class="item-card match-finding-item" idd="78632">
+                                    <ul class="list-item-san">
+                                        <li class="item-card match-finding-item" th:each="exchange:${exchanges}" th:id="${'exchange-' + exchange.id}">
                                             <div class="row">
                                                 <div class="col-md-12 right-item-san right-item-doi">
                                                     <h2 class="team-match-headlink">
                                                         <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-                                                        <a href="">20h30 Thứ
-                                                            Sáu
-                                                            ngày 19/04/2019</a>
+                                                        <a th:text="${exchange.getTimeString()}"></a>
                                                     </h2>
-                                                    <div class="btn-doi-top pull-right chi-tiet-doi-main btn-doi-inteam">
-
-
+                                                    <div class="btn-doi-top pull-right chi-tiet-doi-main btn-doi-inteam" th:if="${exchange.status == 0}">
+                                                        <a href="/" class="btn btn-sm btn-primary pull-right btn-batdoi" sec:authorize="isAnonymous()">Đăng nhập để bắt đối</a>
                                                         <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
-                                                                data-modal-tpl="match.recipientMaker"
-                                                                login-required="true"
-                                                                data-modal-qs="toTeamId=16692&toUserId=4308&toMatchId=78632&matchId=78632&teamId=16692&toTeamName=FC Th&#225;i Thuần">
+                                                                data-toggle="modal" data-target="#sendInvitation"
+                                                                th:onclick="'javascript:openInvitation('+ ${exchange.id} +')'"
+                                                                sec:authorize="isAuthenticated()" th:if="${!isThisUserBelongsToTeam && exchange.hasPitch != 0}">
                                                             <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
                                                         </button>
-
-
+                                                        <button class="btn btn-sm btn-default pull-right btn-batdoi modal-link-angularjs"
+                                                                data-toggle="modal" data-target="#sendInvitation2"
+                                                                th:onclick="'javascript:openInvitation2(\''+ ${exchange.userCreated.id} + '\',\'' + ${exchange.team.id} + '\')'"
+                                                                sec:authorize="isAuthenticated()" th:if="${!isThisUserBelongsToTeam && exchange.hasPitch == 0}">
+                                                            <i class="fa fa-send" aria-hidden="true"></i> Mời giao lưu
+                                                        </button>
+                                                        <button class="btn btn-sm btn-danger pull-right btn-batdoi modal-link-angularjs"
+                                                                th:onclick="'javascript:deleteExchange('+ ${exchange.id} +')'"
+                                                                sec:authorize="isAuthenticated()" th:if="${team.captain.userName.equals(#authentication.name) || exchange.userCreated.userName.equals(#authentication.name)}">
+                                                            <i class="fa fa-remove" aria-hidden="true"></i> Xóa
+                                                        </button>
                                                     </div>
 
-                                                    <p>
-                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Sân
-                                                        nhà:</strong><a href="" target="_blank">Sân
-                                                        bóng viettel 2 (Sân 7 số 1)</a>
-                                                        <span class="price-san">400.000<sup>vnđ</sup> / trận</span>
+                                                    <p class="item-stadium-p">
+                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Người tạo:</strong>
+                                                        <a th:href="@{/user/profile/__${exchange.userCreated.id}__}" target="_blank"
+                                                           th:text="${exchange.userCreated.fullName}">
+                                                        </a>
                                                     </p>
-                                                    <p class="item-stadium-address"><i class="fa fa-map-o"
-                                                                                       aria-hidden="true"></i><strong>Địa
-                                                        chỉ:</strong>Ngõ 155, Ngách 155/206 Trường Chinh - Cầu Phương
-                                                        Liệt
-                                                        (Quận Thanh Xuân Hà Nội)</p>
-
+                                                    <th:block th:if="${exchange.hasPitch == 1}">
+                                                        <p class="item-stadium-p">
+                                                            <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Sân nhà:</strong>
+                                                            <a th:href="@{/pitch/detail/__${exchange.pitch.id}__}" target="_blank"
+                                                               th:text="${exchange.pitch.name}">
+                                                            </a>
+                                                        </p>
+                                                        <p class="item-stadium-address">
+                                                            <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Địa chỉ:</strong>
+                                                            <th:block th:text="${exchange.pitch.address}"></th:block>
+                                                        </p>
+                                                    </th:block>
+                                                    <th:block th:if="${exchange.hasPitch == 0}">
+                                                        <p class="item-stadium-address">
+                                                            <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Khu vực:</strong>
+                                                            <th:block th:text="${exchange.area}"></th:block>
+                                                        </p>
+                                                    </th:block>
                                                     <p class="level-row">
-                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Trình
-                                                        độ:</strong>Trung b&#236;nh
+                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Quận / huyện:</strong>
+                                                        <th:block th:text="${exchange.district.name}"></th:block>
                                                     </p>
-
-
+                                                    <p class="level-row">
+                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Trình độ:</strong>
+                                                        <th:block th:text="${exchange.level.name}"></th:block>
+                                                    </p>
                                                     <p class="match-contract">
-                                                        <i class="fa fa-shirtsinbulk"
-                                                           aria-hidden="true"></i><strong>Kèo:</strong>
-                                                        thương lượng
+                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Kèo:</strong>
+                                                        <th:block th:text="${exchange.bet}"></th:block>
                                                     </p>
-
                                                     <p>
-                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i> <strong>Trạng
-                                                        thái:</strong>
-                                                        <span class="red">Đang chờ</span>
+                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i> <strong>Trạng thái:</strong>
+                                                        <span style="color: blue" th:if="${exchange.status == 0}">Đang chờ</span>
+                                                        <span class="red" th:if="${exchange.status == 1}">Đã có đối</span>
                                                     </p>
-
-
                                                     <p class="quost-doi">
-                                                        đội mới đá được vài tháng, trình độ trung bình, toàn anh em cùng
-                                                        quê, cam kết đá đẹp, rất mong được giao lưu với mọi người, có gì
-                                                        alo
-                                                        mình Sơn(1995) 0981184403
+                                                        <i class="fa fa-quote-left" aria-hidden="true"></i>
+                                                        <th:block th:text="${exchange.invitation}"></th:block>
                                                     </p>
-
-
-                                                    <div class="mobile-only match-button-container">
-
-
-                                                        <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
-                                                                data-modal-tpl="match.recipientMaker"
-                                                                login-required="true"
-                                                                data-modal-qs="toTeamId=16692&toUserId=4308&toMatchId=78632&matchId=78632&teamId=16692&toTeamName=FC Th&#225;i Thuần">
-                                                            <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
-                                                        </button>
-
-
-                                                    </div>
 
 
                                                 </div>
                                             </div>
                                         </li>
 
-                                        <li class="item-card match-finding-item" idd="78631">
-                                            <div class="row">
-                                                <div class="col-md-12 right-item-san right-item-doi">
-                                                    <h2 class="team-match-headlink">
-                                                        <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-                                                        <a href="">17h30 Thứ
-                                                            Bảy
-                                                            ngày 13/04/2019</a>
-                                                    </h2>
-                                                    <div class="btn-doi-top pull-right chi-tiet-doi-main btn-doi-inteam">
-
-
-                                                    </div>
-
-                                                    <p>
-                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Sân
-                                                        nhà:</strong><a href="" target="_blank">Sân
-                                                        bóng viettel 2 (Sân 7 số 4)</a>
-                                                    </p>
-                                                    <p class="item-stadium-address"><i class="fa fa-map-o"
-                                                                                       aria-hidden="true"></i><strong>Địa
-                                                        chỉ:</strong>Ngõ 155, Ngách 155/206 Trường Chinh - Cầu Phương
-                                                        Liệt
-                                                        (Quận Thanh Xuân Hà Nội)</p>
-
-                                                    <p class="level-row">
-                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Trình
-                                                        độ:</strong>Trung b&#236;nh
-                                                    </p>
-
-
-                                                    <p class="match-contract">
-                                                        <i class="fa fa-shirtsinbulk"
-                                                           aria-hidden="true"></i><strong>Kèo:</strong>
-                                                        thương lượng tại s&#226;n
-                                                    </p>
-
-                                                    <p>
-                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i> <strong>Trạng
-                                                        thái:</strong>
-                                                        <span class="red">Đã hủy</span>
-                                                    </p>
-
-
-                                                    <p class="quost-doi">
-                                                        đội mới đá được vài tháng, trình độ trung bình, toàn anh em cùng
-                                                        quê, cam kết đá đẹp, rất mong được giao lưu với mọi người, có gì
-                                                        alo
-                                                        mình Sơn(1995) 0981184403
-                                                    </p>
-
-
-                                                    <div class="mobile-only match-button-container">
-
-
-                                                    </div>
-
-
-                                                </div>
-                                            </div>
-                                        </li>
-
-                                        <li class="item-card match-finding-item" idd="78632">
-                                            <div class="row">
-                                                <div class="col-md-12 right-item-san right-item-doi">
-                                                    <h2 class="team-match-headlink">
-                                                        <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-                                                        <a href="">20h30 Thứ
-                                                            Sáu
-                                                            ngày 19/04/2019</a>
-                                                    </h2>
-                                                    <div class="btn-doi-top pull-right chi-tiet-doi-main btn-doi-inteam">
-
-
-                                                        <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
-                                                                data-modal-tpl="match.recipientMaker"
-                                                                login-required="true"
-                                                                data-modal-qs="toTeamId=16692&toUserId=4308&toMatchId=78632&matchId=78632&teamId=16692&toTeamName=FC Th&#225;i Thuần">
-                                                            <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
-                                                        </button>
-
-
-                                                    </div>
-
-                                                    <p>
-                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Sân
-                                                        nhà:</strong><a href="" target="_blank">Sân
-                                                        bóng viettel 2 (Sân 7 số 1)</a>
-                                                        <span class="price-san">400.000<sup>vnđ</sup> / trận</span>
-                                                    </p>
-                                                    <p class="item-stadium-address"><i class="fa fa-map-o"
-                                                                                       aria-hidden="true"></i><strong>Địa
-                                                        chỉ:</strong>Ngõ 155, Ngách 155/206 Trường Chinh - Cầu Phương
-                                                        Liệt
-                                                        (Quận Thanh Xuân Hà Nội)</p>
-
-                                                    <p class="level-row">
-                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i><strong>Trình
-                                                        độ:</strong>Trung b&#236;nh
-                                                    </p>
-
-
-                                                    <p class="match-contract">
-                                                        <i class="fa fa-shirtsinbulk"
-                                                           aria-hidden="true"></i><strong>Kèo:</strong>
-                                                        thương lượng
-                                                    </p>
-
-                                                    <p>
-                                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i> <strong>Trạng
-                                                        thái:</strong>
-                                                        <span class="red">Đang chờ</span>
-                                                    </p>
-
-
-                                                    <p class="quost-doi">
-                                                        đội mới đá được vài tháng, trình độ trung bình, toàn anh em cùng
-                                                        quê, cam kết đá đẹp, rất mong được giao lưu với mọi người, có gì
-                                                        alo
-                                                        mình Sơn(1995) 0981184403
-                                                    </p>
-
-
-                                                    <div class="mobile-only match-button-container">
-
-
-                                                        <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
-                                                                data-modal-tpl="match.recipientMaker"
-                                                                login-required="true"
-                                                                data-modal-qs="toTeamId=16692&toUserId=4308&toMatchId=78632&matchId=78632&teamId=16692&toTeamName=FC Th&#225;i Thuần">
-                                                            <i class="fa fa-send" aria-hidden="true"></i> Bắt đối
-                                                        </button>
-
-
-                                                    </div>
-
-
-                                                </div>
-                                            </div>
-                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -290,7 +148,7 @@
                         <div class="item-card">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="right-item-san right-item-doi right-item-doi-ct">
+                                    <div class="right-item-san team-management-page">
                                         <div class="bs-example bs-example-tabs" data-example-id=togglable-tabs>
                                             <ul class="nav nav-tabs" id=myTabs role=tablist>
                                                 <li role=presentation class=active><a href="javascript:void(0)">Thành
@@ -301,46 +159,29 @@
                                                 <div class="tab-pane fade in active col-md-12 layout-main-content">
                                                     <div class="portlet-body">
                                                         <ul class="list-item-san" id="team-user-list">
-                                                            <li class="item-card item-team-user ng-scope">
+                                                            <li class="item-card item-team-user ng-scope" th:each="member,iterStat:${members}" style="height: 120px">
                                                                 <div class="row">
                                                                     <div class="col-md-4 mobile-bottom-10">
-                                                                        <a href="/user/profile/3399" target="_blank"><img class="img-responsive" ng-src="/Images/user/default-user.png" align="thumbnail" src="/Images/user/default-user.png"></a>
-                                                                    </div>
-                                                                    <div class="col-md-8 right-item-san">
-                                                                        <h2><a href="/user/profile/3399" target="_blank" class="ng-binding">Nguyen Thien</a></h2>
-                                                                        <p class="ng-binding"><i class="fa fa-map-o" aria-hidden="true"></i> Đội Trưởng</p>
-                                                                        <!-- ngIf: user.userMobile!='' -->
-                                                                        <!-- ngIf: user.userEmail!='' --><p class="user-email ng-binding ng-scope" ng-if="user.userEmail!=''"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i> avac@gmail.com</p><!-- end ngIf: user.userEmail!='' -->
-                                                                        <a href="javascript:;" ng-show="vm.onshowRemoveUser(user);" class="btn-chi-tiet ng-hide" ng-click="vm.onConfirmRemoveUser(user);" style="margin-left:2px;">
-                                                                            <i class="fa fa-long-arrow-right" aria-hidden="true"></i> Xóa khỏi đội
+                                                                        <a th:href="@{/user/profile/__${member.id}__}" target="_blank">
+                                                                            <img class="img-responsive" th:src="@{/uploads/__${member.avatar}__}" align="thumbnail">
                                                                         </a>
                                                                     </div>
-                                                                </div>
-                                                            </li>
-                                                            <li class="item-card item-team-user ng-scope" ng-repeat="user in vm.userList" style="">
-                                                                <div class="row">
-                                                                    <div class="col-md-4 mobile-bottom-10">
-                                                                        <a href="/user/profile/3399" target="_blank"><img class="img-responsive" ng-src="/Images/user/default-user.png" align="thumbnail" src="/Images/user/default-user.png"></a>
-                                                                    </div>
                                                                     <div class="col-md-8 right-item-san">
-                                                                        <h2><a href="/user/profile/3399" target="_blank" class="ng-binding">Nguyen Thien</a></h2>
-                                                                        <p class="ng-binding"><i class="fa fa-map-o" aria-hidden="true"></i> Đội Trưởng</p>
-                                                                        <!-- ngIf: user.userMobile!='' -->
-                                                                        <!-- ngIf: user.userEmail!='' --><p class="user-email ng-binding ng-scope" ng-if="user.userEmail!=''"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i> avac@gmail.com</p><!-- end ngIf: user.userEmail!='' -->
-                                                                        <a href="javascript:;" ng-show="vm.onshowRemoveUser(user);" class="btn-chi-tiet ng-hide" ng-click="vm.onConfirmRemoveUser(user);" style="margin-left:2px;">
-                                                                            <i class="fa fa-long-arrow-right" aria-hidden="true"></i> Xóa khỏi đội
-                                                                        </a>
+                                                                        <h2>
+                                                                            <a th:href="@{/user/profile/__${member.id}__}" target="_blank" th:text="${member.fullName}"></a>
+                                                                        </h2>
+                                                                        <p>
+                                                                            <i class="fa fa-tag" aria-hidden="true"></i>
+                                                                            <th:block th:text="${team.captain.id == member.id? 'Đội trưởng' : 'Thành viên'}"></th:block>
+                                                                            <a href="javascript:;" style="margin-left:2px;" th:if="${team.captain.userName.equals(#authentication.name) && !team.captain.userName.equals(member.userName)}">
+                                                                                <i class="fa fa-remove" aria-hidden="true"></i> Xóa khỏi đội
+                                                                            </a>
+                                                                        </p>
+
                                                                     </div>
                                                                 </div>
                                                             </li>
                                                         </ul>
-                                                        <!--<div class="col-md-3 col-xs-6 team-member-card" th:each="member,iterStat:${members}">-->
-                                                            <!--<img class="img-responsive avatar-list" style="height: 50px"-->
-                                                                 <!--th:src="@{/uploads/__${member.avatar}__}" align="thumb"-->
-                                                                 <!--th:alt="${member.fullName}">-->
-                                                            <!--<a th:href="@{/user/profile/__${member.id}__}"-->
-                                                               <!--th:text="${member.fullName}"></a>-->
-                                                        <!--</div>-->
                                                     </div>
                                                 </div>
                                             </div>
@@ -395,36 +236,69 @@
                         </div>
                     </div>
                 </th:block>
-                <th:block th:if="${tab == 4}">
-                    <div class="content-cts">
-                        <div class="item-card" style="padding-bottom:30px;">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="form-group">
-                                        <div class="col-sm-12">
-                                            <p class="alert alert-info">
-                                                <strong>Chỉ thành viên đội bóng mới xem được thông tin này</strong>
-                                                <br />
-                                                <a data-dismiss="modal" href="javascript:;" onclick="global.showModalLoginPopup();" class="btn btn-success">Đăng nhập</a>
-                                                <a href="#" onclick="location.href = '/';" class="btn btn-danger">Đăng kí</a>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </th:block>
             </div>
 
             <div class="col-md-4" id="chitiet-doi-right">
                 <div class="ads-banner-right" id="s9adright">
                 </div>
 
+                <div class="sidebar sidebar-tien-san" th:if="${isThisUserBelongsToTeam}">
+                    <p class="title-box">
+                        <i class="fa fa-soccer-ball-o" aria-hidden="true"></i> Trận đấu sắp diễn ra
+                    </p>
+                    <div class="list-doi-new">
+                        <ul class="ul-list-doi-new right-item-san right-item-doi">
+                            <li th:if="${upcomingMatch != null}">
+                                <div>
+                                    <p class="tim-doi-time ng-binding">
+                                        <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+                                        <strong>Thời gian:</strong>
+                                        <th:block th:text="${upcomingMatch.exchange.getTimeString()}"></th:block>
+                                    </p>
+                                    <p class="tim-doi-time ng-binding">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Sân:</strong>
+                                        <a th:href="@{/pitch/detail/__${upcomingMatch.exchange.pitch.id}__}" target="_blank"
+                                           th:text="${upcomingMatch.exchange.pitch.name}">
+                                        </a>
+                                    </p>
+
+                                    <p class="item-stadium-address ng-binding ng-scope">
+                                        <i class="fa fa-map-o" aria-hidden="true"></i>
+                                        <strong>Địa chỉ:</strong>
+                                        <th:block th:text="${upcomingMatch.exchange.pitch.address + ', ' + upcomingMatch.exchange.pitch.district.name}"></th:block>
+                                    </p>
+
+                                    <p class="item-stadium-address">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Đội chủ nhà:</strong>
+                                        <a th:href="@{/team/detail/__${upcomingMatch.exchange.team.path}__}" target="_blank"
+                                           th:text="${upcomingMatch.exchange.team.name}">
+                                        </a>
+                                    </p>
+
+                                    <p class="item-stadium-address">
+                                        <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                        <strong>Đội khách:</strong>
+                                        <a th:href="@{/team/detail/__${upcomingMatch.team.path}__}" target="_blank"
+                                           th:text="${upcomingMatch.team.name}">
+                                        </a>
+                                    </p>
+
+                                </div>
+                            </li>
+                        </ul>
+                        <a class="doi-xem-them" href="/exchange/create" th:if="${upcomingMatch == null}">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                            Tạo trận đấu mới
+                        </a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
 
                 <div class="sidebar sidebar-tien-san">
                     <p class="title-box">
-                        <i class="fa fa-soccer-ball-o" aria-hidden="true"></i> Cùng trình độ
+                        <i class="fa fa-soccer-ball-o" aria-hidden="true"></i> Đội bóng cùng trình độ
                     </p>
                     <div class="list-doi-new">
                         <ul class="ul-list-doi-new">
@@ -454,9 +328,135 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="sendInvitation" role="dialog">
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Mời giao lưu</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="form-group row hide">
+                            <div class="col-md-6">
+                                <input type="number" name="exchangeId" id="exchangeId" class="form-control input-sm">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 control-label" style="font-weight: bold; margin-top: 5px;">Đội bóng của bạn</label>
+                            <div class="col-md-8">
+                                <select required class="form-control" name="teamSenderId" id="teamSenderId">
+                                    <th:block  th:each="team:${myTeams}">
+                                        <option th:label="${team.name}" th:value="${team.id}"></option>
+                                    </th:block>
+                                    <th:block th:if="${#lists.isEmpty(myTeams)}">
+                                        <option value="0">Không có đội bóng nào để chọn! Vui lòng tạo đội bóng mới!</option>
+                                    </th:block>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 control-label" style="font-weight: bold; margin-top: 5px;">Lời nhắn</label>
+                            <div class="col-md-8">
+                                <textarea rows="3" cols="5" name="message" id="messageModal"
+                                          class="form-control input-sm width-100p"
+                                          placeholder="Lời mời giao lưu"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-success btn-submit-invite" data-dismiss="modal">Gửi</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="sendInvitation2" role="dialog">
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Mời giao lưu</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <h5 style="margin-bottom: 15px">Chọn trận đấu để mời:</h5>
+                        <ul class="list-item-san">
+                            <li th:if="${#lists.isEmpty(myExchanges)}">
+                                <h4 style="color: red">Không có trận đấu nào đang sẵn sàng để chọn!</h4>
+                                <a href="/exchange/create">Click để tạo trận đấu</a>
+                            </li>
+                            <li class="item-card ng-scope" style="position:relative;" th:each="myEx,itemStat:${myExchanges}">
+                                <div class="row">
+                                    <div class="col-md-12 right-item-san right-item-doi">
+                                        <div class="header-item-doi header-tim-doi @">
+                                            <div class="match-header-texts">
+                                                <h2>
+                                                    <a th:href="${myEx.team.path}" th:title="${myEx.team.name}" class="ng-binding ng-scope">
+                                                        <a th:href="@{/team/detail/__${myEx.team.path}__}"
+                                                           th:title="${myEx.team.name}" th:text="${myEx.team.name}">
+                                                        </a>
+                                                        <a th:href="@{/pitch/detail/__${myEx.pitch.id}__}">
+                                                            <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                                            <th:block th:text="${myEx.pitch.name}"></th:block>
+                                                        </a>
+                                                    </a>
+                                                </h2>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <p class="tim-doi-time ng-binding"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>
+                                                <strong>Thời gian:</strong>
+                                                <th:block th:text="${myEx.getTimeString()}"></th:block>
+                                            </p>
+
+                                            <p class="item-stadium-address ng-binding ng-scope"><i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
+                                                <strong>Địa chỉ:</strong>
+                                                <th:block th:text="${myEx.pitch.address + ', ' + myEx.pitch.district.name}"></th:block>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="text-highlight ng-scope" style="position:absolute; top:0px; right:10px;">
+                                    <input name="exchange2" type="radio" th:value="${myEx.id}" th:checked="${itemStat.count == 1? true : false}" style="width: 3em; height: 3em">
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="form-group row" th:unless="${#lists.isEmpty(myExchanges)}">
+                        <label class="col-md-3 control-label" style="font-weight: bold; margin-top: 5px;">Lời mời</label>
+                        <div class="col-md-9">
+                                <textarea rows="3" cols="5" name="message" id="messageModal2"
+                                          class="form-control input-sm width-100p"
+                                          placeholder="Lời mời giao lưu"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row hide">
+                        <div class="col-md-6">
+                            <input type="number" name="userId" id="userId2" class="form-control input-sm">
+                            <input type="number" name="teamId" id="teamId2" class="form-control input-sm">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-success btn-submit-invite2" data-dismiss="modal" th:unless="${#lists.isEmpty(myExchanges)}">Gửi</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
 
 <footer th:replace="fragments/footer::footer"></footer>
 <div th:replace="fragments/modals::modals"></div>
+<script th:src="@{/js/my-custom/team.js}"></script>
 </body>
 </html>

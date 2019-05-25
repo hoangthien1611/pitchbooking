@@ -1,5 +1,6 @@
 package com.hoangthien.pitchbooking.services;
 
+import com.hoangthien.pitchbooking.constants.Defines;
 import com.hoangthien.pitchbooking.dto.InvitationDTO;
 import com.hoangthien.pitchbooking.entities.Exchange;
 import com.hoangthien.pitchbooking.entities.Invitation;
@@ -12,8 +13,12 @@ import com.hoangthien.pitchbooking.repositories.InvitationRepository;
 import com.hoangthien.pitchbooking.repositories.TeamRepository;
 import com.hoangthien.pitchbooking.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -82,5 +87,16 @@ public class InvitationServiceImpl implements InvitationService {
             exchangeRepository.save(exchange);
         }
         return true;
+    }
+
+    @Override
+    public Invitation getUpcomingMatch(Long teamId) {
+        LocalDateTime now = LocalDateTime.now();
+        List<Invitation> invitations = invitationRepository
+                .findByTeamParticipate(teamId, now, PageRequest.of(0, 1)).getContent();
+        if (!CollectionUtils.isEmpty(invitations)) {
+            return invitations.get(0);
+        }
+        return null;
     }
 }

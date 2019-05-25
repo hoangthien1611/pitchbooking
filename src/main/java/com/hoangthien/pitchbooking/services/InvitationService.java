@@ -12,4 +12,6 @@ public interface InvitationService {
     List<Invitation> getAllOfAUser(String userName);
 
     boolean changeStatus(Long invitationId, int status);
+
+    Invitation getUpcomingMatch(Long teamId);
 }

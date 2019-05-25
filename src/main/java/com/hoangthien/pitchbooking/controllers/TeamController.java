@@ -4,17 +4,11 @@ import com.hoangthien.pitchbooking.constants.Defines;
 import com.hoangthien.pitchbooking.constants.MessageType;
 import com.hoangthien.pitchbooking.dto.Message;
 import com.hoangthien.pitchbooking.dto.TeamDTO;
-import com.hoangthien.pitchbooking.entities.District;
-import com.hoangthien.pitchbooking.entities.Level;
-import com.hoangthien.pitchbooking.entities.Team;
-import com.hoangthien.pitchbooking.entities.User;
+import com.hoangthien.pitchbooking.entities.*;
 import com.hoangthien.pitchbooking.exception.PitchBookingException;
 import com.hoangthien.pitchbooking.exception.PitchBookingNotFoundException;
 import com.hoangthien.pitchbooking.exception.PitchBookingUnauthorizedException;
-import com.hoangthien.pitchbooking.services.DistrictService;
-import com.hoangthien.pitchbooking.services.FileService;
-import com.hoangthien.pitchbooking.services.LevelService;
-import com.hoangthien.pitchbooking.services.TeamService;
+import com.hoangthien.pitchbooking.services.*;
 import com.hoangthien.pitchbooking.utils.PitchBookingUtils;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
@@ -30,8 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -52,6 +45,12 @@ public class TeamController extends BaseController {
 
     @Autowired
     private TeamService teamService;
+
+    @Autowired
+    private InvitationService invitationService;
+
+    @Autowired
+    private ExchangeService exchangeService;
 
     @GetMapping("/create")
     public String create(Model model) {
@@ -146,7 +145,8 @@ public class TeamController extends BaseController {
     }
 
     @GetMapping("/detail/{path}")
-    public String detail(Model model, @PathVariable("path") String path, @RequestParam(value = "tab", defaultValue = "1") String tabStr) {
+    public String detail(Model model, @PathVariable("path") String path,
+                         @RequestParam(value = "tab", defaultValue = "1") String tabStr, Principal principal) {
         log.info("GET: " + BASE_URL + "/detail/" + path);
         try {
             int tab = Integer.parseInt(tabStr);
@@ -161,10 +161,40 @@ public class TeamController extends BaseController {
                 members.addAll(team.getMembers());
             }
 
+            boolean isThisUserBelongsToTeam = false;
+
+            if (principal != null) {
+                isThisUserBelongsToTeam = members.stream()
+                        .anyMatch(user -> user.getUserName().equals(principal.getName()));
+            }
+
+            List<Exchange> exchanges = team.getExchanges();
+            Collections.sort(exchanges, new Comparator<Exchange>() {
+                @Override
+                public int compare(Exchange o1, Exchange o2) {
+                    if (o1.getTimeExchange().isAfter(o2.getTimeExchange())) {
+                        return -1;
+                    }
+                    return 1;
+                }
+            });
+
+            List<Exchange> myExchanges = new ArrayList<>();
+            List<Team> myTeams = new ArrayList<>();
+            if (principal != null) {
+                myExchanges = exchangeService.getAllByUserAndAvailable(principal.getName());
+                myTeams = teamService.getAllTeamsUserIn(principal.getName());
+            }
+
             model.addAttribute("team", team);
             model.addAttribute("tab", tab);
             model.addAttribute("members", members);
             model.addAttribute("teamsSameLevel", teamService.get5TeamsSameLevel(team.getId(), team.getLevel().getId()));
+            model.addAttribute("upcomingMatch", invitationService.getUpcomingMatch(team.getId()));
+            model.addAttribute("isThisUserBelongsToTeam", isThisUserBelongsToTeam);
+            model.addAttribute("exchanges", exchanges);
+            model.addAttribute("myExchanges", myExchanges);
+            model.addAttribute("myTeams", myTeams);
             return "team/detail";
         } catch (Exception e) {
             log.error(e.getMessage());

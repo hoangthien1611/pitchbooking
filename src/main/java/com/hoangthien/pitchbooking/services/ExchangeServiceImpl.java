@@ -4,6 +4,7 @@ import com.hoangthien.pitchbooking.constants.Defines;
 import com.hoangthien.pitchbooking.dto.ExchangeDTO;
 import com.hoangthien.pitchbooking.entities.*;
 import com.hoangthien.pitchbooking.exception.PitchBookingException;
+import com.hoangthien.pitchbooking.exception.PitchBookingNotFoundException;
 import com.hoangthien.pitchbooking.mapper.ExchangeMapper;
 import com.hoangthien.pitchbooking.repositories.*;
 import com.hoangthien.pitchbooking.utils.TimeUtils;
@@ -109,5 +110,14 @@ public class ExchangeServiceImpl implements ExchangeService {
     public List<Exchange> getAllByUserAndAvailable(String userName) {
         LocalDateTime now = LocalDateTime.now();
         return exchangeRepository.findAllByUserCreatedUserNameAndTimeExchangeAfterAndHasPitchEqualsAndStatusEquals(userName, now, 1, 0);
+    }
+
+    @Override
+    public boolean delete(Long exchangeId) {
+        exchangeRepository.findById(exchangeId)
+                .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy exchange cần xóa"));
+
+        exchangeRepository.deleteById(exchangeId);
+        return true;
     }
 }

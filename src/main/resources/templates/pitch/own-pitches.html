@@ -29,7 +29,7 @@
                                 Danh sách sân
                             </a>
                         </li>
-                        <li>
+                        <li th:if="${totalRequests != null}">
                             <a th:href="@{/pitch/management/booking-requests}">
                                 <i class="fa fa-list"></i>
                                 Yêu cầu đặt sân

@@ -52,6 +52,9 @@ public class TeamController extends BaseController {
     @Autowired
     private ExchangeService exchangeService;
 
+    @Autowired
+    private UserTeamService userTeamService;
+
     @GetMapping("/create")
     public String create(Model model) {
         log.info("GET: " + BASE_URL + "/create");
@@ -103,7 +106,41 @@ public class TeamController extends BaseController {
     public String getMyTeams(Model model, Principal principal) {
         log.info("GET: /team/my-teams");
         model.addAttribute("teams", teamService.getAllTeamsUserIn(principal.getName()));
+        if (teamService.isUserOwningTeam(principal.getName())) {
+            model.addAttribute("totalRequests", userTeamService.getAllJoinRequests(principal.getName()).size());
+        }
         return "team/my-teams";
+    }
+
+    @GetMapping("/my-teams/join-requests")
+    public String getJoinRequests(Model model, Principal principal) {
+        log.info("GET: /team/my-teams/join-requests");
+        model.addAttribute("requests", userTeamService.getAllJoinRequests(principal.getName()));
+        return "team/join-requests";
+    }
+
+    @PatchMapping("/accept-join-team")
+    @ResponseBody
+    public boolean acceptJoinTeam(@RequestParam("userId") Long userId, @RequestParam("teamId") Long teamId) {
+        log.info("PATCH: /team/accept-join-team");
+        try {
+            return userTeamService.acceptJoinTeam(userId, teamId);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return false;
+        }
+    }
+
+    @DeleteMapping("/delete-join-team/{userId}/{teamId}")
+    @ResponseBody
+    public boolean deleteJoinTeam(@PathVariable("userId") Long userId, @PathVariable("teamId") Long teamId) {
+        log.info("DELETE: /team/delete-join-team");
+        try {
+            return userTeamService.deleteJoinTeam(userId, teamId);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return false;
+        }
     }
 
     @DeleteMapping("/{teamId}")
@@ -150,6 +187,9 @@ public class TeamController extends BaseController {
         log.info("GET: " + BASE_URL + "/detail/" + path);
         try {
             int tab = Integer.parseInt(tabStr);
+            boolean isThisUserBelongsToTeam = false;
+            boolean isThisUserWaitingForAccept = false;
+
             if (tab < 1 || tab > 4) {
                 throw new PitchBookingException("Tab không hợp lệ!");
             }
@@ -157,15 +197,18 @@ public class TeamController extends BaseController {
 
             List<User> members = new ArrayList<>();
             members.add(team.getCaptain());
-            if (!CollectionUtils.isEmpty(team.getMembers())) {
-                members.addAll(team.getMembers());
-            }
-
-            boolean isThisUserBelongsToTeam = false;
+            team.getUserTeams().forEach(userTeam -> {
+                if (userTeam.isAccepted()) {
+                    members.add(userTeam.getUser());
+                }
+            });
 
             if (principal != null) {
                 isThisUserBelongsToTeam = members.stream()
                         .anyMatch(user -> user.getUserName().equals(principal.getName()));
+
+                isThisUserWaitingForAccept = team.getUserTeams().stream()
+                        .anyMatch(userTeam -> !userTeam.isAccepted() && userTeam.getUser().getUserName().equals(principal.getName()));
             }
 
             List<Exchange> exchanges = team.getExchanges();
@@ -192,6 +235,7 @@ public class TeamController extends BaseController {
             model.addAttribute("teamsSameLevel", teamService.get5TeamsSameLevel(team.getId(), team.getLevel().getId()));
             model.addAttribute("upcomingMatch", invitationService.getUpcomingMatch(team.getId()));
             model.addAttribute("isThisUserBelongsToTeam", isThisUserBelongsToTeam);
+            model.addAttribute("isThisUserWaitingForAccept", isThisUserWaitingForAccept);
             model.addAttribute("exchanges", exchanges);
             model.addAttribute("myExchanges", myExchanges);
             model.addAttribute("myTeams", myTeams);
@@ -200,6 +244,18 @@ public class TeamController extends BaseController {
             log.error(e.getMessage());
         }
         return "error/page_404";
+    }
+
+    @PostMapping("/join-team")
+    @ResponseBody
+    public boolean joinTeam(@RequestParam("teamId") Long teamId, Principal principal) {
+        log.info("POST: /team/join-team");
+        try {
+            return userTeamService.save(teamId, principal.getName());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return false;
+        }
     }
 
     @PostMapping("/edit")

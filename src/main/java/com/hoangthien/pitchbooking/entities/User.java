@@ -45,16 +45,14 @@ public class User {
 
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "user",
+            orphanRemoval = true,
             cascade = CascadeType.ALL)
     private List<Notification> notifications;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
-            mappedBy = "members")
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "user",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private Set<Team> joiningTeams = new HashSet<>();
+    private Set<UserTeam> userTeams = new HashSet<>();
 }

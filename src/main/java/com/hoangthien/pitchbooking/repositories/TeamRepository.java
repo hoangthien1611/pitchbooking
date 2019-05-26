@@ -38,11 +38,13 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
 
     Page<Team> findAllByLevelIdAndIdNot(Long levelId, Long teamId, Pageable pageable);
 
-    @Query("select distinct t from Team t join t.members m where m.userName = ?1")
+    @Query("select distinct t from Team t join t.userTeams ut join ut.user u where u.userName = ?1")
     List<Team> findAllByMemberUserName(String userName);
 
-    @Query("select distinct t from Team t join t.captain c left join t.members m where c.userName = ?1 or m.userName = ?1")
+    @Query("select distinct t from Team t join t.captain c left join t.userTeams ut left join ut.user u where c.userName = ?1 or (u.userName = ?1 and ut.accepted = true)")
     List<Team> findAllByCaptainUserNameAndMemberUserName(String userName);
 
     List<Team> findAllByCaptainUserName(String userName);
+
+    boolean existsByCaptainUserName(String userName);
 }

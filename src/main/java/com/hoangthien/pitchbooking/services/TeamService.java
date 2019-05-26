@@ -41,4 +41,8 @@ public interface TeamService {
     boolean isPathExisted(String path);
 
     boolean delete(Long teamId);
+
+    boolean joinTeam(Long teamId, String userName);
+
+    boolean isUserOwningTeam(String userName);
 }

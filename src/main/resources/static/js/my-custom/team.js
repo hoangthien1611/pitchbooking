@@ -174,6 +174,10 @@ $(document).ready(function () {
         var exchangeId = $("#exchangeId").val();
         var teamId = $("#teamSenderId").val();
         var message = $("#messageModal").val();
+        if (teamId == 0) {
+            alert('Bạn phải là thành viên trong một đội bóng!');
+            return;
+        }
 
         var data = {
             exchangeId,
@@ -373,5 +377,85 @@ function deleteExchange(exchangeId) {
                 alert('Error! Có lỗi xảy ra!');
             }
         });
+    }
+}
+
+function joinTeam(teamId) {
+    $.ajax({
+        type: 'post',
+        url: '/team/join-team',
+        data: {
+            teamId
+        },
+        success: function (data) {
+            if (data) {
+                html = "<a class=\"btn btn-warning btn-sm disabled\"><i class=\"fa fa-send-o\"></i>"
+                + "&nbsp;Đang chờ phê duyệt</a>";
+                $(".btn-join-team").html(html);
+            } else {
+                alert("Yêu cầu tham gia thất bại!");
+            }
+        },
+        error: function () {
+            alert('Error! Có lỗi xảy ra!');
+        }
+    });
+}
+
+function acceptJoinTeam(userId, teamId) {
+    $.ajax({
+        type: 'patch',
+        url: '/team/accept-join-team/',
+        data: {
+            userId,
+            teamId
+        },
+        success: function (data) {
+            if (data) {
+                alert("Chấp nhận thành công!");
+                removeRow(userId, teamId);
+            } else {
+                alert("Chấp nhận thất bại!");
+            }
+        },
+        error: function () {
+            alert('Error! Có lỗi xảy ra!');
+        }
+    });
+}
+
+function deleteJoinTeam(userId, teamId, type) {
+    var result = confirm("Bạn có chắc chắn muốn xóa?");
+    if (result) {
+        $.ajax({
+            type: 'delete',
+            url: '/team/delete-join-team/' + userId + '/' + teamId,
+            success: function (data) {
+                if (data) {
+                    alert("Xóa thành công!");
+                    if (type == 0) {
+                        removeRow(userId, teamId);
+                    } else {
+                        $(`#member-card-${userId}`).remove();
+                    }
+                } else {
+                    alert("Xóa thất bại!");
+                }
+            },
+            error: function () {
+                alert('Error! Có lỗi xảy ra!');
+            }
+        });
+    }
+}
+
+function removeRow(userId, teamId) {
+    var total = parseInt($(".show-total-requests").text());
+    total -= 1;
+    $(`#request-${userId}-${teamId}`).remove();
+    $(".show-total-requests").text(total);
+    if (total == 0) {
+        var tr = "<tr><td colspan=\"6\">Không có yêu cầu nào</td>";
+        $("#tbody-requests").append(tr);
     }
 }

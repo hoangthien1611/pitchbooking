@@ -2,10 +2,7 @@ package com.hoangthien.pitchbooking.services;
 
 import com.hoangthien.pitchbooking.constants.Defines;
 import com.hoangthien.pitchbooking.dto.TeamDTO;
-import com.hoangthien.pitchbooking.entities.District;
-import com.hoangthien.pitchbooking.entities.Level;
-import com.hoangthien.pitchbooking.entities.Team;
-import com.hoangthien.pitchbooking.entities.User;
+import com.hoangthien.pitchbooking.entities.*;
 import com.hoangthien.pitchbooking.exception.PitchBookingException;
 import com.hoangthien.pitchbooking.exception.PitchBookingNotFoundException;
 import com.hoangthien.pitchbooking.mapper.TeamMapper;
@@ -197,5 +194,32 @@ public class TeamServiceImpl implements TeamService {
     public boolean delete(Long teamId) {
         teamRepository.deleteById(teamId);
         return true;
+    }
+
+    @Override
+    public boolean joinTeam(Long teamId, String userName) {
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy team"));
+
+        User user = userRepository.findByUserName(userName)
+                .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy user"));
+
+        UserTeam userTeam = new UserTeam();
+        userTeam.setUser(user);
+        userTeam.setTeam(team);
+        userTeam.setAccepted(false);
+        Set<UserTeam> userTeams = team.getUserTeams();
+        userTeams.add(userTeam);
+
+        team.getUserTeams().clear();
+        team.getUserTeams().addAll(userTeams);
+        teamRepository.save(team);
+
+        return true;
+    }
+
+    @Override
+    public boolean isUserOwningTeam(String userName) {
+        return teamRepository.existsByCaptainUserName(userName);
     }
 }

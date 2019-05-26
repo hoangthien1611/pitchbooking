@@ -215,8 +215,9 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingDTO> getAllBookingsOfAUser(String userName) {
         LocalDateTime now = LocalDateTime.now();
-        return bookingRepository.findAllByUserBookingUserName(userName)
+        return bookingRepository.findAllByUserBookingUserNameOrderByDateBookingDesc(userName)
                 .stream()
+                .filter(booking -> !booking.getChildPitch().getGroupSpecificPitches().getPitch().getOwner().getUserName().equals(userName))
                 .map(booking -> {
                     BookingDTO bookingDTO = bookingMapper.bookingToBookingDTO(booking);
                     bookingDTO.setDateBookingString(TimeUtils.getDateStringFromLocalDate(booking.getDateBooking()));

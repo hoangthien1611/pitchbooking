@@ -47,16 +47,12 @@ public class Team {
     @JoinColumn(name = "districtId")
     private District area;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            })
-    @JoinTable(name = "team_user",
-            joinColumns = {@JoinColumn(name = "teamId")},
-            inverseJoinColumns = {@JoinColumn(name = "userId")})
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "team",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
-    private Set<User> members = new HashSet<>();
+    private Set<UserTeam> userTeams = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "team",

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,5 +23,5 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     @Query("select distinct b from Booking b join b.childPitch cp join cp.groupSpecificPitches gsp join gsp.pitch p join p.owner o where o.userName = ?1 and b.accepted = false")
     List<Booking> findAllByOwnerUserNameAndNotAccepted(String userName);
 
-    List<Booking> findAllByUserBookingUserName(String userName);
+    List<Booking> findAllByUserBookingUserNameOrderByDateBookingDesc(String userName);
 }

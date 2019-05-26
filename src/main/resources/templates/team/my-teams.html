@@ -29,6 +29,13 @@
                                 Đội bóng của tôi
                             </a>
                         </li>
+                        <li th:if="${totalRequests != null}">
+                            <a th:href="@{/team/my-teams/join-requests}">
+                                <i class="fa fa-list"></i>
+                                Yêu cầu tham gia đội bóng
+                                <b class="badge badge-primary" style="background-color:red" th:text="${totalRequests}"></b>
+                            </a>
+                        </li>
                     </ul>
                     <div id="stadiumListTabContent" class="tab-content">
                         <div class="tab-pane fade" id="booking">

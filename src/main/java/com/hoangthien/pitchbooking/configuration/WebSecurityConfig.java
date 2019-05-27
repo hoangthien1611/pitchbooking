@@ -3,6 +3,7 @@ package com.hoangthien.pitchbooking.configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -46,7 +47,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/" ,"/register", "/pitch/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/exchange/create", "/team/create", "/user/profile",
+                        "/user/invitation-history", "/user/booking-history", "/team/my-teams", "/team/my-teams/**",
+                        "/pitch/management", "/pitch/management/**").authenticated()
+                .antMatchers(HttpMethod.GET).permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/")

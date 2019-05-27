@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head th:replace="fragments/head :: head"></head>
 <body ng-app="sportApp" class="page-sportstadiumdetails ">
 
@@ -274,7 +274,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-success btn-submit-booking" data-dismiss="modal">Xác nhận</button>
+                <button type="button" sec:authorize="isAuthenticated()" class="btn btn-success btn-submit-booking" data-dismiss="modal">Xác nhận</button>
+                <a href="/" sec:authorize="isAnonymous()" class="btn btn-info">Bạn cần phải đăng nhập</a>
             </div>
         </div>
 

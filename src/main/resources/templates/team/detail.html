@@ -9,13 +9,20 @@
 <div class="top-banner-box top-banner-box-doi">
     <div class="container">
         <p class="page-title"></p>
-        <div class="team-banner-btn-container btn-join-team" th:if="${!isThisUserBelongsToTeam && !isThisUserWaitingForAccept}">
+        <div class="team-banner-btn-container btn-join-team" sec:authorize="isAnonymous()">
+            <a href="/" class="btn btn-info btn-sm modal-link-angularjs">
+                <i class="fa fa-send-o"></i>
+                Đăng nhập để tham gia
+            </a>
+        </div>
+        <div class="team-banner-btn-container btn-join-team" sec:authorize="isAuthenticated()"
+             th:if="${!isThisUserBelongsToTeam && !isThisUserWaitingForAccept}">
             <a class="btn btn-info btn-sm modal-link-angularjs" th:onclick="'javascript:joinTeam('+ ${team.id} +')'">
                 <i class="fa fa-send-o"></i>
                 Tham gia đội bóng
             </a>
         </div>
-        <div class="team-banner-btn-container" th:if="${isThisUserWaitingForAccept}">
+        <div class="team-banner-btn-container" sec:authorize="isAuthenticated()" th:if="${isThisUserWaitingForAccept}">
             <a class="btn btn-warning btn-sm disabled">
                 <i class="fa fa-send-o"></i>
                 Đang chờ phê duyệt

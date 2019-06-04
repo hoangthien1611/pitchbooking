@@ -35,6 +35,7 @@
                 </div>
             </div>
             <div class="col-md-7">
+                <h1 id="a" class="title-intent title-pages"><i class="fa fa-futbol-o" aria-hidden="true"></i> Tất cả lời mời giao lưu</h1>
                 <h3 th:if="${#lists.isEmpty(invitations)}" class="text-center">Không có lời mời nào!</h3>
                 <div class="q-container ngloaded" th:each="invitation:${invitations}">
                     <div class="q-items ng-scope" th:with="isUser=${invitation.user.userName.equals(#authentication.name)}">

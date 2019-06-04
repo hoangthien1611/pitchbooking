@@ -36,6 +36,13 @@
                                 <b class="badge badge-primary" style="background-color:red" th:text="${totalRequests}"></b>
                             </a>
                         </li>
+                        <li>
+                            <th:block th:if="${msg != null}" th:with="type=${msg.type == 1 ? 'success' : 'danger'}">
+                                <div th:class="${'alert msg-noti alert-' + type}" style="text-align: center">
+                                    <strong th:text="${'Heheh heheheh'}"></strong>
+                                </div>
+                            </th:block>
+                        </li>
                     </ul>
                     <div id="stadiumListTabContent" class="tab-content">
                         <div class="tab-pane fade" id="booking">

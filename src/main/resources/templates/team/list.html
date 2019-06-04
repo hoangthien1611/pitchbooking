@@ -97,7 +97,10 @@
                                         <th:block th:text="${team.captain.fullName}"></th:block></a>
                                         <span class="captain-item-status offline hide"></span>
                                     </p>
-                                    <p class="quost-doi" th:text="${team.description}"></p>
+                                    <p class="quost-doi">
+                                        <i class="fa fa-quote-left"></i>
+                                        <th:block th:text="${team.description}"></th:block>
+                                    </p>
                                     <p>
                                         <i class="fa fa-shirtsinbulk" aria-hidden="true"></i>
                                         <strong>Trình độ: </strong> <th:block th:text="${team.level.name}"></th:block>

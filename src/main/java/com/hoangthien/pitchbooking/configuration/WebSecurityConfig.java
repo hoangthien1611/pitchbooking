@@ -51,6 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/user/invitation-history", "/user/booking-history", "/team/my-teams", "/team/my-teams/**",
                         "/pitch/management", "/pitch/management/**").authenticated()
                 .antMatchers(HttpMethod.GET).permitAll()
+                .antMatchers(HttpMethod.POST, "/user/check-userName", "/register").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

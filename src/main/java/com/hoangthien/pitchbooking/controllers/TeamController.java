@@ -82,7 +82,7 @@ public class TeamController extends BaseController {
             if (!banner.getOriginalFilename().isEmpty()) {
                 teamDTO.setPicture(fileService.saveFile(banner));
             } else {
-                teamDTO.setLogo("default-team-picture.jpg");
+                teamDTO.setPicture("default-team-picture.jpg");
             }
 
             teamService.saveNewTeam(teamDTO, principal.getName());

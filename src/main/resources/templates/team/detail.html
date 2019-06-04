@@ -37,11 +37,10 @@
         </div>
         <div class="title-doi">
             <h1 th:text="${team.name}"><span class="gender"><i class="fa fa-mars" aria-hidden="true"></i></span></h1>
-            <p class="captain-item" owner-id="4308">
+            <p class="captain-item">
                     <span>
                         <a th:href="@{/user/profile/__${team.captain.id}__}" th:text="${team.captain.fullName}"></a> (đội trưởng)
                     </span>
-                <span class="chat-nhanh"><i class="fa fa-comments" aria-hidden="true"></i> Nói chuyện</span>
             </p>
         </div>
         <div class="wrap-ul-doi">
@@ -71,6 +70,9 @@
                             <div class="row">
                                 <div class="p-content">
                                     <ul class="list-item-san">
+                                        <li class="item-card match-finding-item text-center" th:if="${#lists.isEmpty(exchanges)}">
+                                            <h4>Chưa có thông tin tìm đối nào</h4>
+                                        </li>
                                         <li class="item-card match-finding-item" th:each="exchange:${exchanges}" th:id="${'exchange-' + exchange.id}">
                                             <div class="row">
                                                 <div class="col-md-12 right-item-san right-item-doi">
@@ -239,9 +241,13 @@
 
                                     </div>
                                     <div class="cl">
-                                        <div class="title-img" th:text="${'Giới thiệu về ' + team.name}"></div>
+                                        <div class="title-img">Giới thiệu</div>
                                         <div class="content-sans">
                                             <p th:text="${team.description}"></p>
+                                        </div>
+                                        <div class="title-img">Hình ảnh đội</div>
+                                        <div class="content-sans">
+                                            <img th:src="@{/uploads/__${team.picture}__}" width="100%" alt="Hình ảnh đội">
                                         </div>
                                     </div>
                                 </div>

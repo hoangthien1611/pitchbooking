@@ -143,6 +143,7 @@ public class ExchangeController extends BaseController {
             if (exchangeService.save(exchangeDTO)) {
                 ra.addFlashAttribute("msg", new Message(MessageType.SUCCESS, "Tạo thành công"));
             }
+            return "redirect:/exchange/waiting/all";
         } catch (PitchBookingException e) {
             ra.addFlashAttribute("msg", new Message(MessageType.ERROR, e.getMessage()));
         }

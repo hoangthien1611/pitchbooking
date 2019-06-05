@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -211,7 +212,15 @@ public class TeamController extends BaseController {
                         .anyMatch(userTeam -> !userTeam.isAccepted() && userTeam.getUser().getUserName().equals(principal.getName()));
             }
 
+            LocalDateTime now = LocalDateTime.now();
             List<Exchange> exchanges = team.getExchanges();
+            exchanges.forEach(exchange -> {
+                if (now.isBefore(exchange.getTimeExchange())) {
+                    exchange.setOutDated(false);
+                } else {
+                    exchange.setOutDated(true);
+                }
+            });
             Collections.sort(exchanges, new Comparator<Exchange>() {
                 @Override
                 public int compare(Exchange o1, Exchange o2) {
@@ -292,7 +301,7 @@ public class TeamController extends BaseController {
             List<Level> levelList = new ArrayList<>();
             List<Long> levelIds = new ArrayList<>();
             int page = Integer.parseInt(pg);
-            int offset = (page - 1) * Defines.NUMBER_OF_ROWS_PER_PAGE;
+            page = page < 1? 0 : (page - 1);
 
             if (areaId == 0) {
                 levelList = levelService.getAllLevels(search);
@@ -300,9 +309,9 @@ public class TeamController extends BaseController {
                         : PitchBookingUtils.convertFromStringListToLongList(level);
 
                 if (StringUtils.isEmpty(search)) {
-                    pages = teamService.getAllTeamsPageable(levelIds, offset);
+                    pages = teamService.getAllTeamsPageable(levelIds, page);
                 } else {
-                    pages = teamService.getAllTeamsPageable(levelIds, search, offset);
+                    pages = teamService.getAllTeamsPageable(levelIds, search, page);
                 }
 
                 model.addAttribute("listLevels", levelList);
@@ -312,9 +321,9 @@ public class TeamController extends BaseController {
                         : PitchBookingUtils.convertFromStringListToLongList(level);
 
                 if (StringUtils.isEmpty(search)) {
-                    pages = teamService.getAllTeamsPageable(areaId, levelIds, offset);
+                    pages = teamService.getAllTeamsPageable(areaId, levelIds, page);
                 } else {
-                    pages = teamService.getAllTeamsPageable(areaId, levelIds, search, offset);
+                    pages = teamService.getAllTeamsPageable(areaId, levelIds, search, page);
                 }
 
                 model.addAttribute("areaName", districtService.getDistrictById(areaId).getName());
@@ -337,7 +346,7 @@ public class TeamController extends BaseController {
             List<District> listDistricts = districtService.getAllDistricts();
             listDistricts.add(0, district);
 
-            model.addAttribute("currentPage", page);
+            model.addAttribute("currentPage", (page+1));
             model.addAttribute("totalPages", totalPages);
             model.addAttribute("aValue", area);
             model.addAttribute("lValue", level);

@@ -82,6 +82,7 @@
                                                     </h2>
                                                     <div class="btn-doi-top pull-right chi-tiet-doi-main btn-doi-inteam" th:if="${exchange.status == 0}">
                                                         <a href="/" class="btn btn-sm btn-primary pull-right btn-batdoi" sec:authorize="isAnonymous()">Đăng nhập để bắt đối</a>
+                                                        <th:block th:if="${!exchange.outDated}">
                                                         <button class="btn btn-sm btn-primary pull-right btn-batdoi modal-link-angularjs"
                                                                 data-toggle="modal" data-target="#sendInvitation"
                                                                 th:onclick="'javascript:openInvitation('+ ${exchange.id} +')'"
@@ -94,6 +95,13 @@
                                                                 sec:authorize="isAuthenticated()" th:if="${!isThisUserBelongsToTeam && exchange.hasPitch == 0}">
                                                             <i class="fa fa-send" aria-hidden="true"></i> Mời giao lưu
                                                         </button>
+                                                        </th:block>
+                                                        <th:block th:if="${exchange.outDated}">
+                                                            <button class="btn btn-sm btn-default pull-right btn-batdoi modal-link-angularjs disabled"
+                                                                    sec:authorize="isAuthenticated()" th:if="${!isThisUserBelongsToTeam}">
+                                                                <i class="fa fa-send" aria-hidden="true"></i> Đã hết hạn
+                                                            </button>
+                                                        </th:block>
                                                         <button class="btn btn-sm btn-danger pull-right btn-batdoi modal-link-angularjs"
                                                                 th:onclick="'javascript:deleteExchange('+ ${exchange.id} +')'"
                                                                 sec:authorize="isAuthenticated()" th:if="${team.captain.userName.equals(#authentication.name) || exchange.userCreated.userName.equals(#authentication.name)}">

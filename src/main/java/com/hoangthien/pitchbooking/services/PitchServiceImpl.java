@@ -181,33 +181,33 @@ public class PitchServiceImpl implements PitchService {
 
 
     @Override
-    public Page<Pitch> getAllPageable(String path, List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, int offset) {
-        return pitchRepository.findAllByDistrictPathAndPitchTypeIdInAndSurfaceIdInAndCostIn(path, typeIds, surfaceIds, costs, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    public Page<Pitch> getAllPageable(String path, List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, int page) {
+        return pitchRepository.findAllByDistrictPathAndPitchTypeIdInAndSurfaceIdInAndCostIn(path, typeIds, surfaceIds, costs, PageRequest.of(page, Defines.NUMBER_OF_ROWS_PER_PAGE));
     }
 
     @Override
-    public Page<Pitch> getAllPageable(String path, List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, String search, int offset) {
-        return pitchRepository.findAllByDistrictPathAndPitchTypeIdInAndSurfaceIdInAndCostInAndSearch(path, typeIds, surfaceIds, costs, search.toLowerCase(), PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    public Page<Pitch> getAllPageable(String path, List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, String search, int page) {
+        return pitchRepository.findAllByDistrictPathAndPitchTypeIdInAndSurfaceIdInAndCostInAndSearch(path, typeIds, surfaceIds, costs, search.toLowerCase(), PageRequest.of(page, Defines.NUMBER_OF_ROWS_PER_PAGE));
     }
 
     @Override
-    public Page<Pitch> getAllPageable(String path, List<Long> typeIds, List<Long> surfaceIds, int offset) {
-        return pitchRepository.findAllByDistrictPathAndPitchTypeIdInAndSurfaceIdIn(path, typeIds, surfaceIds, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    public Page<Pitch> getAllPageable(String path, List<Long> typeIds, List<Long> surfaceIds, int page) {
+        return pitchRepository.findAllByDistrictPathAndPitchTypeIdInAndSurfaceIdIn(path, typeIds, surfaceIds, PageRequest.of(page, Defines.NUMBER_OF_ROWS_PER_PAGE));
     }
 
     @Override
-    public Page<Pitch> getAllPageable(String path, List<Long> typeIds, List<Long> surfaceIds, String search, int offset) {
-        return pitchRepository.findAllByDistrictPathAndPitchTypeIdInAndSurfaceIdInAndSearch(path, typeIds, surfaceIds, search.toLowerCase(), PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    public Page<Pitch> getAllPageable(String path, List<Long> typeIds, List<Long> surfaceIds, String search, int page) {
+        return pitchRepository.findAllByDistrictPathAndPitchTypeIdInAndSurfaceIdInAndSearch(path, typeIds, surfaceIds, search.toLowerCase(), PageRequest.of(page, Defines.NUMBER_OF_ROWS_PER_PAGE));
     }
 
     @Override
-    public Page<Pitch> getAllPageable(List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, int offset) {
-        return pitchRepository.findAllByPitchTypeIdInAndSurfaceIdInAndCostIn(typeIds, surfaceIds, costs, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    public Page<Pitch> getAllPageable(List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, int page) {
+        return pitchRepository.findAllByPitchTypeIdInAndSurfaceIdInAndCostIn(typeIds, surfaceIds, costs, PageRequest.of(page, Defines.NUMBER_OF_ROWS_PER_PAGE));
     }
 
     @Override
-    public Page<Pitch> getAllPageable(List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, String search, int offset) {
-        return pitchRepository.findAllByPitchTypeIdInAndSurfaceIdInAndCostInAndSearch(typeIds, surfaceIds, costs, search.toLowerCase(), PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    public Page<Pitch> getAllPageable(List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, String search, int page) {
+        return pitchRepository.findAllByPitchTypeIdInAndSurfaceIdInAndCostInAndSearch(typeIds, surfaceIds, costs, search.toLowerCase(), PageRequest.of(page, Defines.NUMBER_OF_ROWS_PER_PAGE));
     }
 
     @Override

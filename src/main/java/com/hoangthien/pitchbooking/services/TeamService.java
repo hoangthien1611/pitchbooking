@@ -24,13 +24,13 @@ public interface TeamService {
 
     Page<Team> getAllTeamsPageable(int offset);
 
-    Page<Team> getAllTeamsPageable(List<Long> levelIds, String search, int offset);
+    Page<Team> getAllTeamsPageable(List<Long> levelIds, String search, int page);
 
-    Page<Team> getAllTeamsPageable(List<Long> levelIds, int offset);
+    Page<Team> getAllTeamsPageable(List<Long> levelIds, int page);
 
-    Page<Team> getAllTeamsPageable(Long areaId, List<Long> levelIds, String search, int offset);
+    Page<Team> getAllTeamsPageable(Long areaId, List<Long> levelIds, String search, int page);
 
-    Page<Team> getAllTeamsPageable(Long areaId, List<Long> levelIds, int offset);
+    Page<Team> getAllTeamsPageable(Long areaId, List<Long> levelIds, int page);
 
     long countTotalTeams();
 

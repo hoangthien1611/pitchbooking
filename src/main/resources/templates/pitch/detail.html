@@ -113,7 +113,7 @@
                                         <div class="des-san contact-info">
                                             <div class="phone-numb">
                                                 <i class="fa fa-phone-square" aria-hidden="true"></i>
-                                                <a href="" class="text-highlight" target="_blank">
+                                                <a th:href="@{/user/profile/__${pitch.owner.id}__}" class="text-highlight" target="_blank">
                                                     <th:block th:text="${pitch.owner.fullName + ' - ' + pitch.phoneNumber}"></th:block>
                                                 </a>
                                             </div>
@@ -130,7 +130,7 @@
 
                                     <div class="col-md-12">
                                         <div class="title-img">Giới thiệu về sân</div>
-                                        <div class="des-san-group san-short-summary">
+                                        <div class="des-san-group san-short-summary" style="font-weight: bold">
                                             <th:block th:text="${pitch.introduction}"></th:block>
                                         </div>
                                         <div class="content-sans">

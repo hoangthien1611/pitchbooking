@@ -57,7 +57,7 @@ public class ExchangeController extends BaseController {
 
         try {
             int page = Integer.parseInt(pg);
-            int offset = (page - 1) * Defines.NUMBER_OF_ROWS_PER_PAGE;
+            page = page < 1 ? 0 : (page - 1);
             Page<Exchange> pageExchanges;
             List<Level> levelList = levelService.getAllLevelsByExchange(path, search);
             List<Long> levelIds = StringUtils.isEmpty(lValue) ? PitchBookingUtils.getIdsFromLevels(levelList)
@@ -65,9 +65,9 @@ public class ExchangeController extends BaseController {
             List<Integer> hasPitchList = StringUtils.isEmpty(hPValue) ? Arrays.asList(0, 1) : PitchBookingUtils.convertFromStringListToIntList(hPValue);
 
             if (StringUtils.isEmpty(search)) {
-                pageExchanges = exchangeService.getAllPageable(path, hasPitchList, levelIds, offset);
+                pageExchanges = exchangeService.getAllPageable(path, hasPitchList, levelIds, page);
             } else {
-                pageExchanges = exchangeService.getAllPageable(path, hasPitchList, levelIds, search, offset);
+                pageExchanges = exchangeService.getAllPageable(path, hasPitchList, levelIds, search, page);
             }
 
             int totalPages = pageExchanges.getTotalPages();
@@ -93,7 +93,7 @@ public class ExchangeController extends BaseController {
             }
 
             model.addAttribute("exchanges", pageExchanges.getContent());
-            model.addAttribute("currentPage", page);
+            model.addAttribute("currentPage", (page+1));
             model.addAttribute("totalPages", totalPages);
             model.addAttribute("lValue", lValue);
             model.addAttribute("hPValue", hPValue);

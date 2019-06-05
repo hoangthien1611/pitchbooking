@@ -39,7 +39,7 @@
                         <li>
                             <th:block th:if="${msg != null}" th:with="type=${msg.type == 1 ? 'success' : 'danger'}">
                                 <div th:class="${'alert msg-noti alert-' + type}" style="text-align: center">
-                                    <strong th:text="${'Heheh heheheh'}"></strong>
+                                    <strong th:text="${msg.message}"></strong>
                                 </div>
                             </th:block>
                         </li>

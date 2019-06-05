@@ -85,25 +85,25 @@ public class ExchangeServiceImpl implements ExchangeService {
     }
 
     @Override
-    public Page<Exchange> getAllPageable(String path, List<Integer> hasPitch, List<Long> levelIds, String search, int offset) {
+    public Page<Exchange> getAllPageable(String path, List<Integer> hasPitch, List<Long> levelIds, String search, int page) {
         LocalDateTime now = LocalDateTime.now();
 
         if (Defines.DISTRICT_PATH_ALL.equalsIgnoreCase(path)) {
-            return exchangeRepository.findAllByHasPitchInAndLevelIdInAndSearchAndTimeExchangeAfter(hasPitch, levelIds, search.toLowerCase(), now, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+            return exchangeRepository.findAllByHasPitchInAndLevelIdInAndSearchAndTimeExchangeAfter(hasPitch, levelIds, search.toLowerCase(), now, PageRequest.of(page, Defines.NUMBER_OF_ROWS_PER_PAGE));
         }
 
-        return exchangeRepository.findAllByDistrictPathAndHasPitchInAndLevelIdInAndSearchAndTimeExchangeAfter(path, hasPitch, levelIds, search.toLowerCase(), now, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+        return exchangeRepository.findAllByDistrictPathAndHasPitchInAndLevelIdInAndSearchAndTimeExchangeAfter(path, hasPitch, levelIds, search.toLowerCase(), now, PageRequest.of(page, Defines.NUMBER_OF_ROWS_PER_PAGE));
     }
 
     @Override
-    public Page<Exchange> getAllPageable(String path, List<Integer> hasPitch, List<Long> levelIds, int offset) {
+    public Page<Exchange> getAllPageable(String path, List<Integer> hasPitch, List<Long> levelIds, int page) {
         LocalDateTime now = LocalDateTime.now();
 
         if (Defines.DISTRICT_PATH_ALL.equalsIgnoreCase(path)) {
-            return exchangeRepository.findAllByHasPitchInAndLevelIdInAndTimeExchangeAfter(hasPitch, levelIds, now, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+            return exchangeRepository.findAllByHasPitchInAndLevelIdInAndTimeExchangeAfter(hasPitch, levelIds, now, PageRequest.of(page, Defines.NUMBER_OF_ROWS_PER_PAGE));
         }
 
-        return exchangeRepository.findAllByDistrictPathAndHasPitchInAndLevelIdInAndTimeExchangeAfter(path, hasPitch, levelIds, now, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+        return exchangeRepository.findAllByDistrictPathAndHasPitchInAndLevelIdInAndTimeExchangeAfter(path, hasPitch, levelIds, now, PageRequest.of(page, Defines.NUMBER_OF_ROWS_PER_PAGE));
     }
 
     @Override

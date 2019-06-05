@@ -25,17 +25,17 @@ public interface PitchService {
 
     List<TimeFrameBooking> getTimeFrameBookingsByDate(Long pitchId, LocalDate dateBooking);
 
-    Page<Pitch> getAllPageable(String path, List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, int offset);
+    Page<Pitch> getAllPageable(String path, List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, int page);
 
-    Page<Pitch> getAllPageable(String path, List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, String search, int offset);
+    Page<Pitch> getAllPageable(String path, List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, String search, int page);
 
-    Page<Pitch> getAllPageable(String path, List<Long> typeIds, List<Long> surfaceIds, int offset);
+    Page<Pitch> getAllPageable(String path, List<Long> typeIds, List<Long> surfaceIds, int page);
 
-    Page<Pitch> getAllPageable(String path, List<Long> typeIds, List<Long> surfaceIds, String search, int offset);
+    Page<Pitch> getAllPageable(String path, List<Long> typeIds, List<Long> surfaceIds, String search, int page);
 
-    Page<Pitch> getAllPageable(List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, int offset);
+    Page<Pitch> getAllPageable(List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, int page);
 
-    Page<Pitch> getAllPageable(List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, String search, int offset);
+    Page<Pitch> getAllPageable(List<Integer> costs, List<Long> typeIds, List<Long> surfaceIds, String search, int page);
 
     List<Pitch> get3PitchesSameDistrict(Long pitchId, Long districtId);
 }

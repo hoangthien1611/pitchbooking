@@ -246,7 +246,7 @@ public class PitchController extends BaseController {
         log.info("GET: " + BASE_URL + "/" + path);
         try {
             int page = Integer.parseInt(pg);
-            int offset = (page - 1) * Defines.NUMBER_OF_ROWS_PER_PAGE;
+            page = page < 1 ? 0 : (page - 1);
             List<Integer> intCosts = specificPitchesCostService.getAllCostsByDistrictPath(path);
             List<PitchType> pitchTypes = pitchTypeService.getAll();
             List<YardSurface> yardSurfaces = yardSurfaceService.getAllYardSurfaces();
@@ -258,17 +258,17 @@ public class PitchController extends BaseController {
 
             if (Defines.DISTRICT_PATH_ALL.equalsIgnoreCase(path)) {
                 if (StringUtils.isEmpty(search)) {
-                    pagePitches = pitchService.getAllPageable(costValues, typeIdValues, surfaceIdValues, offset);
+                    pagePitches = pitchService.getAllPageable(costValues, typeIdValues, surfaceIdValues, page);
                 } else {
-                    pagePitches = pitchService.getAllPageable(costValues, typeIdValues, surfaceIdValues, search, offset);
+                    pagePitches = pitchService.getAllPageable(costValues, typeIdValues, surfaceIdValues, search, page);
                 }
             } else {
                 if (StringUtils.isEmpty(search)) {
-                    pagePitches = costValues.size() > 0 ? pitchService.getAllPageable(path, costValues, typeIdValues, surfaceIdValues, offset)
-                            : pitchService.getAllPageable(path, typeIdValues, surfaceIdValues, offset);
+                    pagePitches = costValues.size() > 0 ? pitchService.getAllPageable(path, costValues, typeIdValues, surfaceIdValues, page)
+                            : pitchService.getAllPageable(path, typeIdValues, surfaceIdValues, page);
                 } else {
-                    pagePitches = costValues.size() > 0 ? pitchService.getAllPageable(path, costValues, typeIdValues, surfaceIdValues, search, offset)
-                            : pitchService.getAllPageable(path, typeIdValues, surfaceIdValues, search, offset);
+                    pagePitches = costValues.size() > 0 ? pitchService.getAllPageable(path, costValues, typeIdValues, surfaceIdValues, search, page)
+                            : pitchService.getAllPageable(path, typeIdValues, surfaceIdValues, search, page);
                 }
                 model.addAttribute("districtName", districtService.getDistrictDTOByPath(path).getName());
             }
@@ -286,7 +286,7 @@ public class PitchController extends BaseController {
             }
 
             model.addAttribute("pitches", pagePitches.getContent());
-            model.addAttribute("currentPage", page);
+            model.addAttribute("currentPage", (page + 1));
             model.addAttribute("totalPages", totalPages);
             model.addAttribute("path", path);
             model.addAttribute("pitchTypes", pitchTypes);

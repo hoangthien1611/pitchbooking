@@ -47,6 +47,9 @@ public class Exchange {
 
     private int status;
 
+    @Transient
+    private boolean outDated;
+
     @org.springframework.data.annotation.Transient
     public String getTimeString() {
         String minute = timeExchange.getMinute() < 10 ? ("0" + timeExchange.getMinute()) : ("" + timeExchange.getMinute());

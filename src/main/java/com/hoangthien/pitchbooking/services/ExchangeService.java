@@ -10,9 +10,9 @@ public interface ExchangeService {
 
     boolean save(ExchangeDTO exchangeDTO);
 
-    Page<Exchange> getAllPageable(String path, List<Integer> hasPitch, List<Long> levelIds, String search, int offset);
+    Page<Exchange> getAllPageable(String path, List<Integer> hasPitch, List<Long> levelIds, String search, int page);
 
-    Page<Exchange> getAllPageable(String path, List<Integer> hasPitch, List<Long> levelIds, int offset);
+    Page<Exchange> getAllPageable(String path, List<Integer> hasPitch, List<Long> levelIds, int page);
 
     List<Exchange> getAllByUserAndAvailable(String userName);
 

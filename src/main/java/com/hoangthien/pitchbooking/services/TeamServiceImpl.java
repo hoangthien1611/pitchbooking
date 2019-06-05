@@ -142,23 +142,23 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public Page<Team> getAllTeamsPageable(List<Long> levelIds, String search, int offset) {
-        return teamRepository.findAllByLevelIdInAndSearch(levelIds, search.toLowerCase(), PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    public Page<Team> getAllTeamsPageable(List<Long> levelIds, String search, int page) {
+        return teamRepository.findAllByLevelIdInAndSearch(levelIds, search.toLowerCase(), PageRequest.of(page, Defines.NUMBER_OF_ROWS_PER_PAGE));
     }
 
     @Override
-    public Page<Team> getAllTeamsPageable(List<Long> levelIds, int offset) {
-        return teamRepository.findAllByLevelIdIn(levelIds, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    public Page<Team> getAllTeamsPageable(List<Long> levelIds, int page) {
+        return teamRepository.findAllByLevelIdIn(levelIds, PageRequest.of(page, Defines.NUMBER_OF_ROWS_PER_PAGE));
     }
 
     @Override
-    public Page<Team> getAllTeamsPageable(Long areaId, List<Long> levelIds, String search, int offset) {
-        return teamRepository.findAllByAreaIdAndLevelIdInAndSearch(areaId, levelIds, search.toLowerCase(), PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    public Page<Team> getAllTeamsPageable(Long areaId, List<Long> levelIds, String search, int page) {
+        return teamRepository.findAllByAreaIdAndLevelIdInAndSearch(areaId, levelIds, search.toLowerCase(), PageRequest.of(page, Defines.NUMBER_OF_ROWS_PER_PAGE));
     }
 
     @Override
-    public Page<Team> getAllTeamsPageable(Long areaId, List<Long> levelIds, int offset) {
-        return teamRepository.findAllByAreaIdAndLevelIdIn(areaId, levelIds, PageRequest.of(offset, Defines.NUMBER_OF_ROWS_PER_PAGE));
+    public Page<Team> getAllTeamsPageable(Long areaId, List<Long> levelIds, int page) {
+        return teamRepository.findAllByAreaIdAndLevelIdIn(areaId, levelIds, PageRequest.of(page, Defines.NUMBER_OF_ROWS_PER_PAGE));
     }
 
     @Override

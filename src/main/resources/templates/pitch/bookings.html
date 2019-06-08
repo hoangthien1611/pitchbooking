@@ -97,7 +97,7 @@
                                                                     <div class="booking-price-info hover-bg">
                                                                         <i class="fa fa-database"
                                                                            aria-hidden="true"></i>
-                                                                        <span class="red ng-binding" th:text="${childPitch.getCostCommafy()}">3000</span>
+                                                                        <span  th:text="${childPitch.getCostCommafy()}">3000</span>
                                                                         &nbsp;
                                                                         <a title="Cập nhật giá" th:href="@{/pitch/management/pitch-prices/__${pitchId}__}">
                                                                             <i class="fa fa-pencil" aria-hidden="true"></i>
@@ -149,13 +149,13 @@
                                                                     <div class="cl" th:id="${'text-info-'+ itemStat.index + '-' + childPitch.id}"
                                                                          th:onclick="'javascript:openForm('+ ${itemStat.index + ',' + childPitch.id} +')'">
                                                                         <div th:if="${childPitch.booking == null}">
-                                                                            Đang trống, click để cập nhật
+                                                                            Sân đang trống
                                                                         </div>
-                                                                        <div th:if="${childPitch.booking != null && childPitch.bookingAccepted}" style="color: red">
-                                                                            Đã có người đặt, click để xem
+                                                                        <div th:if="${childPitch.booking != null && childPitch.bookingAccepted}" style="color: red; font-weight: bold">
+                                                                            Đã có người đặt
                                                                         </div>
-                                                                        <div th:if="${childPitch.booking != null && !childPitch.bookingAccepted}" style="color: blue">
-                                                                            Đang chờ phê duyệt, click để xem
+                                                                        <div th:if="${childPitch.booking != null && !childPitch.bookingAccepted}" style="color: blue; font-weight: bold">
+                                                                            Chờ phê duyệt
                                                                         </div>
                                                                     </div>
                                                                 </td>

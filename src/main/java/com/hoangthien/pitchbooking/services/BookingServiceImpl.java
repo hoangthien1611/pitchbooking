@@ -43,6 +43,9 @@ public class BookingServiceImpl implements BookingService {
     @Autowired
     private BookingMapper bookingMapper;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @Override
     public BookingDTO save(BookingDTO bookingDTO) {
         User userBooking = userRepository
@@ -180,7 +183,12 @@ public class BookingServiceImpl implements BookingService {
         booking.setTimeCreated(LocalDateTime.now());
         booking.setUserBooking(userBooking);
 
-        return bookingMapper.bookingToBookingDTO(bookingRepository.save(booking));
+        Booking savedBooking = bookingRepository.save(booking);
+
+        notificationService.create(specificPitchesCost.getGroupSpecificPitches().getPitch().getOwner(), userBooking.getFullName(),
+                "đã gửi yêu cầu đặt sân", "/pitch/management/booking-requests", "pitch-booking.png");
+
+        return bookingMapper.bookingToBookingDTO(savedBooking);
     }
 
     @Override
@@ -209,6 +217,9 @@ public class BookingServiceImpl implements BookingService {
                 .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy booking!"));
         booking.setAccepted(true);
         bookingRepository.save(booking);
+
+        notificationService.create(booking.getUserBooking(), booking.getChildPitch().getGroupSpecificPitches().getPitch().getOwner().getFullName(),
+                "đã chấp nhận yêu cầu đặt sân của bạn", "/user/booking-history", "pitch-booking.png");
         return true;
     }
 

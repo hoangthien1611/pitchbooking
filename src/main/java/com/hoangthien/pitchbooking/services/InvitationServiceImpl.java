@@ -24,6 +24,9 @@ import java.util.List;
 @Service
 public class InvitationServiceImpl implements InvitationService {
 
+    private final String LINK = "/user/invitation-history";
+    private final String ICON = "envelope.png";
+
     @Autowired
     private UserRepository userRepository;
 
@@ -36,13 +39,18 @@ public class InvitationServiceImpl implements InvitationService {
     @Autowired
     private InvitationRepository invitationRepository;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @Override
     public boolean createInvitation(InvitationDTO invitationDTO, String userName) {
         User user;
         if (invitationDTO.getUserId() == null) {
+            // bắt đối
             user = userRepository.findByUserName(userName)
                     .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy user"));
         } else {
+            // mời giao lưu
             user = userRepository.findById(invitationDTO.getUserId())
                     .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy user"));
         }
@@ -53,7 +61,7 @@ public class InvitationServiceImpl implements InvitationService {
         Exchange exchange = exchangeRepository.findById(invitationDTO.getExchangeId())
                 .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy exchange"));
 
-        if (exchange.getStatus() != 0) {
+        if (exchange.getStatus() == 1) {
             throw new PitchBookingException("Trận đấu này đã tìm được đối");
         }
 
@@ -65,6 +73,14 @@ public class InvitationServiceImpl implements InvitationService {
         invitation.setStatus(0);
         invitation.setType(invitationDTO.getType());
         invitationRepository.save(invitation);
+
+        if (invitationDTO.getType() == 1) {
+            notificationService.create(exchange.getUserCreated(), user.getFullName(),
+                    "muốn giao lưu trận đấu bạn đã tạo", LINK, ICON);
+        } else {
+            notificationService.create(invitation.getUser(), exchange.getUserCreated().getFullName(),
+                    "đã gửi lời mời giao lưu", LINK, ICON);
+        }
 
         return true;
     }
@@ -81,11 +97,18 @@ public class InvitationServiceImpl implements InvitationService {
 
         invitation.setStatus(status);
         invitationRepository.save(invitation);
+        String content = status == 1? "đã chấp nhận lời mời giao lưu của bạn" : "đã từ chối lời mời giao lưu của bạn";
+        User userGetNoti = invitation.getType() == 1? invitation.getUser() : invitation.getExchange().getUserCreated();
+        String name = invitation.getType() == 1? invitation.getExchange().getUserCreated().getFullName() : invitation.getUser().getFullName();
+
         if (status == 1) {
             Exchange exchange = invitation.getExchange();
             exchange.setStatus(1);
             exchangeRepository.save(exchange);
         }
+
+        notificationService.create(userGetNoti, name, content, LINK, ICON);
+
         return true;
     }
 

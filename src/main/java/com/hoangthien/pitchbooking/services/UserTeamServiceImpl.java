@@ -24,6 +24,9 @@ public class UserTeamServiceImpl implements UserTeamService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @Override
     public boolean save(Long teamId, String userName) {
         Team team = teamRepository.findById(teamId)
@@ -49,6 +52,12 @@ public class UserTeamServiceImpl implements UserTeamService {
                 .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy yêu cầu"));
         userTeam.setAccepted(true);
         userTeamRepository.save(userTeam);
+
+        String link = "/team/detail/" + userTeam.getTeam().getPath();
+
+        notificationService.create(userTeam.getUser(), userTeam.getTeam().getCaptain().getFullName(),
+                "đã chấp nhận yêu cầu tham gia đội bóng của bạn", link, "add-member.png");
+
         return true;
     }
 
@@ -57,6 +66,12 @@ public class UserTeamServiceImpl implements UserTeamService {
         UserTeam userTeam = userTeamRepository.findByUserIdAndTeamId(userId, teamId)
                 .orElseThrow(() -> new PitchBookingNotFoundException("Không tìm thấy yêu cầu"));
         userTeamRepository.delete(userTeam);
+
+        String link = "/team/detail/" + userTeam.getTeam().getPath();
+
+        notificationService.create(userTeam.getUser(), userTeam.getTeam().getCaptain().getFullName(),
+                "đã từ chối yêu cầu tham gia đội bóng của bạn", link, "add-member.png");
+
         return true;
     }
 }

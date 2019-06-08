@@ -38,6 +38,9 @@ public class TeamServiceImpl implements TeamService {
     @Autowired
     private TeamMapper teamMapper;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @Override
     public Team saveNewTeam(TeamDTO teamDTO, String userName) {
         if (isPathExisted(teamDTO.getPath().trim())) {
@@ -214,6 +217,9 @@ public class TeamServiceImpl implements TeamService {
         team.getUserTeams().clear();
         team.getUserTeams().addAll(userTeams);
         teamRepository.save(team);
+
+        notificationService.create(team.getCaptain(), user.getFullName(), "đã gửi yêu cầu tham gia đội bóng",
+                "/team/my-teams/join-requests", "add-member.png");
 
         return true;
     }

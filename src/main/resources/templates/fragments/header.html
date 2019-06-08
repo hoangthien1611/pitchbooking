@@ -89,74 +89,88 @@
                     </li>
 
                     <th:block sec:authorize="isAuthenticated()">
-                    <li class="dropdown navbar-notification">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-bell navbar-notification-icon"></i>
-                            <span class="visible-xs-inline">&nbsp;Notifications</span>
-                            <b class="badge badge-primary ng-binding" style="display:none"></b>
-                        </a>
-                        <div class="dropdown-menu">
-                            <div class="dropdown-header">Thông báo</div>
-                            <div class="notification-list scrollbar-enabled">
-                                <div class="force-overflow" ng-show="isNotificationLoaded" style="">
-                                    <!-- ngRepeat: noti in notiItemListDisplay | orderBy:'-time' -->
-                                    <!-- / .notification -->
-                                </div>
-                            </div> <!-- / .notification-list -->
-                            <a href=""
-                               class="notification-link-all text-center">Xem tất cả</a>
-                        </div> <!-- / .dropdown-menu -->
-                    </li>
+                        <li class="dropdown navbar-notification">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-bell navbar-notification-icon"></i>
+                                <span class="visible-xs-inline">&nbsp;Notifications</span>
+                                <b class="badge badge-primary badge-total-new" th:if="${newNotifications > 0}" th:text="${newNotifications}"></b>
+                            </a>
+                            <div class="dropdown-menu">
+                                <div class="dropdown-header">Thông báo</div>
+                                <div class="notification-list scrollbar-enabled">
+                                    <div class="force-overflow">
+                                        <div th:each="noti:${notifications}" th:class="${'notification ' + (noti.seen? '':'notification-not-seen')}"
+                                             th:onclick="'javascript:seeNotification('+ ${noti.id} +')'" th:id="${'noti-'+noti.id}">
+                                            <div class="notification-icon">
+                                                <a th:href="@{__${noti.link}__}">
+                                                    <img th:src="@{/uploads/__${noti.icon}__}" alt="">
+                                                </a>
+                                            </div>
+                                            <div>
+                                                <a th:href="@{__${noti.link}__}" class="notification-description">
+                                                    <span class="name" th:text="${noti.name}"></span>
+                                                    <th:block th:text="${noti.content}"></th:block>
+                                                </a>
+                                                <span class="notification-time" th:text="${noti.getTimeString()}"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- / .notification-list -->
+                                <a href=""
+                                   class="notification-link-all text-center">Xem tất cả</a>
+                            </div> <!-- / .dropdown-menu -->
+                        </li>
 
-                    <li class="dropdown navbar-profile" style="margin-right: 80px">
+                        <li class="dropdown navbar-profile" style="margin-right: 80px">
 
-                        <a class="dropdown-toggle user-menu" data-toggle="dropdown" href="javascript:;">
-                            <img th:src="@{/images/default-user.png}"
-                                 class="navbar-profile-avatar" alt="">
-                            <span class="visible-xs-inline user-name" style="text-transform: none;" th:text="${#authentication.name}">User &nbsp;</span>
-                            <i class="fa fa-caret-down"></i>
-                        </a>
-                        <ul class="navbar-nav-dropdown" role="menu">
+                            <a class="dropdown-toggle user-menu" data-toggle="dropdown" href="javascript:;">
+                                <img th:src="@{/images/default-user.png}"
+                                     class="navbar-profile-avatar" alt="">
+                                <span class="visible-xs-inline user-name" style="text-transform: none;"
+                                      th:text="${#authentication.name}">User &nbsp;</span>
+                                <i class="fa fa-caret-down"></i>
+                            </a>
+                            <ul class="navbar-nav-dropdown" role="menu">
 
-                            <li>
-                                <a th:href="@{/user/profile}">
-                                    <i class="fa fa-user"></i>
-                                    Thông tin tài khoản
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/user/invitation-history">
-                                    <i class="fa fa-envelope-o"></i>
-                                    Lời mời giao lưu
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/user/booking-history">
-                                    <i class="fa fa-history"></i>
-                                    Lịch sử đặt sân
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/team/my-teams">
-                                    <i class="fa fa-futbol-o"></i>
-                                    Đội bóng của tôi
-                                </a>
-                            </li>
-                            <li>
-                                <a th:href="@{/pitch/management}">
-                                    <i class="fa fa-th-large"></i>
-                                    Sân bóng của tôi
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/logout">
-                                    <i class="fa fa-sign-out" aria-hidden="true"></i>
-                                    Đăng xuất
-                                </a>
-                            </li>
-                            <li style="display:none"></li>
-                        </ul>
-                    </li>
+                                <li>
+                                    <a th:href="@{/user/profile}">
+                                        <i class="fa fa-user"></i>
+                                        Thông tin tài khoản
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/user/invitation-history">
+                                        <i class="fa fa-envelope-o"></i>
+                                        Lời mời giao lưu
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/user/booking-history">
+                                        <i class="fa fa-history"></i>
+                                        Lịch sử đặt sân
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/team/my-teams">
+                                        <i class="fa fa-futbol-o"></i>
+                                        Đội bóng của tôi
+                                    </a>
+                                </li>
+                                <li>
+                                    <a th:href="@{/pitch/management}">
+                                        <i class="fa fa-th-large"></i>
+                                        Sân bóng của tôi
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/logout">
+                                        <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                        Đăng xuất
+                                    </a>
+                                </li>
+                                <li style="display:none"></li>
+                            </ul>
+                        </li>
                     </th:block>
                 </ul>
             </nav>

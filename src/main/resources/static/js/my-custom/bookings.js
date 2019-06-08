@@ -83,7 +83,7 @@ function submitForm(index, childPitchId) {
                         $(`#id-${index}-${childPitchId}`).val(data.id);
                     }
 
-                    var textInfo = "<div style=\"color: red\">Đã có người đặt, click để xem</div>";
+                    var textInfo = "<div style=\"color: red; font-weight: bold\">Đã có người đặt</div>";
 
                     $(`#${textId}`).html(textInfo);
                     $(`#${formId}`).hide();
@@ -115,7 +115,7 @@ function deleteBooking(index, childPitchId, bookingId) {
                     $(`#content-${index}-${childPitchId}`).val('');
                     $(this).remove();
 
-                    var textInfo = "<div>Đang trống, click để cập nhật</div>";
+                    var textInfo = "<div>Sân đang trống</div>";
                     var textId = "text-info-" + index + "-" + childPitchId;
                     $(`#${textId}`).html(textInfo);
 

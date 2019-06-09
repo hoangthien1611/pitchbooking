@@ -314,7 +314,7 @@
                         <ul class="list-item-san">
                             <li th:if="${#lists.isEmpty(myExchanges)}">
                                 <h4 style="color: red">Không có trận đấu nào đang sẵn sàng để chọn!</h4>
-                                <a href="/exchange/create">Click để tạo trận đấu</a>
+                                <a href="/exchange/create" class="margin-top-10">Click để tạo trận đấu</a>
                             </li>
                             <li class="item-card ng-scope" style="position:relative;" th:each="myEx,itemStat:${myExchanges}">
                                 <div class="row">

@@ -192,7 +192,7 @@ $(document).ready(function () {
             data: data,
             success: function (data) {
                 if (data) {
-                    showAlertMessage('success', 'Gửi lời mời thành công', false, 1500);
+                    showAlertMessage('success', 'Đã gửi lời mời giao lưu', false, 1500);
                 } else {
                     showAlertMessageAndReload('error', "Thất bại! Trận đấu này đã tìm được được đối hoặc thông tin không đúng!", 10000);
                 }
@@ -225,9 +225,9 @@ $(document).ready(function () {
             data: data,
             success: function (data) {
                 if (data) {
-                    showAlertMessage('success', 'Gửi lời mời thành công', false, 1500);
+                    showAlertMessage('success', 'Đã gửi lời mời giao lưu', false, 1500);
                 } else {
-                    showAlertMessageAndReload('error', "Thất bại! Trận đấu này đã tìm được được đối hoặc thông tin không đúng!", 10000);
+                    showAlertMessageAndReload('error', "Thất bại! Trận đấu này đã tìm được đối hoặc thông tin không đúng!", 10000);
                 }
             },
             error: function () {

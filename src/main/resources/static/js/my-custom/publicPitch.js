@@ -61,7 +61,7 @@ $(document).ready(function () {
                 success: function (data) {
                     if (data) {
                         if (data == "SUCCESS") {
-                            showAlertMessage('success', 'Đặt sân thành công', false, 1500);
+                            showAlertMessage('success', 'Đã gửi yêu cầu đặt sân', false, 1500);
                         } else {
                             showAlertMessageAndReload('error', data, 10000);
                         }

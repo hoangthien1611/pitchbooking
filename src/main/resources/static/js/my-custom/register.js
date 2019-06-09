@@ -24,14 +24,14 @@ $(document).ready(function () {
            },
            success: function (data) {
                if (data) {
-                   alert('Username này đã tồn tại. Vui lòng nhập username khác!');
+                   showAlertMessage('warning', 'Username này đã tồn tại. Vui lòng nhập username khác!', true, 10000);
                    ("#userName").focus();
                } else {
-                   alert('Có thể sử dụng username này!');
+                   showAlertMessage('info', 'Có thể sử dụng username này', false, 1500);
                }
            },
            error: function () {
-               alert('Đã có lỗi xảy ra!');
+               showAlertMessage('error', 'Đã có lỗi xảy ra!', true, 10000);
            }
        });
    });

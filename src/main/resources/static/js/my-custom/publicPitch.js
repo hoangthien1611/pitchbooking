@@ -15,8 +15,8 @@ $(document).ready(function () {
         var temp = "";
         if (additionalURL) {
             tempArray = additionalURL.split("&");
-            for (var i=0; i<tempArray.length; i++){
-                if(tempArray[i].split('=')[0] != 's'){
+            for (var i = 0; i < tempArray.length; i++) {
+                if (tempArray[i].split('=')[0] != 's') {
                     newAdditionalURL += temp + tempArray[i];
                     temp = "&";
                 }
@@ -52,7 +52,7 @@ $(document).ready(function () {
         }
 
         if (!orderName || !orderPhone) {
-            alert('Vui lòng nhập đầy đủ thông tin phù hợp!');
+            showAlertMessage('warning', 'Vui lòng nhập đầy đủ thông tin!', true, 10000);
         } else {
             $.ajax({
                 type: 'post',
@@ -60,19 +60,17 @@ $(document).ready(function () {
                 data: data,
                 success: function (data) {
                     if (data) {
-                      if (data == "SUCCESS") {
-                          alert('Đặt sân thành công!');
-                          location.reload(true);
-                      } else {
-                          alert(data);
-                          location.reload(true);
-                      }
+                        if (data == "SUCCESS") {
+                            showAlertMessage('success', 'Đặt sân thành công', false, 1500);
+                        } else {
+                            showAlertMessageAndReload('error', data, 10000);
+                        }
                     } else {
-                        alert("Không thể đặt sân được!");
+                        showAlertMessage('error', 'Đã có lỗi xảy ra!', true, 10000);
                     }
                 },
                 error: function () {
-                    alert('Error! Có lỗi xảy ra!');
+                    showAlertMessage('error', 'Lỗi! Không thể đặt được sân!', true, 10000);
                 }
             });
         }
@@ -115,7 +113,7 @@ function goToUrl(inputId, param, value) {
 
         }
     }
-    var newParam = !willCheck ? "" : (existed ? "" : ( additionalURL? ("&" + param + "=" + value) : (param + "=" + value)));
+    var newParam = !willCheck ? "" : (existed ? "" : (additionalURL ? ("&" + param + "=" + value) : (param + "=" + value)));
     var queries = "?" + newAdditionalURL + newParam;
     window.location.href = baseURL + ((queries.length > 1) ? queries : "");
 }
@@ -158,12 +156,12 @@ function checkPitches(pitchesCostId) {
                 var html = "";
                 if (data.length > 0) {
                     data.forEach(function (item, index) {
-                       html += "<button type=\"button\" class=\"btn btn-sm btn-time-available-true" + (item.available ? " btn-success" : " btn-default disabled") + "\" style=\"margin-top:3px\""
+                        html += "<button type=\"button\" class=\"btn btn-sm btn-time-available-true" + (item.available ? " btn-success" : " btn-default disabled") + "\" style=\"margin-top:3px\""
                             + " onclick=\"showBookingModal(" + index + "," + pitchesCostId + ")\" "
-                            + " id=\"btn-timeFrame-"+ index + "-" + pitchesCostId + "\" "
-                            + (item.available? " data-toggle=\"modal\" data-target=\"#pitch-booking\">" : " >")
+                            + " id=\"btn-timeFrame-" + index + "-" + pitchesCostId + "\" "
+                            + (item.available ? " data-toggle=\"modal\" data-target=\"#pitch-booking\">" : " >")
                             + "<i class=\"fa fa-clock-o\" aria-hidden=\"true\"></i>"
-                            + "<span>"+ item.timeFrame.fromTime + "-" + item.timeFrame.toTime +"</span>"
+                            + "<span>" + item.timeFrame.fromTime + "-" + item.timeFrame.toTime + "</span>"
                             + "</button> &nbsp;"
                     });
 
@@ -175,11 +173,11 @@ function checkPitches(pitchesCostId) {
                 }
 
             } else {
-                alert("Không thể tìm được!");
+                showAlertMessage('error', 'Đã có lỗi xảy ra!', true, 10000);
             }
         },
         error: function () {
-            alert('Error! Có lỗi xảy ra!');
+            showAlertMessage('error', 'Lỗi! Không thể tìm được!', true, 10000);
         }
     });
 }

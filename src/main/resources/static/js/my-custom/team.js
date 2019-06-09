@@ -28,7 +28,7 @@ $(document).ready(function () {
                 }
             },
             error: function () {
-                alert('Error! Có lỗi xảy ra!');
+                showAlertMessage('error', 'Đã có lỗi xảy ra!', true, 10000);
             }
         });
     });
@@ -135,7 +135,7 @@ $(document).ready(function () {
                 $("#modal-choose-pitch").html(html);
             },
             error: function () {
-                alert('Error! Có lỗi xảy ra!');
+                showAlertMessage('error', 'Đã có lỗi xảy ra!', true, 10000);
             }
         });
     });
@@ -175,7 +175,7 @@ $(document).ready(function () {
         var teamId = $("#teamSenderId").val();
         var message = $("#messageModal").val();
         if (teamId == 0) {
-            alert('Bạn phải là thành viên trong một đội bóng!');
+            showAlertMessage('warning', 'Bạn phải là thành viên trong một đội bóng!', true, 10000);
             return;
         }
 
@@ -192,14 +192,13 @@ $(document).ready(function () {
             data: data,
             success: function (data) {
                 if (data) {
-                    alert('Gửi lời mời thành công');
+                    showAlertMessage('success', 'Gửi lời mời thành công', false, 1500);
                 } else {
-                    alert("Thất bại! Trận đấu này đã tìm được được đối hoặc thông tin không đúng!");
-                    location.reload(true);
+                    showAlertMessageAndReload('error', "Thất bại! Trận đấu này đã tìm được được đối hoặc thông tin không đúng!", 10000);
                 }
             },
             error: function () {
-                alert('Error! Có lỗi xảy ra!');
+                showAlertMessage('error', 'Lỗi! Không thể gửi lời mời!', true, 10000);
             }
         });
     });
@@ -226,14 +225,13 @@ $(document).ready(function () {
             data: data,
             success: function (data) {
                 if (data) {
-                    alert('Gửi lời mời thành công');
+                    showAlertMessage('success', 'Gửi lời mời thành công', false, 1500);
                 } else {
-                    alert("Thất bại! Trận đấu này đã tìm được được đối hoặc thông tin không đúng!");
-                    location.reload(true);
+                    showAlertMessageAndReload('error', "Thất bại! Trận đấu này đã tìm được được đối hoặc thông tin không đúng!", 10000);
                 }
             },
             error: function () {
-                alert('Error! Có lỗi xảy ra!');
+                showAlertMessage('error', 'Lỗi! Không thể gửi lời mời!', true, 10000);
             }
         });
     })
@@ -298,24 +296,32 @@ function choosePitch(pitchId) {
 }
 
 function deleteTeam(teamId) {
-    var result = confirm('Bạn có chắc chắn muốn xóa?');
-    if (result) {
-        $.ajax({
-            type: 'delete',
-            url: '/team/' + teamId,
-            success: function (data) {
-                if (data) {
-                    alert('Xóa thành công');
-                    $(`#tr-team-${teamId}`).remove();
-                } else {
-                    alert("Xóa thất bại!");
+    Swal.fire({
+        title: 'Bạn có chắc chắn muốn xóa?',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Xóa!'
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                type: 'delete',
+                url: '/team/' + teamId,
+                success: function (data) {
+                    if (data) {
+                        showAlertMessage('success', 'Xóa thành công', false, 1500);
+                        $(`#tr-team-${teamId}`).remove();
+                    } else {
+                        showAlertMessage('error', 'Xóa thất bại!', true, 10000);
+                    }
+                },
+                error: function () {
+                    showAlertMessage('error', 'Lỗi! Không thể xóa được!', true, 10000);
                 }
-            },
-            error: function () {
-                alert('Error! Có lỗi xảy ra!');
-            }
-        });
-    }
+            });
+        }
+    })
 }
 
 function openInvitation(exchangeId) {
@@ -350,34 +356,42 @@ function changeInvitaionStatus(id, status) {
                 $(`.stt-text-${id}`).text(txt);
                 $(`.stt-text-${id}`).css("color", color);
             } else {
-                alert("Thay đổi trạng thái thất bại!");
+                showAlertMessage('error', 'Thay đổi trạng thái thất bại!', true, 10000);
             }
         },
         error: function () {
-            alert('Error! Có lỗi xảy ra!');
+            showAlertMessage('error', 'Lỗi! Không thể thay đổi trạng thái!', true, 10000);
         }
     });
 }
 
 function deleteExchange(exchangeId) {
-    var result = confirm('Bạn có chắc chắn muốn xóa?');
-    if (result) {
-        $.ajax({
-            type: 'delete',
-            url: '/exchange/' + exchangeId,
-            success: function (data) {
-                if (data) {
-                    alert('Xóa thành công');
-                    $(`#exchange-${exchangeId}`).remove();
-                } else {
-                    alert("Xóa thất bại!");
+    Swal.fire({
+        title: 'Bạn có chắc chắn muốn xóa?',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Xóa!'
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                type: 'delete',
+                url: '/exchange/' + exchangeId,
+                success: function (data) {
+                    if (data) {
+                        showAlertMessage('success', 'Xóa thành công', false, 1500);
+                        $(`#exchange-${exchangeId}`).remove();
+                    } else {
+                        showAlertMessage('error', 'Xóa thất bại!', true, 10000);
+                    }
+                },
+                error: function () {
+                    showAlertMessage('error', 'Lỗi! Không thể xóa được!', true, 10000);
                 }
-            },
-            error: function () {
-                alert('Error! Có lỗi xảy ra!');
-            }
-        });
-    }
+            });
+        }
+    })
 }
 
 function joinTeam(teamId) {
@@ -393,11 +407,11 @@ function joinTeam(teamId) {
                 + "&nbsp;Đang chờ phê duyệt</a>";
                 $(".btn-join-team").html(html);
             } else {
-                alert("Yêu cầu tham gia thất bại!");
+                showAlertMessage('error', 'Gửi yêu cầu thất bại!', true, 10000);
             }
         },
         error: function () {
-            alert('Error! Có lỗi xảy ra!');
+            showAlertMessage('error', 'Lỗi! Không thể gửi được yêu cầu!', true, 10000);
         }
     });
 }
@@ -412,41 +426,49 @@ function acceptJoinTeam(userId, teamId) {
         },
         success: function (data) {
             if (data) {
-                alert("Chấp nhận thành công!");
+                showAlertMessage('success', 'Chấp nhận thành công', false, 1500);
                 removeRow(userId, teamId);
             } else {
-                alert("Chấp nhận thất bại!");
+                showAlertMessage('error', 'Chấp nhận thất bại!', true, 10000);
             }
         },
         error: function () {
-            alert('Error! Có lỗi xảy ra!');
+            showAlertMessage('error', 'Lỗi! Không thể phê duyệt yêu cầu!', true, 10000);
         }
     });
 }
 
 function deleteJoinTeam(userId, teamId, type) {
-    var result = confirm("Bạn có chắc chắn muốn xóa?");
-    if (result) {
-        $.ajax({
-            type: 'delete',
-            url: '/team/delete-join-team/' + userId + '/' + teamId,
-            success: function (data) {
-                if (data) {
-                    alert("Xóa thành công!");
-                    if (type == 0) {
-                        removeRow(userId, teamId);
+    Swal.fire({
+        title: 'Bạn có chắc chắn muốn xóa?',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Xóa!'
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                type: 'delete',
+                url: '/team/delete-join-team/' + userId + '/' + teamId,
+                success: function (data) {
+                    if (data) {
+                        showAlertMessage('success', 'Xóa thành công', false, 1500);
+                        if (type == 0) {
+                            removeRow(userId, teamId);
+                        } else {
+                            $(`#member-card-${userId}`).remove();
+                        }
                     } else {
-                        $(`#member-card-${userId}`).remove();
+                        showAlertMessage('error', 'Xóa thất bại!', true, 10000);
                     }
-                } else {
-                    alert("Xóa thất bại!");
+                },
+                error: function () {
+                    showAlertMessage('error', 'Lỗi! Không thể xóa được!', true, 10000);
                 }
-            },
-            error: function () {
-                alert('Error! Có lỗi xảy ra!');
-            }
-        });
-    }
+            });
+        }
+    })
 }
 
 function removeRow(userId, teamId) {

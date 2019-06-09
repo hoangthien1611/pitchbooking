@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head::head"></head>
+<body ng-app="sportApp" class="page-notificationhistory  ng-scope" data-gr-c-s-loaded="true">
+<div th:replace="fragments/header::header"></div>
+<div class="content-wrap">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <h1 id="a" class="title-intent title-pages"><i class="fa fa-futbol-o" aria-hidden="true"></i> Thông báo</h1>
+                <ul id="notification-list notifi-list-all scrollbar-enabled">
+                    <!-- ngRepeat: noti in notiItemHistoryList -->
+                    <li>
+                        <div class="force-overflow">
+                            <div th:each="noti:${listNotifications}" th:class="${'notification ' + (noti.seen? '':'notification-not-seen')}"
+                                 th:onclick="'javascript:seeNotification('+ ${noti.id} +')'" th:id="${'noti-'+noti.id}">
+                                <div class="notification-icon">
+                                    <a th:href="@{__${noti.link}__}">
+                                        <img th:src="@{/uploads/__${noti.icon}__}" alt="">
+                                    </a>
+                                </div>
+                                <div>
+                                    <a th:href="@{__${noti.link}__}" class="notification-description">
+                                        <span class="name" th:text="${noti.name}"></span>
+                                        <th:block th:text="${noti.content}"></th:block>
+                                    </a>
+                                    <span class="notification-time" th:text="${noti.getTimeString()}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="pagination_container">
+                            <div class="pagination" th:if="${totalPages > 0}">
+                                <th:block th:if="${currentPage > 1}">
+                                    <a th:href="@{/notification/history?p=__${currentPage - 1}__}"
+                                       class="linkPager hnpagenext" title="Trang trước">
+                                        <span class="hnotherpage"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
+                                    </a>
+                                </th:block>
+                                <th:block th:each="page : ${#numbers.sequence( pageStart, pageEnd)}">
+                                    <a th:href="@{${currentPage == page ? '#' : '/notification/history?p=' + page}}"
+                                       th:title="${page}" th:class="${currentPage == page ? 'noLinkPager hncurrpage' : 'linkPager hnpagelink'}">
+                                        <span class="hnotherpage" th:text="${page}"></span>
+                                    </a>
+                                </th:block>
+                                <th:block th:if="${currentPage < totalPages}">
+                                    <a th:href="@{/notification/history?p=__${currentPage + 1}__}"
+                                       class="linkPager hnpagenext" title="Trang sau">
+                                        <span class="hnotherpage"><i class="fa fa-angle-right" aria-hidden="true"></i></span>
+                                    </a>
+                                </th:block>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="fragments/footer::footer"></footer>
+<div th:replace="fragments/modals::modals"></div>
+</body>
+</html>

@@ -73,37 +73,45 @@ $(document).ready(function() {
                         + "</div></div>"
                     $(markup).insertBefore(".bottom-pitches-right");
                 } else {
-                    alert('Thêm thất bại!');
+                    showAlertMessage('error', 'Thêm thất bại!', true, 10000);
                 }
             },
             error: function () {
-                alert('Error! Không thêm được!');
+                showAlertMessage('error', 'Lỗi! Không thêm được!', true, 10000);
             }
         });
     });
 
     $(document).on("click", ".del-price", function () {
-        var result = confirm('Bạn có chắc chắn muốn xóa?');
-        if (result) {
-            var costId = $(this).closest('tr').children('td.costId').text();
-            var pitchesId = $(this).closest('tr').children('td.pitchesId').text();
-            url = /specific-pitches-cost/ + costId;
+        Swal.fire({
+            title: 'Bạn có chắc chắn muốn xóa?',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Xóa!'
+        }).then((result) => {
+            if (result.value) {
+                var costId = $(this).closest('tr').children('td.costId').text();
+                var pitchesId = $(this).closest('tr').children('td.pitchesId').text();
+                url = /specific-pitches-cost/ + costId;
 
-            $.ajax({
-                type: 'delete',
-                url,
-                success: function (data) {
-                    if (data) {
-                        $(`#tr-${costId}`).remove();
-                    } else {
-                        alert("Xóa thất bại!");
+                $.ajax({
+                    type: 'delete',
+                    url,
+                    success: function (data) {
+                        if (data) {
+                            $(`#tr-${costId}`).remove();
+                        } else {
+                            showAlertMessage('error', 'Xóa thất bại!', true, 10000);
+                        }
+                    },
+                    error: function () {
+                        showAlertMessage('error', 'Lỗi! Không xóa được!', true, 10000);
                     }
-                },
-                error: function () {
-                    alert('Error! Có lỗi xảy ra!');
-                }
-            });
-        }
+                });
+            }
+        })
     });
 
     $(document).on("click", ".btn-change-number", function () {
@@ -111,7 +119,7 @@ $(document).ready(function() {
         var numberChange = parseInt($("#numberChange").val());
 
         if (!numberChange && numberChange < 1) {
-            alert('Vui lòng nhập vào số lượng hợp lệ!');
+            showAlertMessage('warning', 'Vui lòng nhập vào số lượng hợp lệ!', true, 10000);
         } else {
             $.ajax({
                 type: 'put',
@@ -126,11 +134,11 @@ $(document).ready(function() {
                             + "&nbsp;Loại sân: " + data.pitchTypeName + " (" + data.number + " sân)";
                         $(`#pitches-span-${data.id}`).html(span);
                     } else {
-                        alert("Thay đổi thất bại!");
+                        showAlertMessage('error', 'Thay đổi thất bại!', true, 10000);
                     }
                 },
                 error: function () {
-                    alert('Error! Có lỗi xảy ra!');
+                    showAlertMessage('error', 'Lỗi! Không thể thay đổi được!', true, 10000);
                 }
             });
         }
@@ -155,9 +163,9 @@ $(document).ready(function() {
         };
 
         if (toTimeInt <= fromTimeInt) {
-            alert('Vui lòng chọn khung giờ hợp lệ!');
+            showAlertMessage('warning', 'Vui lòng chọn khung giờ hợp lệ!', true, 10000);
         } else if (!groupDaysId) {
-            alert('Vui lòng chọn ngày trong tuần!');
+            showAlertMessage('warning', 'Vui lòng chọn ngày trong tuần!', true, 10000);
         } else if (costId == 0) {
             $.ajax({
                 type: 'post',
@@ -169,11 +177,11 @@ $(document).ready(function() {
                         var markup = generateTableRow(data);
                         $(`table#${tableId} tbody`).append(markup);
                     } else {
-                        alert("Thêm giá thất bại!");
+                        showAlertMessage('warning', 'Thêm giá thất bại!', true, 10000);
                     }
                 },
                 error: function () {
-                    alert('Error! Có lỗi xảy ra!');
+                    showAlertMessage('warning', 'Lỗi! Không thêm giá được!', true, 10000);
                 }
             });
         } else {
@@ -186,11 +194,11 @@ $(document).ready(function() {
                         var markup = generateTableRow(data);
                         $(`#tr-${costId}`).replaceWith(markup);
                     } else {
-                        alert("Chỉnh sửa giá thất bại!");
+                        showAlertMessage('warning', 'Chỉnh sửa giá thất bại!', true, 10000);
                     }
                 },
                 error: function () {
-                    alert('Error! Có lỗi xảy ra!');
+                    showAlertMessage('warning', 'Lỗi! Không chỉnh giá được!', true, 10000);
                 }
             });
         }
@@ -245,38 +253,46 @@ function addPrice(pitchesId) {
 }
 
 function deletePitches(pitchesId) {
-    var result = confirm('Bạn có chắc chắn muốn xóa?');
-    if (result) {
-        url = /group-specific-pitches/ + pitchesId;
+    Swal.fire({
+        title: 'Bạn có chắc chắn muốn xóa?',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Xóa!'
+    }).then((result) => {
+        if (result.value) {
+            url = /group-specific-pitches/ + pitchesId;
 
-        $.ajax({
-            type: 'delete',
-            url,
-            success: function (data) {
-                if (data) {
-                    $("#add-group-pitches-area").show();
-                    $("#area-table-" + pitchesId).remove();
-                    if( $('#select-pitch-type').has('option').length == 0 ) {
-                        $('#select-pitch-type').prepend($("<option></option>").val(data.pitchTypeId).text(data.pitchTypeName));
+            $.ajax({
+                type: 'delete',
+                url,
+                success: function (data) {
+                    if (data) {
+                        $("#add-group-pitches-area").show();
+                        $("#area-table-" + pitchesId).remove();
+                        if( $('#select-pitch-type').has('option').length == 0 ) {
+                            $('#select-pitch-type').prepend($("<option></option>").val(data.pitchTypeId).text(data.pitchTypeName));
+                        } else {
+                            $("#select-pitch-type option").each(function () {
+                                var value = $(this).val();
+                                if (value > data.pitchTypeId) {
+                                    $(this).before($("<option></option>").val(data.pitchTypeId).text(data.pitchTypeName));
+                                    return false;
+                                }
+                            });
+                        }
+
                     } else {
-                        $("#select-pitch-type option").each(function () {
-                            var value = $(this).val();
-                            if (value > data.pitchTypeId) {
-                                $(this).before($("<option></option>").val(data.pitchTypeId).text(data.pitchTypeName));
-                                return false;
-                            }
-                        });
+                        showAlertMessage('error', 'Xóa thất bại!', true, 10000);
                     }
-
-                } else {
-                    alert("Xóa thất bại!");
+                },
+                error: function () {
+                    showAlertMessage('error', 'Lỗi! Không xóa được!', true, 10000);
                 }
-            },
-            error: function () {
-                alert('Error! Có lỗi xảy ra!');
-            }
-        });
-    }
+            });
+        }
+    })
 }
 
 function passPitchesIdToModal(pitchesId, number) {
@@ -285,22 +301,30 @@ function passPitchesIdToModal(pitchesId, number) {
 }
 
 function deletePitch(pitchId) {
-    var result = confirm('Bạn có chắc chắn muốn xóa?');
-    if (result) {
-        $.ajax({
-            type: 'delete',
-            url: '/pitch/management/' + pitchId,
-            success: function (data) {
-                if (data) {
-                    alert('Xóa thành công');
-                    $(`#tr-pitch-${pitchId}`).remove();
-                } else {
-                    alert("Xóa thất bại!");
+    Swal.fire({
+        title: 'Bạn có chắc chắn muốn xóa?',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Xóa!'
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                type: 'delete',
+                url: '/pitch/management/' + pitchId,
+                success: function (data) {
+                    if (data) {
+                        showAlertMessage('success', 'Xóa thành công', false, 1500);
+                        $(`#tr-pitch-${pitchId}`).remove();
+                    } else {
+                        showAlertMessage('error', 'Xóa thất bại!', true, 10000);
+                    }
+                },
+                error: function () {
+                    showAlertMessage('error', 'Lỗi! Không xóa được!', true, 10000);
                 }
-            },
-            error: function () {
-                alert('Error! Có lỗi xảy ra!');
-            }
-        });
-    }
+            });
+        }
+    })
 }

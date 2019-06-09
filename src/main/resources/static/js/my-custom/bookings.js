@@ -54,7 +54,7 @@ function submitForm(index, childPitchId) {
     var cost = $(`#cost-${index}-${childPitchId}`).val();
 
     if (!orderName || !orderPhone || !content) {
-        alert("Vui lòng nhập đầy đủ thông tin phù hợp!");
+        showAlertMessage('warning', 'Vui lòng nhập đầy đủ thông tin!', true, 10000);
     } else {
         var data = {
             id,
@@ -74,7 +74,7 @@ function submitForm(index, childPitchId) {
             data: data,
             success: function (data) {
                 if (data) {
-                    alert('Lưu thành công');
+                    showAlertMessage('success', 'Lưu thành công', false, 1500);
                     if (id == 0) {
                         var btnDel = "<button type=\"button\" class=\"btn btn-danger btn-sm\" onclick=\"deleteBooking(" + index + "," + childPitchId + "," + data.id + ")\">"
                             + "Xóa"
@@ -89,89 +89,112 @@ function submitForm(index, childPitchId) {
                     $(`#${formId}`).hide();
                     $(`#${textId}`).show();
                 } else {
-                    alert("Lưu thất bại! Sân đã được đặt hoặc thời gian đặt không hợp lệ!");
-                    location.reload(true);
+                    showAlertMessageAndReload('error', 'Lưu thất bại! Sân đã được đặt hoặc thời gian đặt không hợp lệ!', 10000);
                 }
             },
             error: function () {
-                alert('Error! Có lỗi xảy ra!');
+                showAlertMessage('error', 'Lỗi! Không thể lưu được!', true, 10000);
             }
         });
     }
 }
 
 function deleteBooking(index, childPitchId, bookingId) {
-    var result = confirm('Bạn có chắc chắn muốn xóa?');
-    if (result) {
-        $.ajax({
-            type: 'delete',
-            url: '/booking/' + bookingId,
-            success: function (data) {
-                if (data) {
-                    alert('Xóa thành công');
-                    $(`#id-${index}-${childPitchId}`).val('0');
-                    $(`#orderName-${index}-${childPitchId}`).val('');
-                    $(`#orderPhone-${index}-${childPitchId}`).val('');
-                    $(`#content-${index}-${childPitchId}`).val('');
-                    $(this).remove();
+    Swal.fire({
+        title: 'Bạn có chắc chắn muốn xóa?',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Xóa!'
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                type: 'delete',
+                url: '/booking/' + bookingId,
+                success: function (data) {
+                    if (data) {
+                        showAlertMessage('success', 'Xóa thành công', false, 1500);
+                        $(`#id-${index}-${childPitchId}`).val('0');
+                        $(`#orderName-${index}-${childPitchId}`).val('');
+                        $(`#orderPhone-${index}-${childPitchId}`).val('');
+                        $(`#content-${index}-${childPitchId}`).val('');
+                        $(this).remove();
 
-                    var textInfo = "<div>Sân đang trống</div>";
-                    var textId = "text-info-" + index + "-" + childPitchId;
-                    $(`#${textId}`).html(textInfo);
+                        var textInfo = "<div>Sân đang trống</div>";
+                        var textId = "text-info-" + index + "-" + childPitchId;
+                        $(`#${textId}`).html(textInfo);
 
-                    var btnCloseForm = "btn-close-form-" + index + "-" + childPitchId;
-                    $(`#${btnCloseForm}`).prev().remove();
-                } else {
-                    alert("Xóa thất bại!");
+                        var btnCloseForm = "btn-close-form-" + index + "-" + childPitchId;
+                        $(`#${btnCloseForm}`).prev().remove();
+                    } else {
+                        showAlertMessage('error', 'Xóa thất bại!', true, 10000);
+                    }
+                },
+                error: function () {
+                    showAlertMessage('error', 'Lỗi! Không thể xóa được!', true, 10000);
                 }
-            },
-            error: function () {
-                alert('Error! Có lỗi xảy ra!');
-            }
-        });
-    }
+            });
+        }
+    })
 }
 
 function delBooking(bookingId) {
-    var result = confirm('Bạn có chắc chắn muốn xóa?');
-    if (result) {
-        $.ajax({
-            type: 'delete',
-            url: '/booking/' + bookingId,
-            success: function (data) {
-                if (data) {
-                    alert('Xóa thành công');
-                    removeRow(bookingId);
-                } else {
-                    alert("Xóa thất bại!");
+    Swal.fire({
+        title: 'Bạn có chắc chắn muốn xóa?',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Xóa!'
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                type: 'delete',
+                url: '/booking/' + bookingId,
+                success: function (data) {
+                    if (data) {
+                        showAlertMessage('success', 'Xóa thành công', false, 1500);
+                        removeRow(bookingId);
+                    } else {
+                        showAlertMessage('error', 'Xóa thất bại!', true, 10000);
+                    }
+                },
+                error: function () {
+                    showAlertMessage('error', 'Lỗi! Không thể xóa được!', true, 10000);
                 }
-            },
-            error: function () {
-                alert('Error! Có lỗi xảy ra!');
-            }
-        });
-    }
+            });
+        }
+    })
 }
 
 function removeBooking(bookingId) {
-    var result = confirm('Bạn có chắc chắn muốn xóa?');
-    if (result) {
-        $.ajax({
-            type: 'delete',
-            url: '/booking/' + bookingId,
-            success: function (data) {
-                if (data) {
-                    alert('Xóa thành công');
-                    $(`#booking-card-${bookingId}`).remove();
-                } else {
-                    alert("Xóa thất bại!");
+    Swal.fire({
+        title: 'Bạn có chắc chắn muốn xóa?',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Xóa!'
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                type: 'delete',
+                url: '/booking/' + bookingId,
+                success: function (data) {
+                    if (data) {
+                        showAlertMessage('success', 'Xóa thành công', false, 1500);
+                        $(`#booking-card-${bookingId}`).remove();
+                    } else {
+                        showAlertMessage('error', 'Xóa thất bại!', true, 10000);
+                    }
+                },
+                error: function () {
+                    showAlertMessage('error', 'Lỗi! Không thể xóa được!', true, 10000);
                 }
-            },
-            error: function () {
-                alert('Error! Có lỗi xảy ra!');
-            }
-        });
-    }
+            });
+        }
+    })
 }
 
 function acceptBooking(bookingId) {
@@ -180,14 +203,14 @@ function acceptBooking(bookingId) {
         url: '/booking/' + bookingId,
         success: function (data) {
             if (data) {
-                alert('Chấp nhận thành công');
+                showAlertMessage('success', 'Chấp nhận thành công', false, 1500);
                 removeRow(bookingId);
             } else {
-                alert("Chấp nhận thất bại!");
+                showAlertMessage('error', 'Chấp nhận thất bại!', true, 10000);
             }
         },
         error: function () {
-            alert('Error! Có lỗi xảy ra!');
+            showAlertMessage('error', 'Lỗi! Không thể phê duyệt được!', true, 10000);
         }
     });
 }

@@ -49,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/exchange/create", "/team/create", "/user/profile",
                         "/user/invitation-history", "/user/booking-history", "/team/my-teams", "/team/my-teams/**",
-                        "/pitch/management", "/pitch/management/**").authenticated()
+                        "/pitch/management", "/pitch/management/**", "/notification/history").authenticated()
                 .antMatchers(HttpMethod.GET).permitAll()
                 .antMatchers(HttpMethod.POST, "/user/check-userName", "/register").permitAll()
                 .anyRequest().authenticated()

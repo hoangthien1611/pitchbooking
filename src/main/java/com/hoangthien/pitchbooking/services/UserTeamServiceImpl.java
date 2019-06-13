@@ -38,6 +38,9 @@ public class UserTeamServiceImpl implements UserTeamService {
         UserTeam userTeam = new UserTeam(user, team, false);
         userTeamRepository.save(userTeam);
 
+        notificationService.create(team.getCaptain(), user.getFullName(),
+                "đã gửi yêu cầu tham gia đội bóng " + team.getName(), "/team/my-teams/join-requests", "add-member.png");
+
         return true;
     }
 

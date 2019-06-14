@@ -107,7 +107,8 @@
                                                 <img height="120" th:src="@{/uploads/__${team.picture}__}">
                                             </td>
 
-                                            <td align="right" style="text-align:right">
+                                            <td align="right" style="text-align:right"
+                                                th:if="${team.captain.userName.equals(#authentication.name)}">
                                                 <div class="form-group">
                                                     <a class="btn btn-info btn-sm" title="Chỉnh sửa"
                                                        style="width:130px"
